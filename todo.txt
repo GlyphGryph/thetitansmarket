@@ -1,7 +1,4 @@
 Immediate goals:
-Allow creation of "world"s.
-Allow creation of "character"s.
-Let player see a list of all existing worlds.
 Allow a user to join a word, which automatically creates a character for them associated with that world.
 Do not let players join a world they have already joined.
 Create a separate list for worlds the player has already joined and ones they can still join.
