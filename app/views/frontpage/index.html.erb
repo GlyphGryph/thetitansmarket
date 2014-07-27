@@ -12,7 +12,7 @@
   <hr />
   <div class="character-list list">
     <% @characters.each do |character| %>
-      <div class="entry"><%= character.name%></div>
+      <div class="entry"><%= character.name%> <%= link_to "Take Control", character_overview_path(:id => character) %></div> 
     <% end %>
   </div>
 
