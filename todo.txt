@@ -1,6 +1,4 @@
 Immediate goals:
-Allow player to "control" a character, and see the summary information for that character and world
-Allow player to return to the master list
 Allow player to queue "actions" to execute (Default: Rest, Farm, Craft)
 Allow player to see the action queue
 Allow player to remove items from the action queue

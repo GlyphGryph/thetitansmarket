@@ -1,1 +1,17 @@
-Character Overview
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %>
+</div>
+
+<div id="character-info">
+  <%= @character.name %>
+</div>
+
+<div id="world-info">
+  <div id="world-name">
+    <%= @world.name %>
+  </div>
+  <div id="world-peers">
+    Peers: <%= @world.characters.count - 1 %>
+  </div>
+
+</div>
