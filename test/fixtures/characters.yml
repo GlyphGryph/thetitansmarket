@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  hp: 1
+  mhp: 1
+  happy: 1
+  mhappy: 1
+  world_id: 1
+
+two:
+  name: MyString
+  hp: 1
+  mhp: 1
+  happy: 1
+  mhappy: 1
+  world_id: 1

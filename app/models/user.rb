@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
   validates :name, :uniqueness => { :case_sensitive => false }, :format => { :without => /[^@]@[^@]/ }
   attr_accessor :login
 
+  has_many :characters
+
   def email_required?
     false
   end
