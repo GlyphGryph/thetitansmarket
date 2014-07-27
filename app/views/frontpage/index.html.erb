@@ -2,7 +2,11 @@
   <div class="world-list list">
     <% @worlds.each do |world| %>
       <div class="entry">
-        <%= world.id %>: <%= world.name%> (<%= world.characters.count %>)</div>
+        <%= world.id %>: <%= world.name%> (<%= world.characters.count %>)
+        <% unless (@user_worlds.include? world) %>
+          <%= link_to "Join World", join_world_path(:id => world.id) %>  
+        <% end %>
+      </div>
     <% end %>
   </div>
   <hr />

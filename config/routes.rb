@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'frontpage#index'
+  
+  get 'world/join/:id' => 'world#join', :as => :join_world
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -15,6 +15,8 @@ class World < ActiveRecord::Base
   end
 
   def join(user)
-    return Character.new(:user => user, :world => self).save
+    new_character = Character.new(:user => user, :world => self)
+    new_character.save
+    new_character
   end
 end
