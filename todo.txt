@@ -1,7 +1,16 @@
 Immediate goals:
-Allow a user to join a word, which automatically creates a character for them associated with that world.
-Do not let players join a world they have already joined.
-Create a separate list for worlds the player has already joined and ones they can still join.
+Allow player to "control" a character, and see the summary information for that character and world
+Allow player to return to the master list
+Allow player to queue "actions" to execute (Default: Rest, Farm, Craft)
+Allow player to see the action queue
+Allow player to remove items from the action queue
+Allow players to select a "ready" button to update a "ready" status
+When all players are ready, display an execute button that any player can select
+When the player selects this button, "execute" all actions in each queue (which currently do nothing) and then clear it
+Add a "timer" to each world
+The Execute action advanced the timer
+
+--Later on--
 Allow creation of conditions
 Allow creation of traits
 Allow hooking both of those up to characters
