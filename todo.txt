@@ -1,0 +1,2 @@
+Names don't seem to be saving correctly when creating a user through devise - figure out why!
+- It's definitely a problem with the name field mapping to e-mail for some reason. Update email updates name!?
