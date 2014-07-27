@@ -1,7 +1,18 @@
 <% if user_signed_in? %>
-  <% @worlds.each do |world| %>
-    <%= world.id %>: <%= world.name%>
-  <% end %>
+  <div class="world-list list">
+    <% @worlds.each do |world| %>
+      <div class="entry">
+        <%= world.id %>: <%= world.name%> (<%= world.characters.count %>)</div>
+    <% end %>
+  </div>
+  <hr />
+  <div class="character-list list">
+    <% @characters.each do |character| %>
+      <div class="entry"><%= character.name%></div>
+    <% end %>
+  </div>
+
+
 <% else %>
   Welcome! Please log in!
 <% end %>

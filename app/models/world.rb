@@ -13,4 +13,8 @@ class World < ActiveRecord::Base
       self.name = NOUN_TARGETS.sample+" & "+NOUN_TARGETS.sample+" "+MARKET_SYNONYMS.sample
     end
   end
+
+  def join(user)
+    return Character.new(:user => user, :world => self).save
+  end
 end
