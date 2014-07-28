@@ -4,5 +4,6 @@ class CharactersController < ApplicationController
   def overview
     @character = Character.find(params[:id])
     @world = @character.world
+    @actions = Action.all
   end
 end

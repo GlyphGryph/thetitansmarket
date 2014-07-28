@@ -3,15 +3,23 @@
 </div>
 
 <div id="character-info">
+  <h5>Character Info</h5>
   <%= @character.name %>
 </div>
 
 <div id="world-info">
+  <h5>World Info</h5>
   <div id="world-name">
     <%= @world.name %>
   </div>
   <div id="world-peers">
     Peers: <%= @world.characters.count - 1 %>
   </div>
+</div>
 
+<div id="action-queue">
+  <h5>Actions Queue</h5>
+  <% @actions.each do |action|%>
+    <%= action.name %>: <%= action.description %>
+  <% end %>
 </div>
