@@ -9,7 +9,6 @@ class CharactersController < ApplicationController
   end
   
   def add_action
-    logger.error "PARAMS PARAMS PARAMS"+params.inspect
     character = Character.find(params[:id])
     action = Action.find(params[:action_id])
     character_action = CharacterAction.new(:character => character, :action => action)
@@ -18,6 +17,18 @@ class CharactersController < ApplicationController
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not add action."}
+      end
+    end
+  end
+
+  def remove_action
+    character_action = CharacterAction.find(params[:character_action_id])
+    character_action.destroy
+    respond_to do |format|
+      if(character_action.destroyed?)
+        format.html { redirect_to character_overview_path }
+      else
+        format.html { redirect_to character_overview_path, :alert => "Could not remove action."}
       end
     end
   end

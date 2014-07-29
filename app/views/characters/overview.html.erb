@@ -21,7 +21,7 @@
   <h5>Actions Queue</h5>
   <ul class="selections">
     <% @character_actions.each do |character_action| %>
-      <li><%= character_action.name %></li>
+      <li><%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %></li>
     <% end %>
   </ul>
   
