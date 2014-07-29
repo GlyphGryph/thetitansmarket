@@ -8,8 +8,8 @@ class Character < ActiveRecord::Base
   validates_presence_of :world
   validates_uniqueness_of :user, :scope => [:world]
 
-  before_save :default_attributes
-  after_save :name_character
+  before_create :default_attributes
+  after_create :name_character
   
   def name_character
     unless(self.name) 
@@ -26,9 +26,20 @@ class Character < ActiveRecord::Base
    self.ap ||= self.max_ap
    self.max_happy ||= 10
    self.happy ||= self.max_happy
+   self.readied=false
   end
 
   def ready?
-    return self.ready
+    return self.readied
+  end
+
+  def ready
+    self.readied = true
+    self.save!
+  end
+
+  def unready
+    self.readied = false
+    self.save!
   end
 end

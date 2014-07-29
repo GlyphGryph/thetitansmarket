@@ -1,6 +1,6 @@
 class World < ActiveRecord::Base
   has_many :characters, :dependent => :destroy
-  before_save :name_world
+  before_create :name_world
   
   NOUN_TARGETS = %w{ Apples Answers Ale Berries Books Barter Carts Cattle Dogs Envy Fear Faces Frogs Farmers 
                     Grain Greed Gold Happiness Hate Jokes Lies Laws Merchants Needs Needles Oranges 
@@ -21,7 +21,7 @@ class World < ActiveRecord::Base
   end
 
   def unready_characters
-    return self.characters.select{|character| !character.ready }
+    return self.characters.select{|character| !character.ready? }
   end
   
   def ready_to_execute?
@@ -29,6 +29,13 @@ class World < ActiveRecord::Base
   end
 
   def execute
-    return false
+    if(self.ready_to_execute?)
+      self.characters.each do |character|
+        character.unready
+      end
+      return true
+    else
+      return false
+    end
   end
 end
