@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   
   get 'world/join/:id' => 'worlds#join', :as => :join_world
   get 'character/:id' => 'characters#overview', :as => :character_overview
+  get 'character/:id/add_action/:action_id' => 'characters#add_action', :as => :add_action
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

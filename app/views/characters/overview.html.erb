@@ -19,7 +19,15 @@
 
 <div id="action-queue">
   <h5>Actions Queue</h5>
-  <% @actions.each do |action|%>
-    <%= action.name %>: <%= action.description %>
-  <% end %>
+  <ul class="selections">
+    <% @character_actions.each do |character_action| %>
+      <li><%= character_action.name %></li>
+    <% end %>
+  </ul>
+  
+  <ul class="options">
+    <% @actions.each do |action|%>
+      <li><%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: <%= action.description %></li>
+    <% end %>
+  </ul>
 </div>

@@ -1,6 +1,4 @@
 Immediate goals:
-Allow player to queue "actions" to execute (Default: Rest, Farm, Craft)
-Allow player to see the action queue
 Allow player to remove items from the action queue
 Allow players to select a "ready" button to update a "ready" status
 When all players are ready, display an execute button that any player can select
