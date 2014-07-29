@@ -1,5 +1,5 @@
 class World < ActiveRecord::Base
-  has_many :characters
+  has_many :characters, :dependent => :destroy
   before_save :name_world
   
   NOUN_TARGETS = %w{ Apples Answers Ale Berries Books Barter Carts Cattle Dogs Envy Fear Faces Frogs Farmers 
