@@ -9,16 +9,7 @@ class Character < ActiveRecord::Base
   validates_uniqueness_of :user, :scope => [:world]
 
   before_create :default_attributes
-  after_create :name_character
   
-  def name_character
-    unless(self.name) 
-      # If no name was provided, build one
-      self.name = "Human Being "+self.id.to_s
-      self.save!
-    end
-  end
-
   def default_attributes
    self.max_hp ||= 10
    self.hp ||= self.max_hp
@@ -27,6 +18,7 @@ class Character < ActiveRecord::Base
    self.max_happy ||= 10
    self.happy ||= self.max_happy
    self.readied=false
+   self.name ||= "Human Being"
   end
 
   def ready?

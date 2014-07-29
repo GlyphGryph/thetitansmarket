@@ -1,17 +1,22 @@
 class World < ActiveRecord::Base
   has_many :characters, :dependent => :destroy
-  before_create :name_world
+  before_create :default_attributes
   
   NOUN_TARGETS = %w{ Apples Answers Ale Berries Books Barter Carts Cattle Dogs Envy Fear Faces Frogs Farmers 
                     Grain Greed Gold Happiness Hate Jokes Lies Laws Merchants Needs Needles Oranges 
                     Shinies Selling Wheat Work Labours Wealth Poverty }
   MARKET_SYNONYMS = %w{ Market Bazaar Faire Emporium }
 
-  def name_world
+  def generate_name
     unless(self.name) 
       # If no name is provided, build one
       self.name = NOUN_TARGETS.sample+" & "+NOUN_TARGETS.sample+" "+MARKET_SYNONYMS.sample
     end
+  end
+
+  def default_attributes
+    self.name ||= generate_name
+    self.turn ||= 1
   end
 
   def join(user)
