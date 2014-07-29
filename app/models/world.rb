@@ -32,6 +32,7 @@ class World < ActiveRecord::Base
     if(self.ready_to_execute?)
       self.characters.each do |character|
         character.unready
+        character.character_actions.destroy_all
       end
       return true
     else
