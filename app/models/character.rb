@@ -18,4 +18,7 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def ready?
+    return self.ready
+  end
 end

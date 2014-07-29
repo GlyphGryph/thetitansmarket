@@ -30,4 +30,12 @@
       <li><%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: <%= action.description %></li>
     <% end %>
   </ul>
+
+  <div class="ready-up">
+    <% if @character.ready? %>
+      <%= link_to "Wait a minute...", unready_path(:id => @character.id) %>
+    <% else %>
+      <%= link_to "Ready Up", ready_path(:id => @character.id) %>
+    <% end %>
+  </div>
 </div>

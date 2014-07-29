@@ -32,4 +32,28 @@ class CharactersController < ApplicationController
       end
     end
   end
+
+  def ready
+    @character = Character.find(params[:id])
+    @character.ready = true
+    respond_to do |format|
+      if(@character.save)
+        format.html { redirect_to character_overview_path }
+      else
+        format.html { redirect_to character_overview_path, :alert => "Could not ready character."}
+      end
+    end
+  end
+
+  def unready
+    @character = Character.find(params[:id])
+    @character.ready = false
+    respond_to do |format|
+      if(@character.save)
+        format.html { redirect_to character_overview_path }
+      else
+        format.html { redirect_to character_overview_path, :alert => "Could not unready character."}
+      end
+    end
+  end
 end
