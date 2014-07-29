@@ -36,10 +36,10 @@ class CharactersController < ApplicationController
   end
 
   def ready
-    @character = Character.find(params[:id])
-    @character.ready = true
+    character = Character.find(params[:id])
+    character.ready = true
     respond_to do |format|
-      if(@character.save)
+      if(character.save)
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not ready character."}
@@ -48,10 +48,10 @@ class CharactersController < ApplicationController
   end
 
   def unready
-    @character = Character.find(params[:id])
-    @character.ready = false
+    character = Character.find(params[:id])
+    character.ready = false
     respond_to do |format|
-      if(@character.save)
+      if(character.save)
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not unready character."}
@@ -60,9 +60,10 @@ class CharactersController < ApplicationController
   end
 
   def execute
-    @world = World.find(params[:world_id])
+    character = Character.find(params[:id])
+    world = World.find(params[:world_id])
     respond_to do |format|
-      if(@world.execute)
+      if(world.execute(character)
         format.html { redirect_to character_overview_path, :notice => "The world turns..." }
       else
         format.html { redirect_to character_overview_path, :alert => "The world could not turn."}
