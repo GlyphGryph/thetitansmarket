@@ -8,6 +8,7 @@ class Character < ActiveRecord::Base
   validates_presence_of :world
   validates_uniqueness_of :user, :scope => [:world]
 
+  before_save :default_attributes
   after_save :name_character
   
   def name_character
@@ -16,6 +17,15 @@ class Character < ActiveRecord::Base
       self.name = "Human Being "+self.id.to_s
       self.save!
     end
+  end
+
+  def default_attributes
+   self.max_hp ||= 10
+   self.hp ||= self.max_hp
+   self.max_ap ||= 10
+   self.ap ||= self.max_ap
+   self.max_happy ||= 10
+   self.happy ||= self.max_happy
   end
 
   def ready?

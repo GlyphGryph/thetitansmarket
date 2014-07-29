@@ -1,4 +1,6 @@
 Immediate goals:
+Make "character actions" dependent destroy on characters OR actions
+Make "characters" dependent destroy on worlds (not users, we'll want to handle that a different way so as not to lose history)
 When all players are ready, display an execute button that any player can select
 When the player selects this button, "execute" all actions in each queue (which currently do nothing) and then clear it
 Add a "timer" to each world
