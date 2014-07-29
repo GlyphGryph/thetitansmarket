@@ -17,6 +17,18 @@ class World < ActiveRecord::Base
   def join(user)
     new_character = Character.new(:user => user, :world => self)
     new_character.save
-    new_character
+    return new_character
+  end
+
+  def unready_characters
+    return self.characters.select{|character| !character.ready }
+  end
+  
+  def ready_to_execute?
+    return self.unready_characters.empty?
+  end
+
+  def execute
+    return false
   end
 end

@@ -10,6 +10,5 @@ class WorldsController < ApplicationController
         format.html { redirect_to root_path, :notice => "World joined successfully."}
       end
     end
-
   end
 end

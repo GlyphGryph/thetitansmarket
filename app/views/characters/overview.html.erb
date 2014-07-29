@@ -41,4 +41,11 @@
       <%= link_to "Ready Up", ready_path(:id => @character.id) %>
     <% end %>
   </div>
+
+  <div class="execute">
+    <% if @ready_to_execute %>
+      <%= link_to "Execute", execute_world_path(:id => @character.id, :world_id => @world.id) %>
+    <% else %>
+      Still waiting on <%= @unready_characters.count %> players.
+    <% end %>
 </div>

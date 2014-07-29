@@ -6,6 +6,8 @@ class CharactersController < ApplicationController
     @world = @character.world
     @character_actions = @character.character_actions
     @actions = Action.all
+    @ready_to_execute = @world.ready_to_execute?
+    @unready_characters = @world.unready_characters
   end
   
   def add_action
@@ -53,6 +55,17 @@ class CharactersController < ApplicationController
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not unready character."}
+      end
+    end
+  end
+
+  def execute
+    @world = World.find(params[:world_id])
+    respond_to do |format|
+      if(@world.execute)
+        format.html { redirect_to character_overview_path, :notice => "The world turns..." }
+      else
+        format.html { redirect_to character_overview_path, :alert => "The world could not turn."}
       end
     end
   end
