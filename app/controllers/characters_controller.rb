@@ -13,7 +13,7 @@ class CharactersController < ApplicationController
   def add_action
     character = Character.find(params[:id])
     action = Action.find(params[:action_id])
-    character_action = CharacterAction.new(:character => character, :action => action)
+    character_action = CharacterAction.new(:character => character, :action_id => action.id)
     respond_to do |format|
       if(character_action.save)
         format.html { redirect_to character_overview_path }

@@ -2,7 +2,6 @@ class Character < ActiveRecord::Base
   belongs_to :user
   belongs_to :world
   has_many :character_actions, :dependent => :destroy
-  has_many :actions, :through => :character_actions
 
   validates_presence_of :user
   validates_presence_of :world
