@@ -1,0 +1,9 @@
+<div id="character-info">
+  <h5>Character Info</h5>
+  <%= @target.name %> - 
+  <%= @target.hp %>/<%= @target.max_hp %> health - 
+  <%= @target.happy %>/<%= @target.max_happy %> happy -
+  <%= @target.ap %>/<%= @target.max_ap %> vigor
+</div>
+
+<%= link_to "Back to your own character", character_overview_path(:id => @character.id) %>

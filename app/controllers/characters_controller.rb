@@ -1,20 +1,21 @@
 class CharactersController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :find_character
+  before_filter :check_valid_owner, :except => :show
 
   def overview
-    @character = Character.find(params[:id])
     @world = @character.world
     @character_actions = @character.character_actions
     @actions = Action.all
     @history = @character.history.last
+    @other_characters = @world.characters.reject{|c| c==@character}
     @ready_to_execute = @world.ready_to_execute?
     @unready_characters = @world.unready_characters
   end
   
   def add_action
-    character = Character.find(params[:id])
     action = Action.find(params[:action_id])
-    character_action = CharacterAction.new(:character => character, :action_id => action.id)
+    character_action = CharacterAction.new(:character => @character, :action_id => action.id)
     respond_to do |format|
       if(character_action.save)
         format.html { redirect_to character_overview_path }
@@ -37,10 +38,9 @@ class CharactersController < ApplicationController
   end
 
   def ready
-    character = Character.find(params[:id])
-    character.ready
+    @character.ready
     respond_to do |format|
-      if(character.ready?)
+      if(@character.ready?)
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not ready character."}
@@ -49,10 +49,9 @@ class CharactersController < ApplicationController
   end
 
   def unready
-    character = Character.find(params[:id])
-    character.unready
+    @character.unready
     respond_to do |format|
-      if(!character.ready?)
+      if(!@character.ready?)
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => "Could not unready character."}
@@ -61,7 +60,6 @@ class CharactersController < ApplicationController
   end
 
   def execute
-    character = Character.find(params[:id])
     world = World.find(params[:world_id])
     respond_to do |format|
       if(world.execute)
@@ -69,6 +67,24 @@ class CharactersController < ApplicationController
       else
         format.html { redirect_to character_overview_path, :alert => "The world could not turn."}
       end
+    end
+  end
+
+  def examine
+    @target = Character.find(params[:character_id])
+  end
+
+  def show
+  end
+
+private
+  def find_character
+    @character = Character.find(params[:id])
+  end
+
+  def check_valid_owner
+    if(!current_user.characters.include?(@character))
+      redirect_to :action => :show
     end
   end
 end

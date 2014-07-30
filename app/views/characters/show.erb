@@ -1,0 +1,9 @@
+<div id="character-info">
+  <h5>Character Info</h5>
+  <%= @character.name %> - 
+  <%= @character.hp %>/<%= @character.max_hp %> health - 
+  <%= @character.happy %>/<%= @character.max_happy %> happy -
+  <%= @character.ap %>/<%= @character.max_ap %> vigor
+</div>
+
+<%= link_to "Back to the front page", root_path %>
