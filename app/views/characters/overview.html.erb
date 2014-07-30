@@ -37,15 +37,24 @@
 
 <div id="action-queue">
   <h5>Actions Queue</h5>
+  <div class="cost">
+    <%= @queue_cost %>/<%= @character.ap %> 
+  </div>
   <ul class="selections">
     <% @character_actions.each do |character_action| %>
-      <li><%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %></li>
+      <li>
+        <%= character_action.action.cost.call(@character) %> -
+        <%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+      </li>
     <% end %>
   </ul>
-  
   <ul class="options">
     <% @actions.each do |action|%>
-      <li><%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: <%= action.description %></li>
+      <li>
+        <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: 
+        <%= action.description %> 
+        (Cost: <%= action.cost.call(@character) %>)
+      </li>
     <% end %>
   </ul>
 

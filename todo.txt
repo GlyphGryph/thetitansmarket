@@ -1,5 +1,4 @@
 Immediate goals:
-Add a "cost" to actions, this should probably be a lamda as well so it can change depending on the characters state.
 Prevent player from adding actions to a queue that would send his "cost" over his current ap.
 Characters have an "inventory". Every character starts with a "perfectly generic object".
 Display the inventory on the character page.

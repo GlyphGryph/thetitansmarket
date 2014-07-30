@@ -8,6 +8,7 @@ class CharactersController < ApplicationController
     @character_actions = @character.character_actions
     @actions = Action.all
     @history = @character.history.last
+    @queue_cost = @character.cost_of_all_actions
     @other_characters = @world.characters.reject{|c| c==@character}
     @ready_to_execute = @world.ready_to_execute?
     @unready_characters = @world.unready_characters

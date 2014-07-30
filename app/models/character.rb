@@ -22,6 +22,14 @@ class Character < ActiveRecord::Base
     self.history ||= [["You were born from the machine, and thrust into the world."]]
   end
 
+  def cost_of_all_actions
+    cost = 0
+    self.character_actions.each do |character_action|
+      cost+=character_action.action.cost.call(self)
+    end
+    return cost
+  end
+
   def ready?
     return self.readied
   end
@@ -38,10 +46,17 @@ class Character < ActiveRecord::Base
 
   def execute
     self.unready
+    cost_so_far = 0
     new_history = []
     self.character_actions.each do |character_action|
       action = character_action.action
-      new_history << action.function.call
+      cost_so_far += action.cost.call(self)
+      if(cost_so_far <= self.ap)
+        new_history << action.result.call(self)
+      end
+    end
+    if(cost_so_far > self.ap)
+      new_history << "You ran out of energy partway through, and couldn't finish what you had planned to do."
     end
     self.history << new_history
     self.save!
