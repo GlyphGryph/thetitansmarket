@@ -30,6 +30,10 @@ class Character < ActiveRecord::Base
     return cost
   end
 
+  def recent_history
+    return history.last
+  end
+
   def ready?
     return self.readied
   end
