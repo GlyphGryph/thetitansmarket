@@ -10,6 +10,13 @@
   <%= @character.ap %>/<%= @character.max_ap %> vigor
 </div>
 
+<div id="character-history">
+  <h5>Recently...</h5>
+  <% @history.each do |story| %>
+    <div><%= story %></div>
+  <% end %>
+</div>
+
 <div id="world-info">
   <h5>World Info</h5>
   <div id="world-name">

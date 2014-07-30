@@ -6,6 +6,7 @@ class CharactersController < ApplicationController
     @world = @character.world
     @character_actions = @character.character_actions
     @actions = Action.all
+    @history = @character.history.last
     @ready_to_execute = @world.ready_to_execute?
     @unready_characters = @world.unready_characters
   end

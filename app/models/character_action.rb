@@ -6,4 +6,8 @@ class CharacterAction < ActiveRecord::Base
   def name
     Action.find(self.action_id).name
   end
+
+  def action
+    Action.find(self.action_id)
+  end
 end
