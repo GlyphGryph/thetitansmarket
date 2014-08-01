@@ -21,7 +21,14 @@ class Character < ActiveRecord::Base
     self.name ||= "Human Being"
     self.history ||= [["You were born from the machine, and thrust into the world."]]
   end
+  
+  # Checks whether or not this character has enough AP to add additional actions.
+  def can_add_action?(action_id)
+    cost_of_action = Action.find(action_id).cost.call(self)
+    return (self.ap - self.cost_of_all_actions) >= cost_of_action
+  end
 
+  # Returns the total cost of all actions in this character's action queue
   def cost_of_all_actions
     cost = 0
     self.character_actions.each do |character_action|

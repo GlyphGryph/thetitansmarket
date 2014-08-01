@@ -21,7 +21,7 @@ class CharactersController < ApplicationController
       if(character_action.save)
         format.html { redirect_to character_overview_path }
       else
-        format.html { redirect_to character_overview_path, :alert => "Could not add action."}
+        format.html { redirect_to character_overview_path, :alert => character_action.errors.full_messages.to_sentence}
       end
     end
   end
