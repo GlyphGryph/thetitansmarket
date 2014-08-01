@@ -35,7 +35,7 @@ Action.new("reminisce",
 
 Action.new("forage",
   { :name=>"Forage", 
-    :description=>"You think about the past.", 
+    :description=>"You rummage through the underbrush.", 
     :result => lambda { |character|
       if(Random.rand(2)==0)
         CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
