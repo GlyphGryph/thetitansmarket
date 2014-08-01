@@ -36,7 +36,14 @@ Action.new("reminisce",
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
-    :result => lambda { |character| return "Tallyho! You explore a while." },
+    :result => lambda { |character| 
+      if(Random.rand(4)==0)
+        CharacterPossession.new(:character_id => character.id, :possession_id => "generic_object").save!
+        return "Tallyho! You explore a while, and discover a Generic Object just lying out in the open! You snatch it up." 
+      else
+        return "Tallyho! You explore a while, but turn up nothing." 
+      end
+    },
     :cost => lambda { |character| return 5 },
   }
 )
