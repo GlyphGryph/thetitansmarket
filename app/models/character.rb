@@ -71,6 +71,8 @@ class Character < ActiveRecord::Base
     self.unready
     cost_so_far = 0
     new_history = []
+
+    # Process this character's actions
     self.character_actions.each do |character_action|
       action = character_action.action
       cost_so_far += action.cost.call(self)
@@ -81,6 +83,16 @@ class Character < ActiveRecord::Base
     if(cost_so_far > self.ap)
       new_history << "You ran out of energy partway through, and couldn't finish what you had planned to do."
     end
+
+    # Process this character's active conditions
+    self.character_conditions.each do |character_condition|
+      condition = character_condition.condition
+      effect = condition.result.call(self)
+      if(effect && !effect.empty?)
+        new_history << effect
+      end
+    end
+
     self.history << new_history
     self.save!
     self.character_actions.destroy_all
