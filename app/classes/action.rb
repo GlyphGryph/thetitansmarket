@@ -1,15 +1,5 @@
 class Action
-  @@actions = {}
-  class << self
-    def all
-      @@actions.values
-    end
-
-    def find(id)
-      @@actions[id]
-    end
-  end
-
+  extend CollectionTracker
   attr_reader :id, :name, :description, :result, :cost
 
   def initialize(id, params={})
@@ -18,7 +8,7 @@ class Action
     @description = params[:description] || "Description Error"
     @result = params[:result] || lambda { |character| return "Function error." }
     @cost = params[:cost] || lambda { |character| return 1 }
-    @@actions[@id]=self
+    self.class.add(@id, self)
   end
 end
 

@@ -1,19 +1,5 @@
 class Possession
-  @entries = {}
-  class << self
-    def all
-      @entries.values
-    end
-
-    def find(id)
-      @actions[id]
-    end
-
-    def add(id, value)
-      @entries[id]=value
-    end
-  end
-
+  extend CollectionTracker
   attr_reader :id, :name, :description, :result, :cost
 
   def initialize(id, params={})

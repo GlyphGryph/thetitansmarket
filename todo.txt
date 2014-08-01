@@ -1,5 +1,4 @@
 Immediate goals:
-Prevent player from adding actions to a queue that would send his "cost" over his current ap.
 Characters have an "inventory". Every character starts with a "perfectly generic object".
 Display the inventory on the character page.
 Add a "forage" action which allows the player a 50% chance of a "food" item being added to their inventory.
