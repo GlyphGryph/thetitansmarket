@@ -1,6 +1,6 @@
 class Possession
   extend CollectionTracker
-  attr_reader :id, :name, :description, :result, :cost
+  attr_reader :id, :name, :description
 
   def initialize(id, params={})
     @id = id
