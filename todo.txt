@@ -1,19 +1,10 @@
 Immediate goals:
-The "eat" action fails if there is no food item in the character's inventory, 
-Add the condition "hunger" to each character on creation, which destroys a food item from the character's inventory or causes their hp to drop by 1 and adds the "starved" event string to the characters history.
-Display conditions and a description for them on the character info page.
 -STYLE BREAK- :: Do some basic styling of the various pages to make navigation and information management easier.
-Add the condition "weariness" to each character on creation, which reduces happy by one each turn.
-Add a "play" action to the action list, which increases happy by 1 when used (up to max).
 
 --Later on--
-Allow creation of conditions
-Allow creation of traits
-Allow hooking both of those up to characters
 Allow player to view their characters full history.
-Allow players to trade items
 Generate an exploration pool for each world's potential results
-Have a chance of exploration producing "wildlands" items.
+Populate the deck "wildlands" and "generic object" items.
 Allow creation of knowledges.
 Add basic farming knowledge, which grants the Clear Land, Collect Seeds, Plant, and Harvest actions.
 Put all actions behind a knowledge barrier
@@ -22,11 +13,12 @@ Players can use the 'Ponder' action (from cognition), to uncover research option
 Allow creation of Proposals
 Play knowledge allows for the "Play Alone" and "Play With Others" actions, the second of which leads to the creation of a basic 'Play' proposal, which sends an invite to another player (or players) to engage in this activity and restore happiness for all those involved.
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
+Allow players to trade items as a proposal, introduce system for counterproposal
 Allow creation of Messages and Broadcasts
 The gestures system allows the player to send messages to other player, or to the market as a whole (a broadcast), by selecting from a few preset actions and selecting references. For example, "Point At", followed by targeting either an item or a person.
 Messages and broadcasts are destroyed after they are viewed by their targets, until the appropriate knowledges are gained
 "Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
-
+Allow creation of traits
 
 Characters have the following stats:
 Health (hp)
@@ -35,5 +27,7 @@ Happiness (happy)
 Max Happiness (max_happy)
 Action Points (ap)
 Maximum Action Points (max_ap)
+Inventory (possessions)
 Conditions: [basic hunger, basic dissatisfaction, basic recovery, mortal]
 Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organized multitasker, big heart]
+Knowledge
