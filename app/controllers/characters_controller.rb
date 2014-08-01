@@ -16,6 +16,7 @@ class CharactersController < ApplicationController
       end
       result
     end
+    @conditions = @character.character_conditions.map(&:condition)
     @history = @character.recent_history
     @queue_cost = @character.cost_of_all_actions
     @other_characters = @world.characters.reject{|c| c==@character}

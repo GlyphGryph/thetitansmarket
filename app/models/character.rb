@@ -4,12 +4,14 @@ class Character < ActiveRecord::Base
   belongs_to :world
   has_many :character_actions, :dependent => :destroy
   has_many :character_possessions, :dependent => :destroy
+  has_many :character_conditions, :dependent => :destroy
 
   validates_presence_of :user
   validates_presence_of :world
   validates_uniqueness_of :user, :scope => [:world]
 
   before_create :default_attributes
+  after_create :default_relationships
   
   def default_attributes
     self.max_hp ||= 10
@@ -21,6 +23,10 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Human Being"
     self.history ||= [["You were born from the machine, and thrust into the world."]]
+  end
+
+  def default_relationships
+    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
   end
   
   # Checks whether or not this character has enough AP to add additional actions.
@@ -36,6 +42,11 @@ class Character < ActiveRecord::Base
       cost+=character_action.action.cost.call(self)
     end
     return cost
+  end
+
+  def damage(amount=1)
+    self.hp-=amount
+    self.save!
   end
 
   def recent_history

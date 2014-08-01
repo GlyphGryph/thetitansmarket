@@ -10,10 +10,17 @@
   <%= @character.ap %>/<%= @character.max_ap %> vigor
 </div>
 
+<div id="conditions">
+  <h5>Conditions</h5>
+  <% @conditions.each do |condition| %>
+    <div class="conditions-element"><%= condition.name %>: <%= condition.description %></div>
+  <% end %>
+</div>
+
 <div id="inventory">
   <h5>Inventory</h5>
   <% @inventory.each_value do |item| %>
-    <div class="inventory-item"><%= item.value.name %> x<%= item.count %>: <%= item.value.description %></div>
+    <div class="inventory-element"><%= item.value.name %> x<%= item.count %>: <%= item.value.description %></div>
   <% end %>
 </div>
 
