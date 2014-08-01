@@ -12,8 +12,8 @@
 
 <div id="inventory">
   <h5>Inventory</h5>
-  <% @inventory.each do |item| %>
-    <div class="inventory-item"><%= item.possession.name %>: <%= item.possession.description %></div>
+  <% @inventory.each_value do |item| %>
+    <div class="inventory-item"><%= item.value.name %> x<%= item.count %>: <%= item.value.description %></div>
   <% end %>
 </div>
 

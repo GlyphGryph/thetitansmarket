@@ -1,6 +1,4 @@
 Immediate goals:
-Add a "forage" action which allows the player a 50% chance of a "food" item being added to their inventory.
-When a character has multiples of the same item, it displays in the format "ItemName x5".
 The "eat" action fails if there is no food item in the character's inventory, 
 Add the condition "hunger" to each character on creation, which destroys a food item from the character's inventory or causes their hp to drop by 1 and adds the "starved" event string to the characters history.
 Display conditions and a description for them on the character info page.

@@ -7,7 +7,15 @@ class CharactersController < ApplicationController
     @world = @character.world
     @character_actions = @character.character_actions
     @actions = Action.all
-    @inventory = @character.character_possessions
+    @inventory = @character.character_possessions.inject({}) do |result, value|
+      possession = value.possession
+      if(result[possession.id]) 
+        result[possession.id][:count]+=1
+      else
+        result[possession.id]=OpenStruct.new(:value=>possession, :count=>1)
+      end
+      result
+    end
     @history = @character.recent_history
     @queue_cost = @character.cost_of_all_actions
     @other_characters = @world.characters.reject{|c| c==@character}
