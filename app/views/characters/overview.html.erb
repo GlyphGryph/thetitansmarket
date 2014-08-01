@@ -13,7 +13,7 @@
 <div id="inventory">
   <h5>Inventory</h5>
   <% @inventory.each do |item| %>
-    <%= item.possession.name %>: <%= item.possession.description %>
+    <div class="inventory-item"><%= item.possession.name %>: <%= item.possession.description %></div>
   <% end %>
 </div>
 

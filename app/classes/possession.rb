@@ -18,3 +18,9 @@ Possession.new("generic_object",
     :description=>"The only notable thing about this object is its complete lack of notable features.", 
   }
 )
+
+Possession.new("food", 
+  { :name=>"Food", 
+    :description=>"This thing is, more or less, edible.", 
+  }
+)

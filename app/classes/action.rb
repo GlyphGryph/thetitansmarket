@@ -33,6 +33,23 @@ Action.new("reminisce",
   }
 )
 
+Action.new("forage",
+  { :name=>"Forage", 
+    :description=>"You think about the past.", 
+    :result => lambda { |character|
+      if(Random.rand(2)==0)
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
+        foodlist = ["strawberries", "blueberries", "bearberries", "hackberries", "boisonberries", "grapes", "bananas",
+                    "squash", "mushrooms", "oranges", "apples", "cranberries", "zuchinni", "cucumber", "chickens"]
+        return "You forage through the underbrush and turn up some #{foodlist.sample}. Food!" 
+      else
+        return "You forage through the underbrush, but find only disappointment." 
+      end
+    },
+    :cost => lambda { |character| return 1 },
+  }
+)
+
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
