@@ -52,7 +52,7 @@ Action.new("ponder",
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
-      return character.knows?("cognition")
+      return character.knows?("cognition") && !character.knows?("basic_farming") && !character.considers?("basic_farming")
     }
   }
 )
@@ -65,7 +65,7 @@ Action.new("investigate",
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
-      return character.knows?("cognition")
+      return character.knows?("cognition") && !character.knows?("basic_farming")
     }
   }
 )
