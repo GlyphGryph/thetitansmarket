@@ -28,6 +28,11 @@ class CharactersController < ApplicationController
   
   def add_action
     action = Action.find(params[:action_id])
+    if(params[:target_type] && params[:target_id])
+      redirect_to :add_action_with_target
+    elsif(action.requires_target)
+      redirect_to :find_target
+    end
     character_action = CharacterAction.new(:character => @character, :action_id => action.id)
     respond_to do |format|
       if(character_action.save)
@@ -36,6 +41,29 @@ class CharactersController < ApplicationController
         format.html { redirect_to character_overview_path, :alert => character_action.errors.full_messages.to_sentence}
       end
     end
+  end
+  
+  def add_action_with_target
+    action = Action.find(params[:action_id])
+    target_type = params[:target_type]
+    target_id = params[:target_id]
+    character_action = CharacterAction.new(:character => @character, :action_id => action.id)
+    respond_to do |format|
+      if(character_action.save)
+        format.html { redirect_to character_overview_path }
+      else
+        format.html { redirect_to character_overview_path, :alert => character_action.errors.full_messages.to_sentence}
+      end
+    end
+  end
+
+  def find_target
+    @action = Action.find(params[:action_id])
+    @targets = @action.targets(@character)
+    @target_possessions = @targets['possessions']
+    @target_conditions = @targets['conditions']
+    @target_characters = @targets['characters']
+    @target_knowledges = @targets['knowledges']
   end
 
   def remove_action

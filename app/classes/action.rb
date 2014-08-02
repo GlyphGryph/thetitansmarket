@@ -1,6 +1,6 @@
 class Action
   extend CollectionTracker
-  attr_reader :id, :name, :description, :result, :cost, :available, :target_prompt
+  attr_reader :id, :name, :description, :result, :cost, :available, :target_prompt, :requires_target
 
   def initialize(id, params={})
     @id = id
@@ -9,8 +9,9 @@ class Action
     @result = params[:result] || lambda { |character| return "Function error." }
     @cost = params[:cost] || lambda { |character| return 1 }
     @available = params[:available] || lambda { |character| return true }
+    @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
-    @targets = params[:valid_targets] || {}
+    @valid_targets = params[:valid_targets] || {}
     self.class.add(@id, self)
   end
 
@@ -23,11 +24,11 @@ class Action
   end
 
   # Takes a character, and returns a list of valid targets, sorted by type, that character can select for this action
-  def valid_targets(character)
+  def targets(character)
     valid = {}
-    @targets.each do |target_type, values|
+    @valid_targets.each do |target_type, values|
       target_objects = []
-      if(target_type == 'possession')
+      if(target_type == 'possessions')
         if(values.include?('all'))
           target_objects = character.character_possessions
         else
@@ -37,7 +38,7 @@ class Action
             end
           end
         end
-      elsif(target_type == 'knowledge')
+      elsif(target_type == 'knowledges')
         if(values.include?('all'))
           # Only pull from knowledges ACTUALLY known, not just those considered. You cannot consider an idea.
           target_objects = character.knowledges
@@ -48,11 +49,11 @@ class Action
             end
           end
         end
-      elsif(target_type == 'character')
+      elsif(target_type == 'characters')
         if(values.include?('all'))
           target_objects = character.world.characters
         end
-      elsif(target_type == 'condition')
+      elsif(target_type == 'conditions')
         if(values.include?('all'))
           target_objects = character.character_conditions
         else
@@ -113,7 +114,8 @@ Action.new("ponder",
     :available => lambda { |character|
       return character.knows?("cognition") && !character.knows?("basic_farming") && !character.considers?("basic_farming")
     },
-    :valid_targets => {'possession'=>['all'], 'condition'=>['all'], 'knowledge'=>['all'], 'character'=>['all']},
+    :requires_target => true,
+    :valid_targets => {'possessions'=>['all'], 'conditions'=>['all'], 'knowledges'=>['all'], 'characters'=>['all']},
     :target_prompt => "What would you like to ponder?",
   }
 )
