@@ -51,6 +51,19 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
+  def eat(amount=1)
+    if(self.possesses?('food'))
+      food = self.character_possessions.where(:possession_id => 'food').first
+      if(self.knows?("basic_farming"))
+        CharacterPossession.new(:character => self, :possession_id => 'seed', :variant=>food.variant).save!
+      end
+      food.destroy!
+      return true
+    else
+      return false
+    end
+  end
+
   def earlier_history
     return history - recent_history
   end

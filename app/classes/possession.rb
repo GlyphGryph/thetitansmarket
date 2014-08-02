@@ -23,6 +23,12 @@ Possession.new("food",
     :description=>"This thing is, more or less, edible.", 
   }
 )
+Possession.new("seed", 
+  { :name=>"Seeds", 
+    :description=>"These seeds can be planted.", 
+  }
+)
+
 Possession.new("wildlands", 
   { :name=>"Plot of Wilderness", 
     :description=>"You've claimed a chunk of land.", 

@@ -18,13 +18,11 @@ Condition.new("hunger",
   { :name=>"Hunger", 
     :description=>"You're in the mood for food.", 
     :result => lambda { |character| 
-      food = character.character_possessions.where(:possession_id => 'food')
-      if(food.empty?)
+      if(character.eat)
+        return "You gobble up a unit of food."
+      else 
         character.damage(1)
         return "You suffer from starvation."
-      else 
-        food.first.destroy!
-        return "You gobble up a unit of food."
       end
     },
   }

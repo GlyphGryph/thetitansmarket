@@ -23,10 +23,9 @@ Action.new("forage",
     :description=>"You rummage through the underbrush.", 
     :result => lambda { |character|
       if(Random.rand(2)==0)
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
-        foodlist = ["strawberries", "blueberries", "bearberries", "hackberries", "boisonberries", "grapes", "bananas",
-                    "squash", "mushrooms", "oranges", "apples", "cranberries", "zuchinni", "cucumber", "chickens"]
-        return "You forage through the underbrush and turn up some #{foodlist.sample}. Food!" 
+        found = Plant.all.sample
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+        return "You forage through the underbrush and discover a #{found.plant_name}. You quickly gather some #{found.food_name}. Food!" 
       else
         return "You forage through the underbrush, but find only disappointment." 
       end
