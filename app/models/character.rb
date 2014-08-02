@@ -5,6 +5,7 @@ class Character < ActiveRecord::Base
   has_many :character_actions, :dependent => :destroy
   has_many :character_possessions, :dependent => :destroy
   has_many :character_conditions, :dependent => :destroy
+  has_many :character_knowledges, :dependent => :destroy
 
   validates_presence_of :user
   validates_presence_of :world
@@ -27,6 +28,7 @@ class Character < ActiveRecord::Base
 
   def default_relationships
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
   end
   
   # Checks whether or not this character has enough AP to add additional actions.
@@ -49,12 +51,26 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
-  def recent_history
-    return history.last
-  end
-
   def earlier_history
     return history - recent_history
+  end
+
+  def ideas
+    character_knowledges.where(:known=>false)
+  end
+
+  def knows?(knowledge_id)
+    return !(self.knowledges.where(:knowledge_id => knowledge_id).empty?)
+  end
+
+  def knowledges
+    character_knowledges.where(:known=>true)
+  end
+  
+  def potential_actions
+    return Action.all.select do |action|
+      action.available.call(self)
+    end
   end
 
   def ready?
@@ -64,6 +80,10 @@ class Character < ActiveRecord::Base
   def ready
     self.readied = true
     self.save!
+  end
+
+  def recent_history
+    return history.last
   end
 
   def unready

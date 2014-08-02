@@ -1,6 +1,6 @@
 class Action
   extend CollectionTracker
-  attr_reader :id, :name, :description, :result, :cost
+  attr_reader :id, :name, :description, :result, :cost, :available
 
   def initialize(id, params={})
     @id = id
@@ -8,6 +8,7 @@ class Action
     @description = params[:description] || "Description Error"
     @result = params[:result] || lambda { |character| return "Function error." }
     @cost = params[:cost] || lambda { |character| return 1 }
+    @available = params[:available] || lambda { |character| return true }
     self.class.add(@id, self)
   end
 end
@@ -24,7 +25,6 @@ Action.new("rest",
     :cost => lambda { |character| return 1 },
   }
 )
-
 Action.new("reminisce", 
   { :name=>"Reminisce", 
     :description=>"You think about the past.", 
@@ -32,7 +32,6 @@ Action.new("reminisce",
     :cost => lambda { |character| return 2 },
   }
 )
-
 Action.new("forage",
   { :name=>"Forage", 
     :description=>"You rummage through the underbrush.", 
@@ -49,7 +48,6 @@ Action.new("forage",
     :cost => lambda { |character| return 1 },
   }
 )
-
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
@@ -57,5 +55,17 @@ Action.new("explore",
       return character.world.explore_with(character)
     },
     :cost => lambda { |character| return 5 },
+  }
+)
+Action.new("ponder",
+  { :name=>"Ponder",
+    :description=>"You think for a while.",
+    :result => lambda { |character|
+      return "You ponder life's mysteries."
+    },
+    :cost => lambda { |character| return 3 },
+    :available => lambda { |character|
+      return character.knows?("cognition")
+    }
   }
 )

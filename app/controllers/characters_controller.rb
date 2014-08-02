@@ -6,7 +6,7 @@ class CharactersController < ApplicationController
   def overview
     @world = @character.world
     @character_actions = @character.character_actions
-    @actions = Action.all
+    @actions = @character.potential_actions
     @inventory = @character.character_possessions.inject({}) do |result, value|
       possession = value.possession
       if(result[possession.id]) 
