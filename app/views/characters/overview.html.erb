@@ -2,88 +2,134 @@
   <%= link_to "Return to World List", root_path %>
 </div>
 
-<div id="character-info">
-  <h5>Character Info</h5>
-  <%= @character.name %> - 
-  <%= @character.hp %>/<%= @character.max_hp %> health - 
-  <%= @character.happy %>/<%= @character.max_happy %> happy -
-  <%= @character.ap %>/<%= @character.max_ap %> vigor
-</div>
+<div id="overview">
+  <div id="character-overview">
+    <div class="info-block" id="character-info">
+      <div class="info-block-head">Character Info</div>
+      <div class="info-block-body">
+        <div class="stat"><%= @character.name %></div>
+        <div class="stat"><%= @character.hp %>/<%= @character.max_hp %> health</div>
+        <div class="stat"><%= @character.happy %>/<%= @character.max_happy %> happy</div>
+        <div class="stat"><%= @character.ap %>/<%= @character.max_ap %> vigor</div>
+      </div>
+    </div>
 
-<div id="conditions">
-  <h5>Conditions</h5>
-  <% @conditions.each do |condition| %>
-    <div class="conditions-element"><%= condition.name %>: <%= condition.description %></div>
-  <% end %>
-</div>
+    <div class="info-block" id="conditions">
+      <div class="info-block-head">Conditions</div>
+      <div class="info-block-body">
+        <% @conditions.each do |condition| %>
+          <div class="conditions-element"><%= condition.name %>: <%= condition.description %></div>
+        <% end %>
+      </div>
+    </div>
 
-<div id="inventory">
-  <h5>Inventory</h5>
-  <% @inventory.each_value do |item| %>
-    <div class="inventory-element"><%= item.value.name %> x<%= item.count %>: <%= item.value.description %></div>
-  <% end %>
-</div>
-
-<div id="character-history">
-  <h5>Recently...</h5>
-  <% @history.each do |story| %>
-    <div><%= story %></div>
-  <% end %>
-</div>
-
-<div id="world-info">
-  <h5>World Info</h5>
-  <div id="world-name">
-    <%= @world.name %>
-  </div>
-  <div id="world-turn">
-    Turns: <%= @world.turn %>
-  </div>
-  <div id="world-peers">
-    <%= @other_characters.count %> Peers: 
-    <ul>
-      <% @other_characters.each do |other| %>
-        <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %></li>
-      <% end %>
-    </ul>
-  </div>
-</div>
-
-<div id="action-queue">
-  <h5>Actions Queue</h5>
-  <div class="cost">
-    <%= @queue_cost %>/<%= @character.ap %> 
-  </div>
-  <ul class="selections">
-    <% @character_actions.each do |character_action| %>
-      <li>
-        <%= character_action.action.cost.call(@character) %> -
-        <%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
-      </li>
-    <% end %>
-  </ul>
-  <ul class="options">
-    <% @actions.each do |action|%>
-      <li>
-        <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: 
-        <%= action.description %> 
-        (Cost: <%= action.cost.call(@character) %>)
-      </li>
-    <% end %>
-  </ul>
-
-  <div class="ready-up">
-    <% if @character.ready? %>
-      <%= link_to "Wait a minute...", unready_path(:id => @character.id) %>
-    <% else %>
-      <%= link_to "Ready Up", ready_path(:id => @character.id) %>
-    <% end %>
+    <div class="info-block" id="inventory">
+      <div class="info-block-head">Inventory</div>
+      <div class="info-block-body">
+        <% if @inventory.empty? %>
+          You have nothing.
+        <% else %>
+          <% @inventory.each_value do |item| %>
+            <div class="inventory-element">
+              <div class="label"><%= item.value.name %></div>
+              <div class="count"><%= item.count %></div> 
+              <div class="description"><%= item.value.description %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <div class="execute">
-    <% if @ready_to_execute %>
-      <%= link_to "Execute", execute_world_path(:id => @character.id, :world_id => @world.id) %>
-    <% else %>
-      Still waiting on <%= @unready_characters.count %> players.
-    <% end %>
+  <div id="controls">
+    <div class="info-block" id="ready-tracker">
+      <div class="info-block-head">Status</div>
+      <div class="info-block-body">
+        <div class="ready-up">
+          <% if @character.ready? %>
+            <%= link_to "Wait a minute...", unready_path(:id => @character.id) %>
+          <% else %>
+            <%= link_to "Ready Up", ready_path(:id => @character.id) %>
+          <% end %>
+        </div>
+
+        <% if @ready_to_execute %>
+          <div class="execute">
+            <%= link_to "Execute", execute_world_path(:id => @character.id, :world_id => @world.id) %>
+          </div>
+        <% else %>
+          <div class="waiting-on">
+            Still waiting on <%= @unready_characters.count %> players.
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="info-block" id="action-queue">
+      <div class="info-block-head">
+        Actions Queue
+        <div class="queue-cost"><%= @queue_cost %>/<%= @character.ap %></div>
+      </div>
+      <div class="info-block-body">
+        <div class="selections">
+          <% if @character_actions.empty? %>
+            No actions selected.
+          <% else %>
+            <% @character_actions.each do |character_action| %>
+              <div class="selection-element">
+                <%= character_action.action.cost.call(@character) %> -
+                <%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-block" id="action-queue">
+      <div class="info-block-head">Possible Actions</div>
+      <div class="info-block-body">
+        <div class="options">
+          <% @actions.each do |action|%>
+            <div class="options-element">
+              <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: 
+              <%= action.description %> 
+              (Cost: <%= action.cost.call(@character) %>)
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <div id="main-overview">
+    <div class="info-block" id="world-info">
+      <div class="info-block-head">World Info</div>
+      <div class="info-block-body">
+        <div id="world-name">
+          <%= @world.name %>
+        </div>
+        <div id="world-turn">
+          Turns: <%= @world.turn %>
+        </div>
+        <div id="world-peers">
+          <%= @other_characters.count %> Peers: 
+          <ul>
+            <% @other_characters.each do |other| %>
+              <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-block" id="character-history">
+      <div class="info-block-head">Recently...</div>
+      <div class="info-block-body">
+        <% @history.each do |story| %>
+          <div><%= story %></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
