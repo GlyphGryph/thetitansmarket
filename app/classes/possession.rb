@@ -28,3 +28,13 @@ Possession.new("wildlands",
     :description=>"You've claimed a chunk of land.", 
   }
 )
+Possession.new("field", 
+  { :name=>"Empty Field.", 
+    :description=>"A plot of cleared land.", 
+  }
+)
+Possession.new("farm", 
+  { :name=>"Farm Plot", 
+    :description=>"A field full of plants.", 
+  }
+)

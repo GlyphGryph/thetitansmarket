@@ -55,6 +55,16 @@ class Character < ActiveRecord::Base
     return history - recent_history
   end
 
+  def consider(knowledge_id)
+    unless(considers?(knowledge_id) || knows?(knowledge_id))
+      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)
+    end
+  end
+
+  def considers?(knowledge_id)
+    return !(self.ideas.where(:knowledge_id => knowledge_id).empty?)
+  end
+
   def ideas
     character_knowledges.where(:known=>false)
   end
@@ -66,7 +76,20 @@ class Character < ActiveRecord::Base
   def knowledges
     character_knowledges.where(:known=>true)
   end
+
+  def learn(knowledge_id)
+    if(considers?(knowledge_id))
+      self.ideas.where(:knowledge_id => knowledge_id).first.learn
+    elsif(!knows?(knowledge_id))
+      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => true)
+    end
+ 
+  end
   
+  def possesses?(possession_id)
+    return !(self.character_possessions.where(:possession_id => possession_id).empty?)
+  end
+
   def potential_actions
     return Action.all.select do |action|
       action.available.call(self)

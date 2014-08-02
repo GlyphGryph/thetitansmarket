@@ -18,7 +18,7 @@
       <div class="info-block-head">Conditions</div>
       <div class="info-block-body">
         <% @conditions.each do |condition| %>
-          <div class="conditions-element"><%= condition.name %>: <%= condition.description %></div>
+          <div class="conditions-element element"><%= condition.name %>: <%= condition.description %></div>
         <% end %>
       </div>
     </div>
@@ -30,10 +30,41 @@
           You have nothing.
         <% else %>
           <% @inventory.each_value do |item| %>
-            <div class="inventory-element">
+            <div class="inventory-element element">
               <div class="label"><%= item.value.name %></div>
               <div class="count"><%= item.count %></div> 
               <div class="description"><%= item.value.description %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+
+    <div class="info-block" id="knowledges">
+      <div class="info-block-head">Knowledge</div>
+      <div class="info-block-body">
+        <% if @knowledges.empty? %>
+          You might as well be called John Snow.
+        <% else %>
+          <% @knowledges.each do |knowledge| %>
+            <div class="knowledge-element element">
+              <div class="label"><%= knowledge.name %></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="info-block" id="knowledges">
+      <div class="info-block-head">Ideas</div>
+      <div class="info-block-body">
+        <% if @ideas.empty? %>
+          You've got no idea.
+        <% else %>
+          <% @ideas.each do |idea| %>
+            <div class="idea-element element">
+              <div class="label"><%= idea.name %></div>
             </div>
           <% end %>
         <% end %>

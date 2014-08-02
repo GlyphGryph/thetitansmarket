@@ -6,4 +6,9 @@ class CharacterKnowledge < ActiveRecord::Base
   def knowledge
     Knowledge.find(self.knowledge_id)
   end
+
+  def learn
+    self.known = true
+    self.save!
+  end
 end

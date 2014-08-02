@@ -16,6 +16,8 @@ class CharactersController < ApplicationController
       end
       result
     end
+    @knowledges = @character.knowledges.map(&:knowledge)
+    @ideas = @character.ideas.map(&:knowledge)
     @conditions = @character.character_conditions.map(&:condition)
     @history = @character.recent_history
     @queue_cost = @character.cost_of_all_actions
