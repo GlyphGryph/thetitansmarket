@@ -15,7 +15,7 @@
   <hr />
   <div class="character-list list">
     <% @characters.each do |character| %>
-      <div class="entry"><%= character.name%> <%= link_to "Take Control", character_overview_path(:id => character) %></div> 
+      <div class="entry"><%= character.name%> (World <%= character.world.id %>, <%= character.world.name %>) <%= link_to "Take Control", character_overview_path(:id => character) %></div> 
     <% end %>
   </div>
 
