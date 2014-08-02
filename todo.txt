@@ -1,7 +1,4 @@
 Immediate goals:
-Allow player to view their characters full history.
-Generate an exploration pool for each world's potential results
-Populate the deck "wildlands" and "generic object" items.
 Allow creation of knowledges.
 Add basic farming knowledge, which grants the Clear Land, Collect Seeds, Plant, and Harvest actions.
 Put all actions behind a knowledge barrier
