@@ -90,17 +90,26 @@ Action.new("plant",
   { :name=>"Sow Fields",
     :description=>"You think for a while.",
     :result => lambda { |character|
-      if(character.possesses?("field"))
-        character.character_possessions.where(:possession_id=>"field").first.destroy!
-        CharacterPossession.new(:character_id => character.id, :possession_id => "farm").save!
-        return "You plow and plant a field."
+      if(character.possesses?("field") && character.possesses?("seed"))
+        seed = character.character_possessions.where(:possession_id => "seed").first
+        character.character_possessions.where(:possession_id => "field").first.destroy!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => seed.variant).save!
+        seed_name = Plant.find(seed.variant).seed_name
+        seed.destroy!
+        return "You plow a field and plant your #{seed_name}."
       else
-        return "You attemped to sow a field, but it failed."
+        if(!character.possesses?("field"))
+          return "You have no field to sow."
+        elsif(!character.possesses?("seed"))
+          return "You have no seeds to sow in the field"
+        else
+          return "We don't know why sowing the field didn't work, but it didn't."
+        end
       end
     },
     :cost => lambda { |character| return 5 },
     :available => lambda { |character|
-      return character.knows?("basic_farming") && character.possesses?("field")
+      return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
     }
   }
 )
@@ -109,12 +118,14 @@ Action.new("harvest",
     :description=>"You think for a while.",
     :result => lambda { |character|
       if(character.possesses?("farm"))
-        character.character_possessions.where(:possession_id=>"farm").first.destroy!
-        CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+        farm = character.character_possessions.where(:possession_id=>"farm").first
         5.times do
-          CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
+          CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
         end
-        return "You harvest a field, gaining 5 food."
+        CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+        food_name = Plant.find(farm.variant).food_name
+        farm.destroy!
+        return "You harvest a field of #{food_name}, gaining 5 food."
       else
         return "You attempted to harvest a field, but it failed."
       end
