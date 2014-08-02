@@ -1,7 +1,4 @@
 Immediate goals:
--STYLE BREAK- :: Do some basic styling of the various pages to make navigation and information management easier.
-
---Later on--
 Allow player to view their characters full history.
 Generate an exploration pool for each world's potential results
 Populate the deck "wildlands" and "generic object" items.
