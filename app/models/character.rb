@@ -53,6 +53,10 @@ class Character < ActiveRecord::Base
     return history.last
   end
 
+  def earlier_history
+    return history - recent_history
+  end
+
   def ready?
     return self.readied
   end

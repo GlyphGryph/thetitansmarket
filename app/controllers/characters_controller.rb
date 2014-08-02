@@ -85,6 +85,11 @@ class CharactersController < ApplicationController
     @target = Character.find(params[:character_id])
   end
 
+  def history
+    @history = @character.earlier_history
+    @recent_history = @character.recent_history
+  end
+
   def show
   end
 

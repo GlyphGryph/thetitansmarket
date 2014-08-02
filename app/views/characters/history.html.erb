@@ -1,0 +1,14 @@
+<div id="character-history">
+  <%= link_to "Back to your world...", character_overview_path(:id=>@character.id) %>
+  <h4>Recently...</h4>
+  <% @recent_history.each do |story| %>
+    <div class="story"><%= story %></div>
+  <% end %>
+
+  <% @history.each do |step| %>
+    <h4>Earlier...</h4>
+    <% step.each do |story| %>
+      <div class="story"><%= story %></div>
+    <% end %>
+  <% end %>
+</div>

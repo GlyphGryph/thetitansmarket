@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'character/:id/execute/:world_id' => 'characters#execute', :as => :execute_world
   get 'character/:id/examine/:character_id' => 'characters#examine', :as => :examine_character
   get 'character/:id/show' => 'characters#show', :as => :show_character
+  get 'character/:id/history' => 'characters#history', :as => :character_history
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
