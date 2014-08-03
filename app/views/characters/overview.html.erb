@@ -108,7 +108,11 @@
             <% @character_actions.each do |character_action| %>
               <div class="selection-element">
                 <%= character_action.action.cost.call(@character) %> -
-                <%= character_action.name %> <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+                <%= character_action.name %> 
+                <% if character_action.action.requires_target? %>
+                  (<%= character_action.target %>)
+                <% end %>
+                <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
               </div>
             <% end %>
           <% end %>

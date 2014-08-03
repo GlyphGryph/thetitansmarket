@@ -15,6 +15,10 @@ class Action
     self.class.add(@id, self)
   end
 
+  def requires_target?
+    return requires_target
+  end
+
   def targetable(type, id)
     if(self.valid_targets[type] && (self.valid_target[type].include?(id) || self.valid_target[type].include?('all')))
       return true
@@ -68,6 +72,7 @@ class Action
       end
       valid[target_type]=target_objects
     end
+    return valid
   end
 end
 

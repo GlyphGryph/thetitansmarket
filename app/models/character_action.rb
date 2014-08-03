@@ -20,4 +20,18 @@ class CharacterAction < ActiveRecord::Base
   def action
     Action.find(self.action_id)
   end
+
+  def target
+    if(self.target_type == "possession")
+      return CharacterPossession.find(self.target_id)
+    elsif(self.target_type == "condition")
+      return CharacterCondition.find(self.target_id)
+    elsif(self.target_type == "character")
+      return Character.find(self.target_id)
+    elsif(self.target_type == "knowledge")
+      return CharacterKnowledge.find(self.target_id)
+    else
+      return OpenStruct.new(:name=>"Invalid Type")
+    end
+  end
 end

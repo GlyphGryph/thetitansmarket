@@ -30,8 +30,10 @@ class CharactersController < ApplicationController
     action = Action.find(params[:action_id])
     if(params[:target_type] && params[:target_id])
       redirect_to :add_action_with_target
-    elsif(action.requires_target)
-      redirect_to :find_target
+      return
+    elsif(action.requires_target?)
+      redirect_to :find_action_target
+      return
     end
     character_action = CharacterAction.new(:character => @character, :action_id => action.id)
     respond_to do |format|
@@ -47,7 +49,7 @@ class CharactersController < ApplicationController
     action = Action.find(params[:action_id])
     target_type = params[:target_type]
     target_id = params[:target_id]
-    character_action = CharacterAction.new(:character => @character, :action_id => action.id)
+    character_action = CharacterAction.new(:character => @character, :action_id => action.id, :target_type => target_type, :target_id => target_id)
     respond_to do |format|
       if(character_action.save)
         format.html { redirect_to character_overview_path }
@@ -57,7 +59,7 @@ class CharactersController < ApplicationController
     end
   end
 
-  def find_target
+  def find_action_target
     @action = Action.find(params[:action_id])
     @targets = @action.targets(@character)
     @target_possessions = @targets['possessions']

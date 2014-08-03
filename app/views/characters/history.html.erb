@@ -1,5 +1,9 @@
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %> - 
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+</div>
+
 <div id="character-history">
-  <%= link_to "Back to your world...", character_overview_path(:id=>@character.id) %>
   <h4>Recently...</h4>
   <% @recent_history.each do |story| %>
     <div class="story"><%= story %></div>

@@ -1,3 +1,8 @@
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %> - 
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+</div>
+
 <div id="character-info">
   <h5>Character Info</h5>
   <%= @target.name %> - 
@@ -5,5 +10,3 @@
   <%= @target.happy %>/<%= @target.max_happy %> happy -
   <%= @target.ap %>/<%= @target.max_ap %> vigor
 </div>
-
-<%= link_to "Back to your own character", character_overview_path(:id => @character.id) %>

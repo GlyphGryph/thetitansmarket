@@ -1,0 +1,50 @@
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %> - 
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+</div>
+
+<div id="choose-target-prompt">
+  <%= @action.target_prompt %>
+</div>
+<div id="choose-target-options">
+  <div class="info-block">
+    <div class="info-block-head">Possessions</div>
+    <div class="info-block-body">
+      <% @target_possessions.each do |target| %>
+        <div class="choosable-element element">
+          <%= link_to target.possession.name, add_action_with_target_path(:id => @character.id, :target_type => 'possession', :target_id => target.id) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="info-block">
+    <div class="info-block-head">Conditions</div>
+    <div class="info-block-body">
+      <% @target_conditions.each do |target| %>
+        <div class="choosable-element element">
+          <%= link_to target.condition.name, add_action_with_target_path(:id => @character.id, :target_type => 'condition', :target_id => target.id) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="info-block">
+    <div class="info-block-head">Characters</div>
+    <div class="info-block-body">
+      <% @target_characters.each do |target| %>
+        <div class="choosable-element element">
+          <%= link_to target.name, add_action_with_target_path(:id => @character.id, :target_type => 'character', :target_id => target.id) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="info-block">
+    <div class="info-block-head">Knowledges</div>
+    <div class="info-block-body">
+      <% @target_knowledges.each do |target| %>
+        <div class="choosable-element element">
+          <%= link_to target.knowledge.name, add_action_with_target_path(:id => @character.id, :target_type => 'knowledge', :target_id => target.id) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
