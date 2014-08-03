@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803185944) do
+ActiveRecord::Schema.define(version: 20140803223631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,32 @@ ActiveRecord::Schema.define(version: 20140803185944) do
     t.integer  "turn"
     t.string   "content_type"
     t.integer  "content_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "trade_asked_character_possessions", force: true do |t|
+    t.integer  "trade_id"
+    t.integer  "character_possession_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "trade_character_possessions", force: true do |t|
+    t.integer  "trade_id"
+    t.integer  "character_possession_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "trade_offered_character_possessions", force: true do |t|
+    t.integer  "trade_id"
+    t.integer  "character_possession_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "trades", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
