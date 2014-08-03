@@ -6,7 +6,7 @@ class Action
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
-    @result = params[:result] || lambda { |character| return "Function error." }
+    @result = params[:result] || lambda { |character, character_action| return "Function error." }
     @cost = params[:cost] || lambda { |character| return 1 }
     @available = params[:available] || lambda { |character| return true }
     @requires_target = params[:requires_target] || false
@@ -78,7 +78,7 @@ end
 
 # Format for new actions
 # 'id', {:name => 'Name', :description=>"Multi-word description.", 
-# :result => lambda {|character| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
+# :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :cost => lambda {|character| if(character.loves_chicken) return 5; else return 6;} // Takes a character, returns a digit
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
 # :valid_targets => {'type_name' => ['id', 'id']} // Types are possession, knowledge, condition, character. 'all' can be used in place of an id to indicate that every object of that type is a valid target
@@ -87,7 +87,7 @@ end
 Action.new("forage",
   { :name=>"Forage", 
     :description=>"You rummage through the underbrush.", 
-    :result => lambda { |character|
+    :result => lambda { |character, character_action|
       if(Random.rand(2)==0)
         found = Plant.all.sample
         CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
@@ -102,7 +102,7 @@ Action.new("forage",
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
-    :result => lambda { |character| 
+    :result => lambda { |character, character_action| 
       return character.world.explore_with(character)
     },
     :cost => lambda { |character| return 5 },
@@ -111,13 +111,29 @@ Action.new("explore",
 Action.new("ponder",
   { :name=>"Ponder",
     :description=>"You think for a while.",
-    :result => lambda { |character|
-      character.consider('basic_farming')
-      return "You ponder life's mysteries."
+    :result => lambda { |character, character_action|
+      target_type = character_action.target_type
+      if(target_type=="character")
+        target = character_action.target
+      else
+        target = character_action.target.get
+      end
+      if( (target_type == 'possession' && target.id == 'food') ||
+          (target_type == 'possession' && target.id == 'wildlands') ||
+          (target_type == 'condition' && target.id == 'hunger') )
+        if(character.knows?("basic_farming") || character.considers?("basic_farming"))
+          return "You ponder the #{target.name}, but nothing new comes to mind."
+        else
+          character.consider('basic_farming')
+          return "You ponder the #{target.name}. You wonder if you could grow your own food, given the opportunity."
+        end
+      else
+        return "You ponder the #{target.name}, but it reveals nothing about life's ineffable mysteries."
+      end
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
-      return character.knows?("cognition") && !character.knows?("basic_farming") && !character.considers?("basic_farming")
+      return character.knows?("cognition")
     },
     :requires_target => true,
     :valid_targets => {'possessions'=>['all'], 'conditions'=>['all'], 'knowledges'=>['all'], 'characters'=>['all']},
@@ -127,20 +143,20 @@ Action.new("ponder",
 Action.new("investigate",
   { :name=>"Investigate",
     :description=>"Pursue a promising idea.",
-    :result => lambda { |character|
+    :result => lambda { |character, character_action|
       character.learn('basic_farming')
       return "You discover the secrets of agriculture."
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
-      return character.knows?("cognition") && !character.knows?("basic_farming")
+      return (character.knows?("cognition") && !character.ideas.empty?)
     }
   }
 )
 Action.new("clear_land",
   { :name=>"Clear Land",
     :description=>"Turn a plot of wilderness into a plot of farmable field.",
-    :result => lambda { |character|
+    :result => lambda { |character, character_action|
       if(character.possesses?("wildlands"))
         character.character_possessions.where(:possession_id=>"wildlands").first.destroy!
         CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
@@ -158,7 +174,7 @@ Action.new("clear_land",
 Action.new("plant",
   { :name=>"Sow Fields",
     :description=>"You plant your seeds.",
-    :result => lambda { |character|
+    :result => lambda { |character, character_action|
       if(character.possesses?("field") && character.possesses?("seed"))
         seed = character.character_possessions.where(:possession_id => "seed").first
         character.character_possessions.where(:possession_id => "field").first.destroy!
@@ -185,7 +201,7 @@ Action.new("plant",
 Action.new("harvest",
   { :name=>"Harvest Fields",
     :description=>"You harvest the crops.",
-    :result => lambda { |character|
+    :result => lambda { |character, character_action|
       if(character.possesses?("farm"))
         farm = character.character_possessions.where(:possession_id=>"farm").first
         5.times do
