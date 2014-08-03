@@ -157,7 +157,7 @@ Action.new("clear_land",
 )
 Action.new("plant",
   { :name=>"Sow Fields",
-    :description=>"You think for a while.",
+    :description=>"You plant your seeds.",
     :result => lambda { |character|
       if(character.possesses?("field") && character.possesses?("seed"))
         seed = character.character_possessions.where(:possession_id => "seed").first
@@ -184,7 +184,7 @@ Action.new("plant",
 )
 Action.new("harvest",
   { :name=>"Harvest Fields",
-    :description=>"You think for a while.",
+    :description=>"You harvest the crops.",
     :result => lambda { |character|
       if(character.possesses?("farm"))
         farm = character.character_possessions.where(:possession_id=>"farm").first
