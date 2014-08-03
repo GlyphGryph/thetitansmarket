@@ -3,7 +3,7 @@ class WorldExploration < ActiveRecord::Base
   validates_presence_of :world_id
   validates_presence_of :exploration_id
 
-  def exploration
+  def get
     Exploration.find(self.exploration_id)
   end
 end

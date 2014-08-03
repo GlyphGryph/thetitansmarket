@@ -107,10 +107,14 @@
           <% else %>
             <% @character_actions.each do |character_action| %>
               <div class="selection-element">
-                <%= character_action.action.cost.call(@character) %> -
-                <%= character_action.name %> 
-                <% if character_action.action.requires_target? %>
-                  (<%= character_action.target %>)
+                <%= character_action.get.cost.call(@character) %> -
+                <%= character_action.get.name %> 
+                <% if character_action.get.requires_target? %>
+                  <% if character_action.target_type == 'character'%>
+                    (<%= character_action.target.name %>)
+                  <% else %>
+                    (<%= character_action.target.get.name %>)
+                  <% end %>
                 <% end %>
                 <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
               </div>

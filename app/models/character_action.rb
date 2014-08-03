@@ -13,11 +13,7 @@ class CharacterAction < ActiveRecord::Base
   include ActiveModel::Validations
   validates_with CharacterActionValidator
 
-  def name
-    Action.find(self.action_id).name
-  end
-
-  def action
+  def get
     Action.find(self.action_id)
   end
 

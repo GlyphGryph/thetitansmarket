@@ -41,7 +41,7 @@ class Character < ActiveRecord::Base
   def cost_of_all_actions
     cost = 0
     self.character_actions.each do |character_action|
-      cost+=character_action.action.cost.call(self)
+      cost+=character_action.get.cost.call(self)
     end
     return cost
   end

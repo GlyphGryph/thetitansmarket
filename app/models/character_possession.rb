@@ -4,7 +4,7 @@ class CharacterPossession < ActiveRecord::Base
   validates_presence_of :possession_id
   attr_accessor :type, :contains
 
-  def possession
+  def get
     Possession.find(self.possession_id)
   end
 end

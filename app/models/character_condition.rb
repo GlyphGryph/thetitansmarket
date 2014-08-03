@@ -3,7 +3,7 @@ class CharacterCondition < ActiveRecord::Base
   validates_presence_of :character_id
   validates_presence_of :condition_id
 
-  def condition 
+  def get
     Condition.find(self.condition_id)
   end
 end

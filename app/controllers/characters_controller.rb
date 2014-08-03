@@ -8,7 +8,7 @@ class CharactersController < ApplicationController
     @character_actions = @character.character_actions
     @actions = @character.potential_actions
     @inventory = @character.character_possessions.inject({}) do |result, value|
-      possession = value.possession
+      possession = value.get
       if(result[possession.id]) 
         result[possession.id][:count]+=1
       else
@@ -16,9 +16,9 @@ class CharactersController < ApplicationController
       end
       result
     end
-    @knowledges = @character.knowledges.map(&:knowledge)
-    @ideas = @character.ideas.map(&:knowledge)
-    @conditions = @character.character_conditions.map(&:condition)
+    @knowledges = @character.knowledges.map(&:get)
+    @ideas = @character.ideas.map(&:get)
+    @conditions = @character.character_conditions.map(&:get)
     @history = @character.recent_history
     @queue_cost = @character.cost_of_all_actions
     @other_characters = @world.characters.reject{|c| c==@character}

@@ -3,7 +3,7 @@ class CharacterKnowledge < ActiveRecord::Base
   validates_presence_of :character_id
   validates_presence_of :knowledge_id
 
-  def knowledge
+  def get
     Knowledge.find(self.knowledge_id)
   end
 
