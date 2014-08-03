@@ -61,11 +61,22 @@ class CharactersController < ApplicationController
 
   def find_action_target
     @action = Action.find(params[:action_id])
-    @targets = @action.targets(@character)
-    @target_possessions = @targets['possessions']
-    @target_conditions = @targets['conditions']
-    @target_characters = @targets['characters']
-    @target_knowledges = @targets['knowledges']
+    @targets = {}
+    @action.targets(@character).each do |key, value|
+      label = "Unknown Type"
+      if(key == "possession")
+        label = "Possessions"
+      elsif(key == "conditions")
+        label = "Conditions"
+      elsif(key == "characters")
+        label = "Characters"
+      elsif(key == "knowledges")
+        label = "Knowledge"
+      elsif(key == "ideas")
+        label = "Ideas"
+      end
+      @targets[key] = OpenStruct.new(:label => label, :values => value)
+    end
   end
 
   def remove_action

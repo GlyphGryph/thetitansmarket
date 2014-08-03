@@ -24,7 +24,7 @@ class CharacterAction < ActiveRecord::Base
       return CharacterCondition.find(self.target_id)
     elsif(self.target_type == "character")
       return Character.find(self.target_id)
-    elsif(self.target_type == "knowledge")
+    elsif(self.target_type == "knowledge" || self.target_type =="idea")
       return CharacterKnowledge.find(self.target_id)
     else
       return OpenStruct.new(:name=>"Invalid Type")

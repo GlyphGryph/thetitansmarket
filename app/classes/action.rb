@@ -44,10 +44,21 @@ class Action
         end
       elsif(target_type == 'knowledges')
         if(values.include?('all'))
-          # Only pull from knowledges ACTUALLY known, not just those considered. You cannot consider an idea.
+          # Only pull from knowledges ACTUALLY known.
           target_objects = character.knowledges
         else
           character.knowledges.each do |character_knowledge|
+            if(values.include?(character_knowledge.knowledge_id))
+              target_objects << character_knowledge
+            end
+          end
+        end
+      elsif(target_type == 'ideas')
+        if(values.include?('all'))
+          # Only pull from knowledges considered but not yet known.
+          target_objects = character.ideas
+        else
+          character.ideas.each do |character_knowledge|
             if(values.include?(character_knowledge.knowledge_id))
               target_objects << character_knowledge
             end
@@ -81,7 +92,7 @@ end
 # :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :cost => lambda {|character| if(character.loves_chicken) return 5; else return 6;} // Takes a character, returns a digit
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
-# :valid_targets => {'type_name' => ['id', 'id']} // Types are possession, knowledge, condition, character. 'all' can be used in place of an id to indicate that every object of that type is a valid target
+# :valid_targets => {'type_name' => ['id', 'id']} // Types are possessions, knowledges, ideas, conditions, characters. 'all' can be used in place of an id to indicate that every object of that type is a valid target. Knowledges are specifically known knowledges, and ideas are considered knowledges.
 # }
 
 Action.new("forage",
@@ -144,13 +155,32 @@ Action.new("investigate",
   { :name=>"Investigate",
     :description=>"Pursue a promising idea.",
     :result => lambda { |character, character_action|
-      character.learn('basic_farming')
-      return "You discover the secrets of agriculture."
+      target_type = character_action.target_type
+      if(target_type=="character")
+        target = character_action.target
+      else
+        target = character_action.target.get
+      end
+      if(target_type == 'knowledge')
+        if(target.id == 'basic_farming')
+          if(character.knows?("basic_farming"))
+            return "You consider your ideas for #{target.name} more fully, but don't think further investigation will accomplish anything here."
+          else
+            character.learn('basic_farming')
+            return "Eureka! You discover the secrets of #{target.name}!"
+          end
+        end
+      else
+        return "Don't be asburd! You can't investigate #{target.name}, you can only investigate ideas!"
+      end
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
       return (character.knows?("cognition") && !character.ideas.empty?)
-    }
+    },
+    :requires_target => true,
+    :valid_targets => {'ideas'=>['all']},
+    :target_prompt => "What would you like to investigate?",
   }
 )
 Action.new("clear_land",
