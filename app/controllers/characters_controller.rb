@@ -66,13 +66,13 @@ class CharactersController < ApplicationController
       label = "Unknown Type"
       if(key == "possession")
         label = "Possessions"
-      elsif(key == "conditions")
+      elsif(key == "condition")
         label = "Conditions"
-      elsif(key == "characters")
+      elsif(key == "character")
         label = "Characters"
-      elsif(key == "knowledges")
+      elsif(key == "knowledge")
         label = "Knowledge"
-      elsif(key == "ideas")
+      elsif(key == "idea")
         label = "Ideas"
       end
       @targets[key] = OpenStruct.new(:label => label, :values => value)

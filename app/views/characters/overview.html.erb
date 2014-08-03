@@ -110,11 +110,7 @@
                 <%= character_action.get.cost.call(@character) %> -
                 <%= character_action.get.name %> 
                 <% if character_action.get.requires_target? %>
-                  <% if character_action.target_type == 'character'%>
-                    (<%= character_action.target.name %>)
-                  <% else %>
-                    (<%= character_action.target.get.name %>)
-                  <% end %>
+                  (<%= character_action.target.get.name %>)
                 <% end %>
                 <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
               </div>

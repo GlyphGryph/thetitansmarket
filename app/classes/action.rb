@@ -32,7 +32,7 @@ class Action
     valid = {}
     @valid_targets.each do |target_type, values|
       target_objects = []
-      if(target_type == 'possessions')
+      if(target_type == "possession")
         if(values.include?('all'))
           target_objects = character.character_possessions
         else
@@ -42,7 +42,7 @@ class Action
             end
           end
         end
-      elsif(target_type == 'knowledges')
+      elsif(target_type == "knowledge")
         if(values.include?('all'))
           # Only pull from knowledges ACTUALLY known.
           target_objects = character.knowledges
@@ -53,7 +53,7 @@ class Action
             end
           end
         end
-      elsif(target_type == 'ideas')
+      elsif(target_type == "idea")
         if(values.include?('all'))
           # Only pull from knowledges considered but not yet known.
           target_objects = character.ideas
@@ -64,11 +64,11 @@ class Action
             end
           end
         end
-      elsif(target_type == 'characters')
+      elsif(target_type == "character")
         if(values.include?('all'))
           target_objects = character.world.characters
         end
-      elsif(target_type == 'conditions')
+      elsif(target_type == "condition")
         if(values.include?('all'))
           target_objects = character.character_conditions
         else
@@ -124,11 +124,7 @@ Action.new("ponder",
     :description=>"You think for a while.",
     :result => lambda { |character, character_action|
       target_type = character_action.target_type
-      if(target_type=="character")
-        target = character_action.target
-      else
-        target = character_action.target.get
-      end
+      target = character_action.target.get
       if( (target_type == 'possession' && target.id == 'food') ||
           (target_type == 'possession' && target.id == 'wildlands') ||
           (target_type == 'condition' && target.id == 'hunger') )
@@ -147,7 +143,7 @@ Action.new("ponder",
       return character.knows?("cognition")
     },
     :requires_target => true,
-    :valid_targets => {'possessions'=>['all'], 'conditions'=>['all'], 'knowledges'=>['all'], 'characters'=>['all']},
+    :valid_targets => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
     :target_prompt => "What would you like to ponder?",
   }
 )
@@ -156,12 +152,8 @@ Action.new("investigate",
     :description=>"Pursue a promising idea.",
     :result => lambda { |character, character_action|
       target_type = character_action.target_type
-      if(target_type=="character")
-        target = character_action.target
-      else
-        target = character_action.target.get
-      end
-      if(target_type == 'knowledge')
+      target = character_action.target.get
+      if(target_type == 'idea')
         if(target.id == 'basic_farming')
           if(character.knows?("basic_farming"))
             return "You consider your ideas for #{target.name} more fully, but don't think further investigation will accomplish anything here."
@@ -179,7 +171,7 @@ Action.new("investigate",
       return (character.knows?("cognition") && !character.ideas.empty?)
     },
     :requires_target => true,
-    :valid_targets => {'ideas'=>['all']},
+    :valid_targets => {"idea"=>['all']},
     :target_prompt => "What would you like to investigate?",
   }
 )
