@@ -37,6 +37,16 @@ class Character < ActiveRecord::Base
     return (self.ap - self.cost_of_all_actions) >= cost_of_action
   end
 
+  def consider(knowledge_id)
+    unless(considers?(knowledge_id) || knows?(knowledge_id))
+      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)
+    end
+  end
+
+  def considers?(knowledge_id)
+    return !(self.ideas.where(:knowledge_id => knowledge_id).empty?)
+  end
+
   # Returns the total cost of all actions in this character's action queue
   def cost_of_all_actions
     cost = 0
@@ -68,14 +78,8 @@ class Character < ActiveRecord::Base
     return history - recent_history
   end
 
-  def consider(knowledge_id)
-    unless(considers?(knowledge_id) || knows?(knowledge_id))
-      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)
-    end
-  end
-
-  def considers?(knowledge_id)
-    return !(self.ideas.where(:knowledge_id => knowledge_id).empty?)
+  def get
+    return self
   end
 
   def ideas
