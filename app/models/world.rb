@@ -48,10 +48,10 @@ class World < ActiveRecord::Base
 
     # Chances of failure will stay in the pool forever
     if(found.exploration_id == 'nothing')
-      return found.exploration.result.call(character)
+      return found.get.result.call(character)
     else
       # Other explorations, however, can only be executed once
-      result = found.exploration.result.call(character)
+      result = found.get.result.call(character)
       found.destroy!
       return result
     end
