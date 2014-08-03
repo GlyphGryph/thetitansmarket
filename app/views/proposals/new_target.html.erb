@@ -1,0 +1,18 @@
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %> - 
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+</div>
+
+<div>Propose to whom?</div>
+<div class="info-block">
+  <div class="info-block-head"> Characters </div>
+  <div class="info-block-body">
+    <% if @other_characters.empty? %>
+      There are no valid targets.
+    <% else %>
+      <% @other_characters.each do |other_character| %>
+        <%= link_to "Send to #{other_character.name}", new_proposal_details_path(:id => @character.id, :target_id => other_character.id) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div id="player-menu">
+  <%= link_to "Return to World List", root_path %> - 
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+</div>
+
+<div class="info-block">
+  <div class="info-block-head">Blank Proposal To <%= @target.name %></div>
+  <div class="info-block-body">
+    There are no details to set for a blank proposal.
+  </div>
+</div>
+
+<div>
+  <%= link_to "Submit", create_proposal_path(:id => @character.id, :target_id => @target.id) %>
+</div>

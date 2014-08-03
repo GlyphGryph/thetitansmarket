@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   
   get 'world/:id/join' => 'worlds#join', :as => :join_world
   get 'world/new' => 'worlds#new', :as => :new_world
+
   get 'character/:id' => 'characters#overview', :as => :character_overview
   get 'character/:id/add_action/:action_id' => 'characters#add_action', :as => :add_action
   get 'character/:id/find_action_target/:action_id' => 'characters#find_action_target', :as => :find_action_target
@@ -21,6 +22,12 @@ Rails.application.routes.draw do
   get 'character/:id/examine/:character_id' => 'characters#examine', :as => :examine_character
   get 'character/:id/show' => 'characters#show', :as => :show_character
   get 'character/:id/history' => 'characters#history', :as => :character_history
+
+  get 'character/:id/proposal' => 'proposals#index', :as => :proposals
+  get 'character/:id/proposal/new' => 'proposals#new_target', :as => :new_proposal
+  get 'character/:id/proposal/new/with/:target_id' => 'proposals#new_details', :as => :new_proposal_details
+  get 'character/:id/proposal/create/with/:target_id' => 'proposals#create', :as => :create_proposal
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

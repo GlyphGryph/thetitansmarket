@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sender_id: 1
+  receiver_id: 1
+  status: MyString
+  turn: 1
+  content_type: MyString
+  content_id: 1
+
+two:
+  sender_id: 1
+  receiver_id: 1
+  status: MyString
+  turn: 1
+  content_type: MyString
+  content_id: 1

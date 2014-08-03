@@ -95,6 +95,16 @@
         <% end %>
       </div>
     </div>
+
+    <div class="info-block" id="proposal-manager">
+      <div class="info-block-head">Proposals</div>
+      <div class="info-block-body">
+        <div><%= "Sent: #{@character.sent_proposals.count}" %></div>
+        <div><%= "Received: #{@character.received_proposals.count}" %></div>
+        <%= link_to "View Proposals", proposals_path(:id => @character.id) %>
+      </div>
+    </div>
+
     <div class="info-block" id="action-queue">
       <div class="info-block-head">
         Actions Queue

@@ -6,6 +6,8 @@ class Character < ActiveRecord::Base
   has_many :character_possessions, :dependent => :destroy
   has_many :character_conditions, :dependent => :destroy
   has_many :character_knowledges, :dependent => :destroy
+  has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal'
+  has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal'
 
   validates_presence_of :user
   validates_presence_of :world
