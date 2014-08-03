@@ -134,7 +134,7 @@ class Character < ActiveRecord::Base
 
     # Process this character's actions
     self.character_actions.each do |character_action|
-      action = character_action.action
+      action = character_action.get
       cost_so_far += action.cost.call(self)
       if(cost_so_far <= self.ap)
         new_history << action.result.call(self)
@@ -146,7 +146,7 @@ class Character < ActiveRecord::Base
 
     # Process this character's active conditions
     self.character_conditions.each do |character_condition|
-      condition = character_condition.condition
+      condition = character_condition.get
       effect = condition.result.call(self)
       if(effect && !effect.empty?)
         new_history << effect

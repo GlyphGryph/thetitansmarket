@@ -76,6 +76,8 @@ class World < ActiveRecord::Base
       self.characters.each do |character|
         character.execute
       end
+      self.turn+=1
+      self.save!
       return true
     else
       return false
