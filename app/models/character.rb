@@ -22,7 +22,7 @@ class Character < ActiveRecord::Base
     self.max_happy ||= 10
     self.happy ||= self.max_happy
     self.readied=false
-    self.name ||= "Human Being"
+    self.name ||= "Avatar of "+self.user.name
     self.history ||= [["You were born from the machine, and thrust into the world."]]
   end
 
