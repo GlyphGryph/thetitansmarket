@@ -143,21 +143,19 @@
   
   <div id="main-overview">
     <div class="info-block" id="world-info">
-      <div class="info-block-head">World Info</div>
+      <div class="info-block-head"><%= @world.name %> - The world has turned <%= @world.turn%> times.</div>
       <div class="info-block-body">
-        <div id="world-name">
-          <%= @world.name %>
-        </div>
-        <div id="world-turn">
-          Turns: <%= @world.turn %>
-        </div>
         <div id="world-peers">
-          <%= @other_characters.count %> Peers: 
-          <ul>
-            <% @other_characters.each do |other| %>
-              <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %></li>
-            <% end %>
-          </ul>
+          <% if @other_characters.empty? %>
+            You are alone.
+          <% else %>
+            There are <%= @other_characters.count %> other beings in this world. 
+            <ul>
+              <% @other_characters.each do |other| %>
+                <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %></li>
+              <% end %>
+            </ul>
+          <% end %>
         </div>
       </div>
     </div>

@@ -4,15 +4,23 @@
 </div>
 
 <div id="character-history">
-  <h4>Recently...</h4>
-  <% @recent_history.each do |story| %>
-    <div class="story"><%= story %></div>
-  <% end %>
+  <div class="info-block">
+    <div class="info-block-head">Recently...</div>
+    <div class="info-block-body">
+      <% @recent_history.each do |story| %>
+        <div class="story"><%= story %></div>
+      <% end %>
+    </div>
+  </div>
 
   <% @history.each do |step| %>
-    <h4>Earlier...</h4>
-    <% step.each do |story| %>
-      <div class="story"><%= story %></div>
-    <% end %>
+    <div class="info-block">
+      <div class="info-block-head">Earlier...</div>
+      <div class="info-block-body">
+        <% step.each do |story| %>
+          <div class="story"><%= story %></div>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>
