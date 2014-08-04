@@ -1,6 +1,7 @@
 <div id="player-menu">
   <%= link_to "Return to World List", root_path %> - 
-  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %> -
+  <%= link_to "Back to Proposals", proposals_path(:id=>@character.id) %>
 </div>
 
 <div class="info-block">

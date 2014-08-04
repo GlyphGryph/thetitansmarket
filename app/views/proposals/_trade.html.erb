@@ -1,0 +1,27 @@
+<div>
+  <h4>My Items</h4>
+  <% if @sender_possessions.empty? %>
+    You have nothing to offer.
+  <% else %>
+    <% @sender_possessions.each do |possession| %>
+      <div>
+        <%= check_box_tag('offered_ids[]', possession.id) %>
+        <%= label_tag(possession.id, possession.get.name) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<div>
+  <h4><%= @target.name %>'s Items</h4>
+  <% if @receiver_possessions.empty? %>
+    He has nothing to request.
+  <% else %>
+    <% @receiver_possessions.each do |possession| %>
+      <div>
+        <%= check_box_tag('asked_ids[]', possession.id) %>
+        <%= label_tag(possession.id, possession.get.name) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

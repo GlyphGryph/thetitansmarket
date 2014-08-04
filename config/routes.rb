@@ -24,9 +24,10 @@ Rails.application.routes.draw do
   get 'character/:id/history' => 'characters#history', :as => :character_history
 
   get 'character/:id/proposal' => 'proposals#index', :as => :proposals
+  get 'character/:id/proposal/:proposal_id/show' => 'proposals#show', :as => :show_proposal
   get 'character/:id/proposal/new/:proposal_type' => 'proposals#new_target', :as => :new_proposal
   get 'character/:id/proposal/new/:proposal_type/with/:target_id' => 'proposals#new_details', :as => :new_proposal_details
-  get 'character/:id/proposal/create/:proposal_type/with/:target_id' => 'proposals#create', :as => :create_proposal
+  post 'character/:id/proposal/create/:proposal_type/with/:target_id' => 'proposals#create', :as => :create_proposal
 
 
   # Example of regular route:

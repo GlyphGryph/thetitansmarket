@@ -1,25 +1,28 @@
 <div id="player-menu">
   <%= link_to "Return to World List", root_path %> - 
-  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
+  <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %> -
+  <%= link_to "Back to Proposals", proposals_path(:id=>@character.id) %>
 </div>
 
-<div class="info-block">
-  <div class="info-block-head">
-    <% if @proposal_type == 'Trade' %>
-      Trade Offer To <%= @target.name %>
-    <% else %>
-      No stop
-    <% end %>
+<%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :method => 'post') do %>
+  <div class="info-block">
+    <div class="info-block-head">
+      <% if @proposal_type == 'Trade' %>
+        Trade Offer To <%= @target.name %>
+      <% else %>
+        No stop
+      <% end %>
+    </div>
+    <div class="info-block-body">
+      <% if @proposal_type == 'Trade' %>
+        <%= render :partial => 'trade' %>
+      <% else %>
+        You're messing with forces beyond your control, kid.
+      <% end %>
+    </div>
   </div>
-  <div class="info-block-body">
-    <% if @proposal_type == 'Trade' %>
-      Imagine there's some trade stuff going on here?
-    <% else %>
-      You're messing with forces beyond your control, kid.
-    <% end %>
-  </div>
-</div>
 
-<div>
-  <%= link_to "Submit", create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id) %>
-</div>
+  <div>
+    <%= submit_tag "Submit" %>
+  </div>
+<% end %>
