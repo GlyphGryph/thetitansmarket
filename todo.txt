@@ -1,8 +1,11 @@
 Immediate goals:
 Allow creation of Proposals
+Implement the ability to accept/decline trades, and have the trade execute
+Implement name_for_receiver and name_for_sender methods
+Implement validation for proposal statuses to one of the valid types
+Implement the ability to cancel sent proposals
 Play knowledge allows for the "Play Alone" and "Play With Others" actions, the second of which leads to the creation of a basic 'Play' proposal, which sends an invite to another player (or players) to engage in this activity and restore happiness for all those involved.
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
-Allow players to trade items as a proposal, introduce system for counterproposal
 Allow creation of Messages and Broadcasts
 The gestures system allows the player to send messages to other player, or to the market as a whole (a broadcast), by selecting from a few preset actions and selecting references. For example, "Point At", followed by targeting either an item or a person.
 Messages and broadcasts are destroyed after they are viewed by their targets, until the appropriate knowledges are gained
@@ -29,5 +32,5 @@ Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organi
 Knowledge
 
 BUGLIST AND SECURITY CONCERNS:
-By editing the URL, people will be able to send Proposals across worlds
+By editing the URL, people will be able to send Proposals across worlds. Additionally, need to enforce that offered and asked items are properly limited to items from their respective owners.
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
