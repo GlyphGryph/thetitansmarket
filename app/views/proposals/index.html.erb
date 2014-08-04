@@ -12,6 +12,11 @@
   <div class="info-block-body">
     <% @sent_proposals.each do |proposal| %>
       <div>
+        <% if proposal.status == 'declined' %>
+          DECLINED -
+        <% elsif proposal.status == 'accepted' %>
+          ACCEPTED
+        <% end %>
         <% if proposal.content_type == 'Trade' %>
           Trade Offer
         <% else %>
@@ -29,6 +34,11 @@
   <div class="info-block-body">
     <% @received_proposals.each do |proposal| %>
       <div>
+        <% if proposal.status == 'declined' %>
+          DECLINED -
+        <% elsif proposal.status == 'accepted' %>
+          ACCEPTED
+        <% end %>
         <% if proposal.content_type == 'Trade' %>
           Trade Offer
         <% else %>
@@ -36,6 +46,10 @@
         <% end %>
         from <%= proposal.sender.name %>
         (<%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
+        <% if proposal.status == 'new' %>
+          (<%= link_to "accept", accept_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
+          (<%= link_to "decline", decline_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
+        <% end %>
       </div>
     <% end %>
   </div>

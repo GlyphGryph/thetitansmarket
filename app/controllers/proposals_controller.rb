@@ -62,9 +62,39 @@ class ProposalsController < ApplicationController
   end
 
   def accept
+    @proposal = Proposal.find(params[:proposal_id])
+    if(@character.received_proposals.include?(@proposal))
+      success = @proposal.accept
+      respond_to do |format|
+        if(success)
+          format.html { redirect_to proposals_path, :notice => "Proposal accepted." }
+        else
+          format.html { redirect_to proposals_path, :alert => "Could not accept."}
+        end
+      end
+    else
+      redirect_to :proposals, :alert => "You cannot accept a proposal that is not yours."
+    end
   end
 
   def decline
+    @proposal = Proposal.find(params[:proposal_id])
+    if(@character.received_proposals.include?(@proposal))
+      success = @proposal.decline
+      respond_to do |format|
+        if(success)
+          format.html { redirect_to proposals_path, :notice => "Proposal declined." }
+        else
+          format.html { redirect_to proposals_path, :alert => "Could not decline."}
+        end
+      end
+    else
+      redirect_to :proposals, :alert => "You cannot decline a proposal that is not yours."
+    end
+  end
+
+  def cancel
+
   end
 
 private

@@ -34,3 +34,4 @@ Knowledge
 BUGLIST AND SECURITY CONCERNS:
 By editing the URL, people will be able to send Proposals across worlds. Additionally, need to enforce that offered and asked items are properly limited to items from their respective owners.
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
+Errors in the world turning allow for free execution of queued actions for one player
