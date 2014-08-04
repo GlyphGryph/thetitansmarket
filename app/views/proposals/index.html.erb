@@ -11,7 +11,14 @@
   <div class="info-block-head">Sent</div>
   <div class="info-block-body">
     <% @sent_proposals.each do |proposal| %>
-      <div>To <%= proposal.receiver.name %></div>
+      <div>
+        <% if proposal.content_type == 'Trade' %>
+          Trade Offer
+        <% else %>
+          Unknown Proposal
+        <% end %>
+        to <%= proposal.receiver.name %>
+      </div>
     <% end %>
   </div>
 </div>
@@ -20,7 +27,14 @@
   <div class="info-block-head">Received</div>
   <div class="info-block-body">
     <% @received_proposals.each do |proposal| %>
-      <div>From <%= proposal.sender.name %></div>
+      <div>
+        <% if proposal.content_type == 'Trade' %>
+          Trade Offer
+        <% else %>
+          Unknown Proposal
+        <% end %>
+        from <%= proposal.sender.name %>
+      </div>
     <% end %>
   </div>
 </div>

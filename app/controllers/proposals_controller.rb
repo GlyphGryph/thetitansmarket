@@ -19,7 +19,10 @@ class ProposalsController < ApplicationController
   end
 
   def create
-    proposal = Proposal.new(:sender_id => @character.id, :receiver_id => params[:target_id], :status => 'new')
+    @target = Character.find(params[:target_id])
+    trade = Trade.new()
+    trade.save!
+    proposal = Proposal.new(:sender_id => @character.id, :receiver => @target, :status => 'new', :content => trade)
     respond_to do |format|
       if(proposal.save)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
