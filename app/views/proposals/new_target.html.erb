@@ -3,9 +3,14 @@
   <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
 </div>
 
-<div>Propose to whom?</div>
 <div class="info-block">
-  <div class="info-block-head"> Characters </div>
+  <div class="info-block-head"> 
+    <% if @proposal_type == 'Trade' %>
+      Offer Trade To
+    <% else %>
+      I don't even
+    <% end %> 
+  <div>
   <div class="info-block-body">
     <% if @other_characters.empty? %>
       There are no valid targets.

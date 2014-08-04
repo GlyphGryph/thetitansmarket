@@ -4,12 +4,22 @@
 </div>
 
 <div class="info-block">
-  <div class="info-block-head">Blank Proposal To <%= @target.name %></div>
+  <div class="info-block-head">
+    <% if @proposal_type == 'Trade' %>
+      Trade Offer To <%= @target.name %>
+    <% else %>
+      No stop
+    <% end %>
+  </div>
   <div class="info-block-body">
-    There are no details to set for a blank proposal.
+    <% if @proposal_type == 'Trade' %>
+      Imagine there's some trade stuff going on here?
+    <% else %>
+      You're messing with forces beyond your control, kid.
+    <% end %>
   </div>
 </div>
 
 <div>
-  <%= link_to "Submit", create_proposal_path(:id => @character.id, :target_id => @target.id) %>
+  <%= link_to "Submit", create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id) %>
 </div>
