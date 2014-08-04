@@ -1,6 +1,4 @@
 Immediate goals:
-Allow creation of Proposals
-Implement the ability to accept/decline trades, and have the trade execute
 Implement name_for_receiver and name_for_sender methods
 Implement validation for proposal statuses to one of the valid types
 Implement the ability to cancel sent proposals
