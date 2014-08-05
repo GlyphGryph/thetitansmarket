@@ -26,22 +26,23 @@ class ProposalsController < ApplicationController
 
   def create
     @target = Character.find(params[:target_id])
-    if(params[:proposal_type] == 'Trade')
+    @asked_ids = params[:asked_ids] || []
+    @offered_ids = params[:offered_ids] || []
+
+    success = false
+    if(params[:proposal_type] && (!@asked_ids.empty? || !@offered_ids.empty?) )
       trade = Trade.new()
-      trade.asked_character_possessions = CharacterPossession.find(params[:asked_ids])
-      trade.offered_character_possessions = CharacterPossession.find(params[:offered_ids])
+      trade.asked_character_possessions = CharacterPossession.find(@asked_ids)
+      trade.offered_character_possessions = CharacterPossession.find(@offered_ids)
       trade.save!
       proposal = Proposal.new(:sender_id => @character.id, :receiver => @target, :status => 'new', :content => trade)
-      success = proposal.save
-    else
-      proposal = Proposal.new(:sender_id => @character.id, :receiver => @target, :status => 'new')
       success = proposal.save
     end
     respond_to do |format|
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
       else
-        format.html { redirect_to proposals_path, :alert => "Could not make this proposal."}
+        format.html { redirect_to new_proposal_details_path, :alert => "Could not make this proposal."}
       end
     end
   end
