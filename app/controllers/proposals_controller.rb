@@ -42,7 +42,7 @@ class ProposalsController < ApplicationController
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
       else
-        format.html { redirect_to new_proposal_details_path, :alert => "Could not make this proposal."}
+        format.html { redirect_to new_proposal_details_path, :alert => (proposal ? proposal.errors.full_messages.to_sentence : "Could not make this proposal.")}
       end
     end
   end

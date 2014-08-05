@@ -1,5 +1,4 @@
 Immediate goals:
-Implement name_for_receiver and name_for_sender methods
 Implement validation for proposal statuses to one of the valid types
 Implement the ability to cancel sent proposals
 Play knowledge allows for the "Play Alone" and "Play With Others" actions, the second of which leads to the creation of a basic 'Play' proposal, which sends an invite to another player (or players) to engage in this activity and restore happiness for all those involved.

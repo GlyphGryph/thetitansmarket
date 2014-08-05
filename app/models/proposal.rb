@@ -1,3 +1,12 @@
+class ProposalValidator < ActiveModel::Validator
+  def validate(record)
+    unless( [].include?(record.status) )
+      record.errors[:proposal] << " can not have a status of #{record.status}."
+    end
+  end
+end
+
+
 class Proposal < ActiveRecord::Base
   belongs_to :sender, :class_name=>"Character"
   belongs_to :receiver, :class_name=>"Character"
@@ -5,13 +14,15 @@ class Proposal < ActiveRecord::Base
   validates_presence_of :sender_id
   validates_presence_of :receiver_id
   validates_presence_of :status
+  include ActiveModel::Validations
+  validates_with ProposalValidator
 
   before_create :default_attributes
 
   def default_attributes
     self.status ||= "new"
   end
-
+  
   def accept
     if(self.status == 'new' && self.content.acceptable?)
       success = self.content.accept
