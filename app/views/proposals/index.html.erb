@@ -17,12 +17,7 @@
         <% elsif proposal.status == 'accepted' %>
           ACCEPTED
         <% end %>
-        <% if proposal.content_type == 'Trade' %>
-          Trade Offer
-        <% else %>
-          Unknown Proposal
-        <% end %>
-        to <%= proposal.receiver.name %>
+        <%= proposal.name_for_sender %>
         (<%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
       </div>
     <% end %>
@@ -39,12 +34,7 @@
         <% elsif proposal.status == 'accepted' %>
           ACCEPTED
         <% end %>
-        <% if proposal.content_type == 'Trade' %>
-          Trade Offer
-        <% else %>
-          Unknown Proposal
-        <% end %>
-        from <%= proposal.sender.name %>
+        <%= proposal.name_for_receiver %>
         (<%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
         <% if proposal.status == 'new' %>
           (<%= link_to "accept", accept_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)

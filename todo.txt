@@ -17,17 +17,13 @@ Remove the "contains" column from character_possessions
   Handle span lists and list lists in info blocks
 --/STYLE BREAK--
 
-Characters have the following stats:
-Health (hp)
-Max Health (max_hp)
+--FAR FUTURE--
+Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
+
+Characters have the following stats yet to be implemented:
 Happiness (happy)
 Max Happiness (max_happy)
-Action Points (ap)
-Maximum Action Points (max_ap)
-Inventory (possessions)
-Conditions: [basic hunger, basic dissatisfaction, basic recovery, mortal]
 Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organized multitasker, big heart]
-Knowledge
 
 BUGLIST AND SECURITY CONCERNS:
 By editing the URL, people will be able to send Proposals across worlds. Additionally, need to enforce that offered and asked items are properly limited to items from their respective owners.

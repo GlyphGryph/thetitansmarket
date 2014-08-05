@@ -4,6 +4,8 @@ class Trade < ActiveRecord::Base
   has_many :trade_offered_character_possessions, :dependent => :destroy
   has_many :asked_character_possessions, :through => :trade_asked_character_possessions, :source => :character_possession
   has_many :offered_character_possessions, :through => :trade_offered_character_possessions, :source => :character_possession
+  has_one :sender, :through => :proposal, :class_name => "Character"
+  has_one :receiver, :through => :proposal, :class_name => "Character"
 
   def acceptable?
     return true
@@ -40,5 +42,29 @@ class Trade < ActiveRecord::Base
 
   def decline
     return true
+  end
+
+  def name_for_sender
+    if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
+      return "Nihilist Exchange with "+self.receiver.name
+    elsif(self.trade_asked_character_possessions.empty?)
+      return "Tribute Offer to "+self.receiver.name
+    elsif(self.trade_offered_character_possessions.empty?)
+      return "Tribute Request to "+self.receiver.name
+    else
+      return "Trade Offer to "+self.receiver.name
+    end
+  end
+
+  def name_for_receiver
+    if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
+      return "Nihilist Exchange with "+self.receiver.name
+    elsif(self.trade_asked_character_possessions.empty?)
+      return "Tribute Offer from "+self.receiver.name
+    elsif(self.trade_offered_character_possessions.empty?)
+      return "Tribute Request from "+self.receiver.name
+    else
+      return "Trade Offer to "+self.receiver.name
+    end
   end
 end
