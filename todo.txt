@@ -1,5 +1,4 @@
 Immediate goals:
-Implement the ability to cancel sent proposals
 Play knowledge allows for the "Play Alone" and "Play With Others" actions, the second of which leads to the creation of a basic 'Play' proposal, which sends an invite to another player (or players) to engage in this activity and restore happiness for all those involved.
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
 Allow creation of Messages and Broadcasts
@@ -8,6 +7,7 @@ The gestures system allows the player to send messages to other player, or to th
 Add a 'reply' button to messages in the index AND on the show page for quick replies.
 Limit message body length in index, only add a 'show' link if there's more message, call it something like 'see more'
 Allow creation of traits
+Allow anyone to execute if more than 24 hours have passed.
 Remove cap on action queue, it was a dumb idea
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions
