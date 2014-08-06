@@ -19,6 +19,7 @@ class World < ActiveRecord::Base
   def default_attributes
     self.name ||= generate_name
     self.turn ||= 1
+    self.lastTurned ||= DateTime.now
   end
 
   def default_relationships
@@ -67,8 +68,16 @@ class World < ActiveRecord::Base
     return self.characters.select{|character| !character.ready? }
   end
   
+  def turn_timed_out?
+    return self.until_time_out <= 0
+  end
+
+  def until_time_out
+    return (24.hour - (Time.now - self.last_turned))
+  end
+  
   def ready_to_execute?
-    return self.unready_characters.empty?
+    return self.unready_characters.empty? || self.turn_timed_out?
   end
 
   def execute
@@ -76,7 +85,8 @@ class World < ActiveRecord::Base
       self.characters.each do |character|
         character.execute
       end
-      self.turn+=1
+      self.turn += 1
+      self.last_turned = Time.now
       self.save!
       return true
     else

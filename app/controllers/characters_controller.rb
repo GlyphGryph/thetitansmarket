@@ -22,7 +22,6 @@ class CharactersController < ApplicationController
     @history = @character.recent_history
     @queue_cost = @character.cost_of_all_actions
     @other_characters = @world.characters.reject{|c| c==@character}
-    @ready_to_execute = @world.ready_to_execute?
     @unready_characters = @world.unready_characters
   end
   

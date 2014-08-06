@@ -76,19 +76,19 @@
     <div class="info-block" id="ready-tracker">
       <div class="info-block-head">Status</div>
       <div class="info-block-body">
-        <% if @character.ready? %>
+        <% if @character.ready? && !@world.turn_timed_out? %>
           <%= link_to "Wait a minute...", unready_path(:id => @character.id), :class => "ready-up basic-button" %>
-        <% else %>
+        <% elsif !@world.turn_timed_out? %>
           <%= link_to "Ready Up", ready_path(:id => @character.id), :class => "ready-up basic-button" %>
         <% end %>
 
-        <% if @ready_to_execute %>
+        <% if @world.ready_to_execute? %>
           <div class="execute">
             <%= link_to "Execute", execute_world_path(:id => @character.id, :world_id => @world.id) %>
           </div>
         <% else %>
           <div class="waiting-on">
-            Still waiting on <%= @unready_characters.count %> players.
+            Still waiting on <%= @unready_characters.count %> players, or for <%= format_time(@world.until_time_out) %> to pass.
           </div>
         <% end %>
       </div>
