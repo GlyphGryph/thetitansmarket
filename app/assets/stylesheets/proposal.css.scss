@@ -1,5 +1,7 @@
 .proposal{
-  border: 1px solid black;
+  border-radius:3px;
+  margin-bottom:2px;
+  padding:4px;
 
   .proposal-status{
     display:inline;
@@ -8,13 +10,84 @@
     display:inline;
   }
   .proposal-details{
-    display:inline-block;
+    line-height:10px;
+    font-size:10px;
+
+    &:before{
+      content:"Details";
+    }
   }
   .proposal-controls{
     display:inline-block;
+  }
 
-    .proposal-control{
-      display:inline-block;
+  &.declined-proposal{
+    background-color:#caa;
+
+    .proposal-status:before{
+      position:relative;
+      padding-top:3px;
+      padding-bottom:3px;
+      padding-right:5px;
+      font-size:65%;
+      border-right:2px solid #b88;
+      content: "Declined";
+    }
+  }
+
+  &.accepted-proposal{
+    background-color:#aca;
+
+    .proposal-status:before{
+      position:relative;
+      padding-top:3px;
+      padding-bottom:3px;
+      padding-right:5px;
+      font-size:65%;
+      border-right:2px solid #8b8;
+      content: "Accepted";
+    }
+  }
+
+  &.received-proposal{
+    .proposal-controls{
+      .proposal-control{
+        display:inline-block;
+
+        a{
+          color:black;
+          display:inline-block;
+          padding:0px;
+          line-height:12px;
+          font-size:10px;
+          border:1px outset black;
+          border-radius:2px;
+          padding-left:2px;
+          padding-right:2px;
+          text-decoration:none;
+        }
+
+        &.accept a{
+          background-color:#aca;
+
+          &:hover{
+            border:1px inset black;
+            border-radius:2px;
+            color:#ccc;
+            background-color:#151;
+          }
+        }
+        &.decline a{
+          background-color:#caa;
+
+          &:hover{
+            border:1px inset black;
+            border-radius:2px;
+            color:#ccc;
+            background-color:#511;
+          }
+        }
+      }
     }
   }
 }

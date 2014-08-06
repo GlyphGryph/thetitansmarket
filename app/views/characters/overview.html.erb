@@ -76,13 +76,11 @@
     <div class="info-block" id="ready-tracker">
       <div class="info-block-head">Status</div>
       <div class="info-block-body">
-        <div class="ready-up">
-          <% if @character.ready? %>
-            <%= link_to "Wait a minute...", unready_path(:id => @character.id) %>
-          <% else %>
-            <%= link_to "Ready Up", ready_path(:id => @character.id) %>
-          <% end %>
-        </div>
+        <% if @character.ready? %>
+          <%= link_to "Wait a minute...", unready_path(:id => @character.id), :class => "ready-up basic-button" %>
+        <% else %>
+          <%= link_to "Ready Up", ready_path(:id => @character.id), :class => "ready-up basic-button" %>
+        <% end %>
 
         <% if @ready_to_execute %>
           <div class="execute">
