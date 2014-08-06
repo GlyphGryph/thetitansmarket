@@ -1,0 +1,20 @@
+.proposal{
+  border: 1px solid black;
+
+  .proposal-status{
+    display:inline;
+  }
+  .proposal-name{
+    display:inline;
+  }
+  .proposal-details{
+    display:inline-block;
+  }
+  .proposal-controls{
+    display:inline-block;
+
+    .proposal-control{
+      display:inline-block;
+    }
+  }
+}

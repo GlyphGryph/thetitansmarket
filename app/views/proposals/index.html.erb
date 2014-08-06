@@ -11,15 +11,31 @@
   <div class="info-block-head">Sent</div>
   <div class="info-block-body">
     <% @sent_proposals.each do |proposal| %>
-      <div>
-        <% if proposal.status == 'declined' %>
-          DECLINED -
-        <% elsif proposal.status == 'accepted' %>
-          ACCEPTED
-        <% end %>
-        <%= proposal.name_for_sender %>
-        (<%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
-      </div>
+      <% if proposal.status == 'declined' %>
+        <div class="declined-proposal proposal">
+          <div class="proposal-status">Denied</div>
+          <div class="proposal-name"><%= proposal.name_for_sender %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% elsif proposal.status == 'accepted' %>
+        <div class="accepted-proposal proposal">
+          <div class="proposal-status">Accepted</div>
+          <div class="proposal-name"><%= proposal.name_for_sender %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% elsif proposal.status == 'open' %>
+        <div class="read-proposal proposal">
+          <div class="proposal-status">Seen</div>
+          <div class="proposal-name"><%= proposal.name_for_sender %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% elsif proposal.status == 'new' %>
+        <div class="unread-proposal proposal">
+          <div class="proposal-status">Unseen</div>
+          <div class="proposal-name"><%= proposal.name_for_sender %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -28,19 +44,30 @@
   <div class="info-block-head">Received</div>
   <div class="info-block-body">
     <% @received_proposals.each do |proposal| %>
-      <div>
-        <% if proposal.status == 'declined' %>
-          DECLINED -
-        <% elsif proposal.status == 'accepted' %>
-          ACCEPTED
-        <% end %>
-        <%= proposal.name_for_receiver %>
-        (<%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
-        <% if proposal.status == 'new' %>
-          (<%= link_to "accept", accept_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
-          (<%= link_to "decline", decline_proposal_path(:id => @character.id, :proposal_id => proposal.id) %>)
-        <% end %>
-      </div>
+      <% if proposal.status == 'declined' %>
+        <div class="declined-proposal proposal">
+          <div class="proposal-status">Denied</div>
+          <div class="proposal-name"><%= proposal.name_for_receiver %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% elsif proposal.status == 'accepted' %>
+        <div class="accepted-proposal proposal">
+          <div class="proposal-status">Accepted</div>
+          <div class="proposal-name"><%= proposal.name_for_receiver %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+        </div>
+      <% elsif proposal.status == 'new' || proposal.status == 'open' %>
+        <div class="received-proposal proposal">
+          <div class="proposal-name"><%= proposal.name_for_receiver %></div>
+          <div class="proposal-details"><%= link_to "show", show_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+          <div class="proposal-controls">
+            <div class="proposal-control accept"><%= link_to "accept", accept_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+            <div class="proposal-control decline"><%= link_to "decline", decline_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
+          </div>
+        </div>
+      <% else %>
+        ERROR: INVALID STATUS FOR PROPOSAL <%= proposal.id %>!
+      <% end %>
     <% end %>
   </div>
 </div>

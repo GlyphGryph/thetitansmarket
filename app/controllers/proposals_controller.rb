@@ -6,6 +6,9 @@ class ProposalsController < ApplicationController
   def index
     @sent_proposals = @character.sent_proposals
     @received_proposals = @character.received_proposals
+    @received_proposals.each do |proposal|
+      proposal.mark_read
+    end
   end
 
   # When we know the proposal type, but not who to send it to yet
@@ -51,6 +54,7 @@ class ProposalsController < ApplicationController
     @proposal = Proposal.find(params[:proposal_id])
     if(@proposal.content_type == "Trade")
       if(@proposal.receiver  == @character)
+        @proposal.mark_read
         @character_gets = @proposal.content.offered_character_possessions
         @character_loses = @proposal.content.asked_character_possessions
       elsif(@proposal.sender  == @character)
@@ -70,7 +74,7 @@ class ProposalsController < ApplicationController
         if(success)
           format.html { redirect_to proposals_path, :notice => "Proposal accepted." }
         else
-          format.html { redirect_to proposals_path, :alert => "Could not accept."}
+          format.html { redirect_to proposals_path, :alert => @proposal.errors.full_messages.to_sentence}
         end
       end
     else
@@ -86,16 +90,12 @@ class ProposalsController < ApplicationController
         if(success)
           format.html { redirect_to proposals_path, :notice => "Proposal declined." }
         else
-          format.html { redirect_to proposals_path, :alert => "Could not decline."}
+          format.html { redirect_to proposals_path, :alert => @proposal.errors.full_messages.to_sentence}
         end
       end
     else
       redirect_to :proposals, :alert => "You cannot decline a proposal that is not yours."
     end
-  end
-
-  def cancel
-
   end
 
 private

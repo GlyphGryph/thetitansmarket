@@ -24,7 +24,7 @@ class Proposal < ActiveRecord::Base
   end
   
   def accept
-    if(self.status == 'new' && self.content.acceptable?)
+    if(self.status == 'open' && self.content.acceptable?)
       success = self.content.accept
       if(success)
         self.status = 'accepted'
@@ -32,12 +32,13 @@ class Proposal < ActiveRecord::Base
       end
       return success
     else
+      self.errors[:proposal] << " is in the #{self.status} state, which is invalid for accepting."
       return false
     end
   end
 
   def decline
-    if(self.status == 'new')
+    if(self.status=="open")
       success = self.content.decline
       if(success)
         self.status = 'declined'
@@ -45,7 +46,15 @@ class Proposal < ActiveRecord::Base
       end
       return success
     else
+      self.errors[:proposal] << " is in the #{self.status} state, which is invalid for declining."
       return false
+    end
+  end
+
+  def mark_read
+    if(self.status == 'new')
+      self.status = 'open'
+      self.save!
     end
   end
 
