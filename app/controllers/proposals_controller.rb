@@ -4,8 +4,8 @@ class ProposalsController < ApplicationController
   before_filter :check_valid_owner, :except => :show
   
   def index
-    @sent_proposals = @character.sent_proposals
-    @received_proposals = @character.received_proposals
+    @sent_proposals = @character.sent_proposals.sort_by(&:created_at)
+    @received_proposals = @character.received_proposals.sort_by(&:created_at)
     @received_proposals.each do |proposal|
       proposal.mark_read
     end
@@ -84,8 +84,24 @@ class ProposalsController < ApplicationController
 
   def decline
     @proposal = Proposal.find(params[:proposal_id])
-    if(@character.received_proposals.include?(@proposal))
+    if(@proposal.receiver == @character)
       success = @proposal.decline
+      respond_to do |format|
+        if(success)
+          format.html { redirect_to proposals_path, :notice => "Proposal declined." }
+        else
+          format.html { redirect_to proposals_path, :alert => @proposal.errors.full_messages.to_sentence}
+        end
+      end
+    else
+      redirect_to :proposals, :alert => "You cannot decline a proposal that is not yours."
+    end
+  end
+
+  def cancel 
+    @proposal = Proposal.find(params[:proposal_id])
+    if(@proposal.sender == @character)
+      success = @proposal.cancel
       respond_to do |format|
         if(success)
           format.html { redirect_to proposals_path, :notice => "Proposal declined." }

@@ -1,6 +1,6 @@
 class ProposalValidator < ActiveModel::Validator
   def validate(record)
-    unless( ['new', 'open', 'accepted', 'declined'].include?(record.status) )
+    unless( ['new', 'open', 'accepted', 'declined', 'cancelled'].include?(record.status) )
       record.errors[:proposal] << " can not have a status of #{record.status}."
     end
   end
@@ -38,7 +38,7 @@ class Proposal < ActiveRecord::Base
   end
 
   def decline
-    if(self.status=="open")
+    if(self.status=="open" || self.status=="new")
       success = self.content.decline
       if(success)
         self.status = 'declined'
@@ -47,6 +47,20 @@ class Proposal < ActiveRecord::Base
       return success
     else
       self.errors[:proposal] << " is in the #{self.status} state, which is invalid for declining."
+      return false
+    end
+  end
+
+  def cancel
+    if(self.status=="open" || self.status=="new")
+      success = self.content.cancel
+      if(success)
+        self.status = 'cancelled'
+        self.save!
+      end
+      return success
+    else
+      self.errors[:proposal] << " is in the #{self.status} state, which is invalid for cancelling."
       return false
     end
   end

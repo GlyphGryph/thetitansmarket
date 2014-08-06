@@ -28,10 +28,15 @@
       position:relative;
       padding-top:3px;
       padding-bottom:3px;
-      padding-right:5px;
       font-size:65%;
-      border-right:2px solid #b88;
       content: "Declined";
+    }
+
+    .proposal-status{
+      display:inline-block;
+      width:50px;
+      padding-right:5px;
+      border-right:2px solid #b88;
     }
   }
 
@@ -42,14 +47,38 @@
       position:relative;
       padding-top:3px;
       padding-bottom:3px;
-      padding-right:5px;
       font-size:65%;
-      border-right:2px solid #8b8;
       content: "Accepted";
+    }
+
+    .proposal-status{
+      display:inline-block;
+      width:50px;
+      padding-right:5px;
+      border-right:2px solid #8b8;
     }
   }
 
-  &.received-proposal{
+  &.cancelled-proposal{
+    background-color:#aaa;
+
+    .proposal-status:before{
+      position:relative;
+      padding-top:3px;
+      padding-bottom:3px;
+      font-size:65%;
+      content: "Cancelled";
+    }
+
+    .proposal-status{
+      display:inline-block;
+      width:50px;
+      padding-right:5px;
+      border-right:2px solid #888;
+    }
+  }
+
+  &.new-proposal, &.open-proposal{
     .proposal-controls{
       .proposal-control{
         display:inline-block;

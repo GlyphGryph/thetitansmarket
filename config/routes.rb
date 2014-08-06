@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   post 'character/:id/proposal/create/:proposal_type/with/:target_id' => 'proposals#create', :as => :create_proposal
   get 'character/:id/proposal/:proposal_id/accept' => 'proposals#accept', :as => :accept_proposal
   get 'character/:id/proposal/:proposal_id/decline' => 'proposals#decline', :as => :decline_proposal
+  get 'character/:id/proposal/:proposal_id/cancel' => 'proposals#cancel', :as => :cancel_proposal
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

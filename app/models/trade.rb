@@ -44,6 +44,10 @@ class Trade < ActiveRecord::Base
     return true
   end
 
+  def cancel
+    return true
+  end
+
   def name_for_sender
     if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
       return "Nihilist Exchange with "+self.receiver.name
