@@ -1,6 +1,6 @@
 class ProposalValidator < ActiveModel::Validator
   def validate(record)
-    unless( [].include?(record.status) )
+    unless( ['new', 'open', 'accepted', 'declined'].include?(record.status) )
       record.errors[:proposal] << " can not have a status of #{record.status}."
     end
   end
