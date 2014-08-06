@@ -133,6 +133,10 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
+  def unread_messages
+    self.received_proposals.where(:status => "new")
+  end
+
   def execute
     self.unready
     cost_so_far = 0
