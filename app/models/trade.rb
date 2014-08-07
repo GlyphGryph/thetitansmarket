@@ -62,13 +62,13 @@ class Trade < ActiveRecord::Base
 
   def name_for_receiver
     if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
-      return "Nihilist Exchange with "+self.receiver.name
+      return "Nihilist Exchange with "+self.sender.name
     elsif(self.trade_asked_character_possessions.empty?)
-      return "Tribute Offer from "+self.receiver.name
+      return "Tribute Offer from "+self.sender.name
     elsif(self.trade_offered_character_possessions.empty?)
-      return "Tribute Request from "+self.receiver.name
+      return "Tribute Request from "+self.sender.name
     else
-      return "Trade Offer to "+self.receiver.name
+      return "Trade Offer from "+self.sender.name
     end
   end
 end
