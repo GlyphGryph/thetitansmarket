@@ -24,28 +24,47 @@ class ProposalsController < ApplicationController
     if(@proposal_type == 'Trade')
       @sender_possessions = @character.character_possessions
       @receiver_possessions = @target.character_possessions
+    elsif(@proposal_type == 'Interaction')
+      @activities = Activity.all
+      @types_of_interaction = ['play']
     end
   end
 
   def create
     @target = Character.find(params[:target_id])
-    @asked_ids = params[:asked_ids] || []
-    @offered_ids = params[:offered_ids] || []
-
+    @proposal_type = params[:proposal_type]
+    error = "Could not make this proposal."
     success = false
-    if(params[:proposal_type] && (!@asked_ids.empty? || !@offered_ids.empty?) )
-      trade = Trade.new()
-      trade.asked_character_possessions = CharacterPossession.find(@asked_ids)
-      trade.offered_character_possessions = CharacterPossession.find(@offered_ids)
-      trade.save!
-      proposal = Proposal.new(:sender_id => @character.id, :receiver => @target, :status => 'new', :content => trade)
-      success = proposal.save
+    if(params[:proposal_type] == 'Trade')
+      asked_ids = params[:asked_ids] || []
+      offered_ids = params[:offered_ids] || []
+      if(!asked_ids.empty? || !offered_ids.empty?)
+        trade = Trade.new()
+        trade.asked_character_possessions = CharacterPossession.find(asked_ids)
+        trade.offered_character_possessions = CharacterPossession.find(offered_ids)
+        trade.save!
+        proposal = Proposal.new(:sender => @character, :receiver => @target, :status => 'new', :content => trade)
+        success = proposal.save
+      else
+        errror = "No asked or offered items. Cannot offer an empty trade."
+      end
+    end
+    if(params[:proposal_type] == 'Interaction')
+      activity = Activity.find(params[:activity])
+      if(activity)
+        interaction = Interaction.new(:activity_id => activity.id)
+        interaction.save!
+        proposal = Proposal.new(:sender => @character, :receiver => @target, :status => 'new', :content => interaction)
+        success = proposal.save
+      else
+        error = "Could not find an activity with the given id."
+      end
     end
     respond_to do |format|
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
       else
-        format.html { redirect_to new_proposal_details_path, :alert => (proposal ? proposal.errors.full_messages.to_sentence : "Could not make this proposal.")}
+        format.html { redirect_to new_proposal_details_path, :alert => (proposal ? proposal.errors.full_messages.to_sentence : error)}
       end
     end
   end

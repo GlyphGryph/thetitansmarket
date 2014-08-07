@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140806164411) do
+ActiveRecord::Schema.define(version: 20140807170733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,12 @@ ActiveRecord::Schema.define(version: 20140806164411) do
     t.integer  "max_ap"
     t.boolean  "readied"
     t.text     "history"
+  end
+
+  create_table "interactions", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "activity_id"
   end
 
   create_table "proposals", force: true do |t|

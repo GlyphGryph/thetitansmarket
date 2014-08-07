@@ -39,6 +39,21 @@ class Character < ActiveRecord::Base
     return (self.ap - self.cost_of_all_actions) >= cost_of_action
   end
 
+  def change_happy(value)
+    # Change the happy, up to max or down to zero
+    new_happy = self.happy+value
+    if(new_happy > self.max_happy)
+      new_happy = self.max_happy
+    elsif(new_happy < 0)
+      new_happy = 0
+    end
+    # Only bother saving if the new happy is different
+    if(self.happy != new_happy)
+      self.happy = new_happy
+      self.save!
+    end
+  end
+
   def consider(knowledge_id)
     unless(considers?(knowledge_id) || knows?(knowledge_id))
       self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)

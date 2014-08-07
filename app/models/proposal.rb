@@ -73,10 +73,10 @@ class Proposal < ActiveRecord::Base
   end
 
   def name_for_sender
-    content.try(:name_for_sender) || "Unknown Proposal to #{self.receiver.name}"
+    content.name_for_sender || "Unknown Proposal to #{self.receiver.name}"
   end
 
   def name_for_receiver
-    content.try(:name_for_receiver) || "Unknown Proposal from #{self.sender.name}"
+    content.name_for_receiver || "Unknown Proposal from #{self.sender.name}"
   end
 end

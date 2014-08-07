@@ -9,6 +9,8 @@
     <div class="info-block-head">
       <% if @proposal_type == 'Trade' %>
         Trade Offer To <%= @target.name %>
+      <% elsif @proposal_type == 'Interaction' %>
+        Interaction Proposal To <%= @target.name %>
       <% else %>
         No stop
       <% end %>
@@ -16,6 +18,8 @@
     <div class="info-block-body">
       <% if @proposal_type == 'Trade' %>
         <%= render :partial => 'trade' %>
+      <% elsif @proposal_type == 'Interaction' %>
+        <%= render :partial => 'interaction' %>
       <% else %>
         You're messing with forces beyond your control, kid.
       <% end %>

@@ -4,7 +4,8 @@
 </div>
 
 <div>
-  <%= link_to "Make new proposal!", new_proposal_path(:id => @character.id, :proposal_type => 'Trade') %>
+  <%= link_to "Make new trade proposal!", new_proposal_path(:id => @character.id, :proposal_type => 'Trade') %>
+  <%= link_to "Make new interaction proposal!", new_proposal_path(:id => @character.id, :proposal_type => 'Interaction') %>
 </div>
 
 <div class="info-block">

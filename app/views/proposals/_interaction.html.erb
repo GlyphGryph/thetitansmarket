@@ -1,0 +1,7 @@
+<div>
+  <h4>Possible Activities</h4>
+  <% @activities.each do |activity| %>
+    <%= radio_button_tag('activity', activity.id, :required => 'required') %>
+    <%= label_tag('activity_'+activity.id, "#{activity.name}: #{activity.description}") %>
+  <% end %>
+</div>
