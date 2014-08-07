@@ -9,7 +9,7 @@ class Interaction < ActiveRecord::Base
   end
 
   def accept
-    return true
+    return Activity.find(self.activity_id).result.call(sender, receiver)
   end
 
   def decline

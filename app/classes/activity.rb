@@ -21,11 +21,13 @@ Activity.new("play",
   { :name=>"Play", 
     :description=>"Play around with another character, increasing your happiness a bit. Costs 2 ap, grants 1 happy.", 
     :result => lambda { |character, target|
-      ap_cost
+      ap_cost = 2
       if(character.ap > ap_cost && target.ap > ap_cost)
         character.change_happy(1)
+        character.change_ap(-2)
         character.save!
         target.change_happy(1)
+        target.change_ap(-2)
         target.save!
         return true;
       end

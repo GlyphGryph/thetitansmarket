@@ -53,6 +53,21 @@ class Character < ActiveRecord::Base
       self.save!
     end
   end
+  
+  def change_ap(value)
+    # Change the ap, up to max or down to zero
+    new_ap = self.ap+value
+    if(new_ap > self.max_ap)
+      new_ap = self.max_ap
+    elsif(new_ap < 0)
+      new_ap = 0
+    end
+    # Only bother saving if the new ap is different
+    if(self.ap != new_ap)
+      self.ap = new_ap
+      self.save!
+    end
+  end
 
   def consider(knowledge_id)
     unless(considers?(knowledge_id) || knows?(knowledge_id))
