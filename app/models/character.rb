@@ -189,6 +189,13 @@ class Character < ActiveRecord::Base
       new_history << "You ran out of energy partway through, and couldn't finish what you had planned to do."
     end
 
+    # Close out any unclosed proposals this character made this turn
+    self.proposals.each do |proposal|
+      if(proposal.status == 'open')
+        proposal.cancel
+      end
+    end
+
     # Restore character's lost ap for their next turn, before conditions potentially reduce it again
     self.ap = self.max_ap
 
