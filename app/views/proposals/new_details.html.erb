@@ -19,11 +19,11 @@
     </div>
     <div class="info-block-body">
       <% if @proposal_type == 'Trade' %>
-        <%= render :partial => 'trade' %>
+        <%= render :partial => 'trade_form_details' %>
       <% elsif @proposal_type == 'Interaction' %>
-        <%= render :partial => 'interaction' %>
+        <%= render :partial => 'interaction_form_details' %>
       <% elsif @proposal_type == 'Message' %>
-        <%= render :partial => 'message' %>
+        <%= render :partial => 'message_form_details' %>
       <% else %>
         You're messing with forces beyond your control, kid.
       <% end %>
