@@ -1,7 +1,7 @@
 class Gesture
   extend CollectionTracker
   include Targetable
-  attr_reader :id, :description, :name
+  attr_reader :id, :description, :name, :result
 
   def initialize(id, params={})
     @id = id

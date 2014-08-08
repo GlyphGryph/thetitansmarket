@@ -1,0 +1,17 @@
+<h2>Trade Offer</h2>
+<div class="info-block">
+  <div class="info-block-head">You get:</div>
+  <div class="info-block-body">
+    <% @character_gets.each do |character_possession| %>
+      <div><%= character_possession.get.name %></div>
+    <% end %>
+  </div>
+</div>
+<div class="info-block">
+  <div class="info-block-head">You lost:</div>
+  <div class="info-block-body">
+    <% @character_loses.each do |character_possession| %>
+      <div><%= character_possession.get.name %></div>
+    <% end %>
+  </div>
+</div>

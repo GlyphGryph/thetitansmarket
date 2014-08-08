@@ -5,32 +5,14 @@
 </div>
 
 <div>
-  <h2>
-    <% if @proposal.content_type == 'Trade' %>
-      Trade Offer
-    <% else %>
-      Unknown Proposal
-    <% end %>
-    from <%= @proposal.sender.name %>
-  </h2>
   <% if @proposal.content_type == 'Trade' %>
-    <div class="info-block">
-      <div class="info-block-head">You get:</div>
-      <div class="info-block-body">
-        <% @character_gets.each do |character_possession| %>
-          <div><%= character_possession.get.name %></div>
-        <% end %>
-      </div>
-    </div>
-    <div class="info-block">
-      <div class="info-block-head">You lost:</div>
-      <div class="info-block-body">
-        <% @character_loses.each do |character_possession| %>
-          <div><%= character_possession.get.name %></div>
-        <% end %>
-      </div>
-    </div>
+    <%= render :partial => 'trade' %>
+  <% elsif @proposal.content_type == 'Interaction' %>
+    <%= render :partial => 'interaction' %>
+  <% elsif @proposal.content_type == 'Message' %>
+    <%= render :partial => 'message' %>
   <% else %>
+    <h2>Unknown Proposal from <%= @proposal.sender.name %></h2>
     <div class="info-block">
       <div class="info-block-head">Has Anyone Really Been</div>
       <div class="info-block-body">Far Even as Decided to Use Even Go Want to do Look More Like?</div>

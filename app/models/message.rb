@@ -22,7 +22,7 @@ class Message < ActiveRecord::Base
     text = ""
     self.body.each do |element|
       if(element['type'] == 'gesture')
-        text = Gesture.find(element['gesture_id']).result(viewer, sender, Character.find(element['target_id']))
+        text = Gesture.find(element['gesture_id']).result.call(viewer, sender, Character.find(element['target_id']))
       elsif(element['type'] == 'text')
         text = element['value']
       end
