@@ -164,12 +164,12 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
-  def proposals
-    return self.received_proposals + self.sent_proposals
+  def recent_proposals
+    return self.received_proposals.where(:turn => self.world.turn) + self.sent_proposals.where(:turn => self.world.turn)
   end
 
   def unread_proposals
-    return self.proposals.reject{|proposal| proposal.viewed_by?(self)}
+    return self.recent_proposals.reject{|proposal| proposal.viewed_by?(self)}
   end
 
   def execute
@@ -190,7 +190,7 @@ class Character < ActiveRecord::Base
     end
 
     # Close out any unclosed proposals this character made this turn
-    self.proposals.each do |proposal|
+    self.recent_proposals.each do |proposal|
       if(proposal.status == 'open')
         proposal.cancel
       end
