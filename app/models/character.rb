@@ -31,6 +31,8 @@ class Character < ActiveRecord::Base
   def default_relationships
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :known => true)
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :known => true)
   end
   
   # Checks whether or not this character can add this action

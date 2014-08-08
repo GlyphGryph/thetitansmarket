@@ -6,8 +6,13 @@ class Activity
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
+    @available = params[:available] || lambda { |character| return true }
     @result = params[:result] || lambda { |character, target| return "Function error." }
     self.class.add(@id, self)
+  end
+
+  def available?(character)
+    return @available.call(character)
   end
 end
 
@@ -32,6 +37,9 @@ Activity.new("play",
         return true;
       end
       return false;
+    },
+    :available => lambda { |character|
+      return character.knows?("play")
     },
   }
 )
