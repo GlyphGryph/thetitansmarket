@@ -29,7 +29,7 @@
                   <div class="proposal-control cancel"><%= link_to "X", cancel_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
                 </div>
               <% end %>
-              <div class="proposal-name"><%= proposal.name_for_receiver %></div>
+              <div class="proposal-name"><%= (proposal.sender==@character) ? proposal.name_for_sender : proposal.name_for_receiver %></div>
               <%= link_to "", show_proposal_path(:id => @character.id, :proposal_id => proposal.id), :class=>"proposal-details basic-button" %>
             </div>
           <% end %>
