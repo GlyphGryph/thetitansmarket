@@ -48,19 +48,41 @@
       padding-left:4px;
       padding-right:4px;
     }
-
-    .queue-cost{
-      font-size:80%;
-      display:float;
-      float:right;
-      margin-right:10px;
-
-      &:before{
-        padding-right:0px;
-        content:'(';
+    #action-queue{
+      &.over-cost .info-block-head{
+        background-color:red;
       }
-      &:after{
-        content:')';
+      position:relative;
+
+      .queue-cost{
+        font-size:80%;
+        display:float;
+        float:right;
+        margin-right:10px;
+
+        &:before{
+          padding-right:0px;
+          content:'(';
+        }
+        &:after{
+          content:')';
+        }
+
+      }
+
+
+      .selection-element{
+        position:relative;
+        padding:2px;
+        text-align:right;
+
+        span.over-cost{
+          padding-left:3px;
+          margin-top:1px;
+          margin-bottom:1px;
+          background-color:#faa;
+          border-radius:2px;
+        }
       }
     }
   }

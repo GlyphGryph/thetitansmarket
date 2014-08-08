@@ -27,6 +27,10 @@ class Action
     end
   end
 
+  def available?(character)
+    return @available.call(character)
+  end
+
   # Takes a character, and returns a list of valid targets, sorted by type, that character can select for this action
   def targets(character)
     valid = {}

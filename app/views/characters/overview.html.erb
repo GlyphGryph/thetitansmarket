@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div class="info-block" id="action-queue">
+    <div class="info-block  <%= (@queue_cost > @character.ap)?'over-cost':''%>" id="action-queue">
       <div class="info-block-head">
         Actions Queue
         <div class="queue-cost"><%= @queue_cost %>/<%= @character.ap %></div>
@@ -113,14 +113,19 @@
           <% if @character_actions.empty? %>
             No actions selected.
           <% else %>
+            <% running_cost = 0 %>
             <% @character_actions.each do |character_action| %>
-              <div class="selection-element">
-                <%= character_action.get.cost.call(@character) %> -
-                <%= character_action.get.name %> 
-                <% if character_action.get.requires_target? %>
-                  (<%= character_action.target.get.name %>)
-                <% end %>
-                <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+              <% action_cost = character_action.get.cost.call(@character) %>
+              <% running_cost += action_cost %>
+              <div class="selection-element ">
+                <span class="<%= (running_cost > @character.ap)?'over-cost':''%>">
+                  <%= action_cost %> -
+                  <%= character_action.get.name %> 
+                  <% if character_action.get.requires_target? %>
+                    (<%= character_action.target.get.name %>)
+                  <% end %>
+                  <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+                </span>
               </div>
             <% end %>
           <% end %>

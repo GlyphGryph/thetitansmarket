@@ -33,10 +33,9 @@ class Character < ActiveRecord::Base
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
   end
   
-  # Checks whether or not this character has enough AP to add additional actions.
+  # Checks whether or not this character can add this action
   def can_add_action?(action_id)
-    cost_of_action = Action.find(action_id).cost.call(self)
-    return (self.ap - self.cost_of_all_actions) >= cost_of_action
+    return Action.find(action_id).available?(self)
   end
 
   def change_happy(value)
