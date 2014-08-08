@@ -4,10 +4,33 @@ class ProposalsController < ApplicationController
   before_filter :check_valid_owner, :except => :show
   
   def index
-    @sent_proposals = @character.sent_proposals.sort_by(&:created_at)
-    @received_proposals = @character.received_proposals.sort_by(&:created_at)
-    @received_proposals.each do |proposal|
-      proposal.mark_read
+    @new_proposals = []
+    @world = @character.world
+
+    sent_proposals = @character.sent_proposals.where(:turn => @world.turn).sort_by(&:created_at)
+    new_sent_proposals = sent_proposals.select{|proposal| !proposal.viewed_by?(@character)}
+    sent_proposals -= new_sent_proposals
+
+    received_proposals = @character.received_proposals.where(:turn => @world.turn).sort_by(&:created_at)
+    new_received_proposals = received_proposals.select{|proposal| !proposal.viewed_by?(@character)}
+    received_proposals -= new_received_proposals
+
+    previous_sent_proposals = @character.sent_proposals.where(:turn => (@world.turn-1)).sort_by(&:created_at)
+    previous_received_proposals = @character.received_proposals.where(:turn => (@world.turn-1)).sort_by(&:created_at)
+
+    @proposals_hash = [
+      {:label => 'Newly Received or Updated', :proposals => new_sent_proposals+new_received_proposals},
+      {:label => 'Received', :proposals => received_proposals},
+      {:label => 'Sent', :proposals => sent_proposals},
+      {:label => 'Previous Proposals', :proposals => previous_sent_proposals+previous_received_proposals}
+    ]
+
+    new_sent_proposals.each do |proposal|
+      proposal.mark_read_for(@character)
+    end
+
+    new_received_proposals.each do |proposal|
+      proposal.mark_read_for(@character)
     end
   end
 
@@ -48,7 +71,7 @@ class ProposalsController < ApplicationController
         trade.asked_character_possessions = CharacterPossession.find(asked_ids)
         trade.offered_character_possessions = CharacterPossession.find(offered_ids)
         trade.save!
-        proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => trade)
+        proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)
         success = proposal.save
       else
         error += " No asked or offered items."
@@ -59,7 +82,7 @@ class ProposalsController < ApplicationController
       if(activity)
         interaction = Interaction.new(:activity_id => activity.id)
         interaction.save!
-        proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => interaction)
+        proposal = Proposal.new(:sender => @character, :receiver => target, :content => interaction)
         success = proposal.save
       else
         error += " Could not find an activity with the given id."
@@ -89,7 +112,7 @@ class ProposalsController < ApplicationController
 
         if(all_components_good)
           message.save!
-          proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => message)
+          proposal = Proposal.new(:sender => @character, :receiver => target, :content => message)
           proposal.save!
           success=true
         else

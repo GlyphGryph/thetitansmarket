@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140808014748) do
+ActiveRecord::Schema.define(version: 20140808215924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,8 @@ ActiveRecord::Schema.define(version: 20140808014748) do
     t.integer  "content_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "viewed_by_receiver"
+    t.boolean  "viewed_by_sender"
   end
 
   create_table "trade_asked_character_possessions", force: true do |t|

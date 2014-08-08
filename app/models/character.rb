@@ -164,8 +164,12 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
-  def unread_messages
-    self.received_proposals.where(:status => "new")
+  def proposals
+    return self.received_proposals + self.sent_proposals
+  end
+
+  def unread_proposals
+    return self.proposals.reject{|proposal| proposal.viewed_by?(self)}
   end
 
   def execute

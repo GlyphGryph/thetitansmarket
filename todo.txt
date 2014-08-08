@@ -1,5 +1,6 @@
 Immediate goals:
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
+Fix type in message name
 FIX: @types_of_interaction = ['play'], have it pull from Activities instead
 "Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
 Allow players to add additional gestures/texts
