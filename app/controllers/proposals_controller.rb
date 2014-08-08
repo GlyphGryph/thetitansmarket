@@ -27,15 +27,21 @@ class ProposalsController < ApplicationController
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
       @types_of_interaction = ['play']
+    elsif(@proposal_type == 'Message')
+      if(@character.knows?('gestures') && @target.knows?('gestures'))
+        @gestures = Gesture.all
+      end
+      @speaks = (@character.knows?('language') && @target.knows('language'))
     end
   end
 
   def create
-    @target = Character.find(params[:target_id])
-    @proposal_type = params[:proposal_type]
+    target = Character.find(params[:target_id])
+    proposal_type = params[:proposal_type]
     error = "Could not make this proposal."
     success = false
-    if(params[:proposal_type] == 'Trade')
+    if(proposal_type == 'Trade')
+      error += " Was a Trade."
       asked_ids = params[:asked_ids] || []
       offered_ids = params[:offered_ids] || []
       if(!asked_ids.empty? || !offered_ids.empty?)
@@ -43,22 +49,58 @@ class ProposalsController < ApplicationController
         trade.asked_character_possessions = CharacterPossession.find(asked_ids)
         trade.offered_character_possessions = CharacterPossession.find(offered_ids)
         trade.save!
-        proposal = Proposal.new(:sender => @character, :receiver => @target, :status => 'new', :content => trade)
+        proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => trade)
         success = proposal.save
       else
-        errror = "No asked or offered items. Cannot offer an empty trade."
+        error += " No asked or offered items."
       end
-    end
-    if(params[:proposal_type] == 'Interaction')
+    elsif(proposal_type == 'Interaction')
+      error += " Was an Interaction."
       activity = Activity.find(params[:activity])
       if(activity)
         interaction = Interaction.new(:activity_id => activity.id)
         interaction.save!
-        proposal = Proposal.new(:sender => @character, :receiver => @target, :status => 'new', :content => interaction)
+        proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => interaction)
         success = proposal.save
       else
-        error = "Could not find an activity with the given id."
+        error += " Could not find an activity with the given id."
       end
+    elsif(proposal_type == 'Message')
+      error += " Was a Message."
+      components = params[:message_components]
+      if(components && !components.empty?)
+        all_components_good = true
+        message = Message.new()
+        components.transform_keys!{ |key| key.to_i }
+        keys = components.keys.sort
+        keys.each do |key|
+          component = components[key]
+          if(component['type']=="gesture")
+            gesture = Gesture.find(component['value'])
+            if(gesture)
+              message.add_gesture(gesture, target)
+            else
+              all_components_good = false
+              error += " Bad component #{component['value']}."
+            end
+          else
+            error += " Only gestures are valid at the moment. Textboxes are not yet implemented."
+          end
+        end
+
+        if(all_components_good)
+          message.save!
+          proposal = Proposal.new(:sender => @character, :receiver => target, :status => 'new', :content => message)
+          proposal.save!
+          success=true
+        else
+          error += " Bad components."
+        end
+      else
+        error += " No message components provided."
+      end
+    else
+      error += " Invalid proposal type."
     end
     respond_to do |format|
       if(success)

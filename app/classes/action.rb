@@ -1,5 +1,6 @@
 class Action
   extend CollectionTracker
+  include Targetable
   attr_reader :id, :name, :description, :result, :cost, :available, :target_prompt, :requires_target
 
   def initialize(id, params={})
@@ -15,79 +16,8 @@ class Action
     self.class.add(@id, self)
   end
 
-  def requires_target?
-    return requires_target
-  end
-
-  def targetable(type, id)
-    if(self.valid_targets[type] && (self.valid_target[type].include?(id) || self.valid_target[type].include?('all')))
-      return true
-    else
-      return false
-    end
-  end
-
   def available?(character)
     return @available.call(character)
-  end
-
-  # Takes a character, and returns a list of valid targets, sorted by type, that character can select for this action
-  def targets(character)
-    valid = {}
-    @valid_targets.each do |target_type, values|
-      target_objects = []
-      if(target_type == "possession")
-        if(values.include?('all'))
-          target_objects = character.character_possessions
-        else
-          character.character_possessions.each do |character_possession|
-            if(values.include?(character_possession.possession_id))
-              target_objects << character_possession
-            end
-          end
-        end
-      elsif(target_type == "knowledge")
-        if(values.include?('all'))
-          # Only pull from knowledges ACTUALLY known.
-          target_objects = character.knowledges
-        else
-          character.knowledges.each do |character_knowledge|
-            if(values.include?(character_knowledge.knowledge_id))
-              target_objects << character_knowledge
-            end
-          end
-        end
-      elsif(target_type == "idea")
-        if(values.include?('all'))
-          # Only pull from knowledges considered but not yet known.
-          target_objects = character.ideas
-        else
-          character.ideas.each do |character_knowledge|
-            if(values.include?(character_knowledge.knowledge_id))
-              target_objects << character_knowledge
-            end
-          end
-        end
-      elsif(target_type == "character")
-        if(values.include?('all'))
-          target_objects = character.world.characters
-        end
-      elsif(target_type == "condition")
-        if(values.include?('all'))
-          target_objects = character.character_conditions
-        else
-          character.character_conditions.each do |character_conditions|
-            if(values.include?(character_condition.condition_id))
-              target_objects << character_condition
-            end
-          end
-        end
-      else
-        raise "Invalid target type for Action: valid targets"
-      end
-      valid[target_type]=target_objects
-    end
-    return valid
   end
 end
 

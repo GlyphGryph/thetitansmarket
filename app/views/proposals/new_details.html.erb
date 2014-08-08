@@ -11,6 +11,8 @@
         Trade Offer To <%= @target.name %>
       <% elsif @proposal_type == 'Interaction' %>
         Interaction Proposal To <%= @target.name %>
+      <% elsif @proposal_type == 'Message' %>
+        Message To <%= @target.name %>
       <% else %>
         No stop
       <% end %>
@@ -20,6 +22,8 @@
         <%= render :partial => 'trade' %>
       <% elsif @proposal_type == 'Interaction' %>
         <%= render :partial => 'interaction' %>
+      <% elsif @proposal_type == 'Message' %>
+        <%= render :partial => 'message' %>
       <% else %>
         You're messing with forces beyond your control, kid.
       <% end %>

@@ -23,6 +23,10 @@ class Proposal < ActiveRecord::Base
     self.status ||= "new"
   end
   
+  def acceptable?
+    return content.acceptable?
+  end
+
   def accept
     if(self.status == 'open' && self.content.acceptable?)
       success = self.content.accept

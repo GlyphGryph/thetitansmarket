@@ -4,8 +4,9 @@
 </div>
 
 <div>
-  <%= link_to "Make new trade proposal!", new_proposal_path(:id => @character.id, :proposal_type => 'Trade') %>
-  <%= link_to "Make new interaction proposal!", new_proposal_path(:id => @character.id, :proposal_type => 'Interaction') %>
+  <%= link_to "Trade", new_proposal_path(:id => @character.id, :proposal_type => 'Trade') %>
+  <%= link_to "Interact", new_proposal_path(:id => @character.id, :proposal_type => 'Interaction') %>
+  <%= link_to "Send a message", new_proposal_path(:id => @character.id, :proposal_type => 'Message') %>
 </div>
 
 <div class="info-block">
@@ -13,7 +14,7 @@
   <div class="info-block-body">
     <% @sent_proposals.each do |proposal| %>
       <div class="<%= proposal.status -%>-proposal proposal">
-        <% if proposal.status == 'open' || proposal.status == 'new' %>
+        <% if (proposal.status == 'new' || proposal.status == 'open') && proposal.acceptable?%>
           <div class="proposal-controls">
             <div class="proposal-control cancel"><%= link_to "X", cancel_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
           </div>
@@ -32,7 +33,7 @@
     <% @received_proposals.each do |proposal| %>
       <div class="<%= proposal.status -%>-proposal proposal">
         <div class="proposal-status"></div>
-        <% if proposal.status == 'new' || proposal.status == 'open' %>
+        <% if (proposal.status == 'new' || proposal.status == 'open') && proposal.acceptable? %>
           <div class="proposal-controls">
             <div class="proposal-control accept"><%= link_to "accept", accept_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>
             <div class="proposal-control decline"><%= link_to "decline", decline_proposal_path(:id => @character.id, :proposal_id => proposal.id) %></div>

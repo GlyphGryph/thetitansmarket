@@ -1,6 +1,7 @@
 Immediate goals:
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
-Allow creation of Messages and Broadcasts
+Allow creation of Messages
+FIX: @types_of_interaction = ['play'], have it pull from Activities instead
 The gestures system allows the player to send messages to other player, or to the market as a whole (a broadcast), by selecting from a few preset actions and selecting references. For example, "Point At", followed by targeting either an item or a person.
 "Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
 Add a 'reply' button to messages in the index AND on the show page for quick replies.
@@ -9,6 +10,7 @@ Allow creation of traits
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions
 Make sure proposals track the turn they were created, and push old proposals into history. Make sure to change their state to closed, and add grey styling for closed/ignored proposals.
+Add explore result that results in a concussion and the loss of a knowledge
 --STYLE BREAK--
   Standardize info-block labels
   Handle span lists and list lists in info blocks
@@ -16,6 +18,7 @@ Make sure proposals track the turn they were created, and push old proposals int
 
 --FAR FUTURE--
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
+Allow creation of broadcasts
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)

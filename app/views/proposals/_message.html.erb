@@ -1,0 +1,20 @@
+<div>
+  <h4>Compose your message</h4>
+  <div>
+    <% index = 1 %>
+    <%= hidden_field_tag("message_components[#{index}][type]","gesture") %> 
+    <% @gestures.each do |gesture| %>
+      <%= radio_button_tag("message_components[#{index}][value]", gesture.id, :required => 'required') %>
+      <%= label_tag("message_components_#{gesture.id}", "#{gesture.name}: #{gesture.description}") %>
+    <% end %>
+  </div>
+
+  <div>
+    <% index += 1 %>
+    <%= hidden_field_tag("message_components[#{index}][type]","gesture") %> 
+    <% @gestures.each do |gesture| %>
+      <%= radio_button_tag("message_components[#{index}][value]", gesture.id, :required => 'required') %>
+      <%= label_tag("message_components_#{gesture.id}", "#{gesture.name}: #{gesture.description}") %>
+    <% end %>
+  </div>
+</div>
