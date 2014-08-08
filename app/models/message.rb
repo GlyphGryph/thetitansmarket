@@ -22,9 +22,13 @@ class Message < ActiveRecord::Base
     text = ""
     self.body.each do |element|
       if(element['type'] == 'gesture')
-        text = Gesture.find(element['gesture_id']).result.call(viewer, sender, Character.find(element['target_id']))
+        text += "<div class='gesture'>"
+        text += Gesture.find(element['gesture_id']).result.call(viewer, sender, Character.find(element['target_id']))
+        text += "</div>"
       elsif(element['type'] == 'text')
-        text = element['value']
+        text += "<div class='text'>"
+        text += element['value']
+        text += "</div>"
       end
     end
     return text
