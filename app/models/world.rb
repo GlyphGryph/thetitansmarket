@@ -19,7 +19,7 @@ class World < ActiveRecord::Base
   def default_attributes
     self.name ||= generate_name
     self.turn ||= 1
-    self.lastTurned ||= DateTime.now
+    self.last_turned ||= DateTime.now
   end
 
   def default_relationships
