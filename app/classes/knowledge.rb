@@ -28,6 +28,11 @@ Knowledge.new("gestures",
     :description=>"You can engage in basic communication with others.", 
   }
 )
+Knowledge.new("language", 
+  { :name=>"Language", 
+    :description=>"You can engage in basic communication with others.", 
+  }
+)
 Knowledge.new("basic_farming", 
   { :name=>"Farming", 
     :description=>"You know how to clear, sow, and harvest the fields.", 

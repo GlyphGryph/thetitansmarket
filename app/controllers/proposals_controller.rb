@@ -26,7 +26,6 @@ class ProposalsController < ApplicationController
       @receiver_possessions = @target.character_possessions
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
-      @types_of_interaction = ['play']
     elsif(@proposal_type == 'Message')
       if(@character.knows?('gestures') && @target.knows?('gestures'))
         @gestures = Gesture.all

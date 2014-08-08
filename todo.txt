@@ -1,9 +1,10 @@
 Immediate goals:
 Proposals are destroyed at end of turn if not accepted, and executed and then destroyed if they are accepted
-Allow creation of Messages
 FIX: @types_of_interaction = ['play'], have it pull from Activities instead
-The gestures system allows the player to send messages to other player, or to the market as a whole (a broadcast), by selecting from a few preset actions and selecting references. For example, "Point At", followed by targeting either an item or a person.
 "Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
+Allow players to add additional gestures/texts
+Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
+Might want to handle building a message out over several pages, thinking about it...
 Add a 'reply' button to messages in the index AND on the show page for quick replies.
 Limit message body length in index, only add a 'show' link if there's more message, call it something like 'see more'
 Allow creation of traits
@@ -17,6 +18,7 @@ Add explore result that results in a concussion and the loss of a knowledge
 --/STYLE BREAK--
 
 --FAR FUTURE--
+Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
 Allow creation of broadcasts
 
