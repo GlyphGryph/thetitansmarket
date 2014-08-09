@@ -59,18 +59,27 @@ Action.new("ponder",
     :result => lambda { |character, character_action|
       target_type = character_action.target_type
       target = character_action.target.get
-      if( (target_type == 'possession' && target.id == 'food') ||
-          (target_type == 'possession' && target.id == 'wildlands') ||
-          (target_type == 'condition' && target.id == 'hunger') )
-        if(character.knows?("basic_farming") || character.considers?("basic_farming"))
-          return "You ponder the #{target.name}, but nothing new comes to mind."
-        else
-          character.consider('basic_farming')
-          return "You ponder the #{target.name}. You wonder if you could grow your own food, given the opportunity."
+      found = false
+      succeeded = false
+      text = ["You ponder the #{target.name}."]
+      Thought.all.each do |thought|
+        if(thought.sources[target_type] && thought.sources[target_type].include?(target.id))
+          found = true
+          if(!character.knows?(thought.id) && !character.considers?(thought.id))
+            character.consider(thought.id)
+            succeeded = true
+            text << thought.description
+          end
         end
-      else
-        return "You ponder the #{target.name}, but it reveals nothing about life's ineffable mysteries."
       end
+      if(!found)
+        text << "It reveals nothing about life's ineffable mysteries."
+      elsif(!succeeded)
+        text << "Nothing new comes to mind."
+      end
+
+      text = text.join(" ")
+      return text
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
