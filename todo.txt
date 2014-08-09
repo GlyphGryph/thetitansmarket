@@ -1,25 +1,50 @@
 Immediate goals:
 Bugfix: Investigating Language doesn't properly do so.
 "Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
-Allow players to add additional gestures/texts
-Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
-Might want to handle building a message out over several pages, thinking about it...
-Add a 'reply' button to messages in the index AND on the show page for quick replies.
-Limit message body length in index, only add a 'show' link if there's more message, call it something like 'see more'
-Allow creation of traits
+Add a 'reply' button to messages in the index AND add the interaciton menu to the character show pages and the character overview page character list for quick interactions
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions
 Make sure proposals track the turn they were created, and push old proposals into history. Make sure to change their state to closed, and add grey styling for closed/ignored proposals.
-Add explore result that results in a concussion and the loss of a knowledge
+HP damage reduces the ability/increases the cost for performing certain tasks.
+Happy damage reduces the ability/increases the cost of performing certain tasks.
 --STYLE BREAK--
   Standardize info-block labels
   Handle span lists and list lists in info blocks
 --/STYLE BREAK--
+--CONTENT BREAK--
+Forage requires wildlands to forage in
+Add explore result that results in a concussion and the loss of a knowledge
+Add the "dissattisfaction" condition to decrease happiness each turn.
+Add Tomatunk and Wampoon deposits to the exploration pool.
+Add Dolait groves to the exploration pool. These can be cleared just like wildlands, but not used to forage.
+Clearing Dolait groves produces a large amount of Dolait resource.  
+Pondering Dolait allows acquisition of the "Harvest Dolait" knowledge, which allows the "Harvest" action, which generates a Dolait resource from a Dolait grove.
+Pondaring a Tomatunk deposit grants the "Tomatunk Collection" knowledge, which allows the "Collect Tomatunk" action, which generates a Tomatunk resource from a Tomatunk deposit at a less than 100% chance.
+Add the "craft basic farming tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Hoe" item (basic_farming_tool) from a Dolait and a Tomatunk. This makes the "Harvest Field" action cost 1ap less.
+Add the "craft basic dolait extraction tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Axe" item (basic_dolait_tool) from a Dolait and a Tomatunk. This makes the "Harvest Dolait" generate an additional Dolait.
+Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
+Add the "Fire" knowledge based on pondering Dolait.
+--/CONTENT BREAK--
+Allow creation of traits
+Allow players to add additional gestures/texts
+Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
+Might want to handle building a message out over several pages, thinking about it...
+Allow "qualities" (tags and values) to be associated with items.
+Add teaching/learning proposals in exchange for goods.
+Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
+Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
+Add an "execution" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
+Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess.
+Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality.
+Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
+
 
 --FAR FUTURE--
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
 Allow creation of broadcasts
+Pull the item list from the worlds instead of from a global item list, and vary the resulting items, esp. qualities. Change the current item stuff to be templates rather than final definitions, with multiple options for various bits to build the real item base.
+Have lots of variant wildlands with their own forage results, and have deposits be an attribute on wildlands. Deposits will be hidden until something something something.
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)
