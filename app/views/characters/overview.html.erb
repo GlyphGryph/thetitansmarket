@@ -7,10 +7,21 @@
     <div class="info-block" id="character-info">
       <div class="info-block-head">Character Info</div>
       <div class="info-block-body">
-        <div class="stat"><%= @character.name %></div>
-        <div class="stat"><%= @character.hp %>/<%= @character.max_hp %> health</div>
-        <div class="stat"><%= @character.happy %>/<%= @character.max_happy %> happy</div>
-        <div class="stat"><%= @character.ap %>/<%= @character.max_ap %> vigor</div>
+        <div class="name"><%= @character.name %></div>
+        <div class="data-block">
+          <div class="data-element">
+            <div class="label">Health</div>
+            <div class="value"><%= @character.hp %>/<%= @character.max_hp -%></div>
+          </div>
+          <div class="data-element">
+            <div class="label">Happy</div>
+            <div class="value"><%= @character.happy %>/<%= @character.max_happy -%></div>
+          </div>
+          <div class="data-element">
+            <div class="label">Vigor</div>
+            <div class="value"><%= @character.ap %>/<%= @character.max_ap -%></div>
+          </div>
+        </div>
       </div>
     </div>
 

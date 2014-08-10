@@ -1,0 +1,19 @@
+<div class="info-block" id="character-info">
+  <div class="info-block-head"><%= shown_character.name %> of <%= shown_character.world.name %></div>
+  <div class="info-block-body">
+    <div class="data-block">
+      <div class="data-element">
+        <div class="label">Health</div>
+        <div class="value"><%= shown_character.hp %>/<%= shown_character.max_hp -%></div>
+      </div>
+      <div class="data-element">
+        <div class="label">Happy</div>
+        <div class="value"><%= shown_character.happy %>/<%= shown_character.max_happy -%></div>
+      </div>
+      <div class="data-element">
+        <div class="label">Vigor</div>
+        <div class="value"><%= shown_character.ap %>/<%= shown_character.max_ap -%></div>
+      </div>
+    </div>
+  </div>
+</div>

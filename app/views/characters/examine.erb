@@ -3,13 +3,7 @@
   <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
 </div>
 
-<div id="character-info">
-  <h5>Character Info</h5>
-  <%= @target.name %> - 
-  <%= @target.hp %>/<%= @target.max_hp %> health - 
-  <%= @target.happy %>/<%= @target.max_happy %> happy -
-  <%= @target.ap %>/<%= @target.max_ap %> vigor
-</div>
+<%= render :partial => "show", :locals => {:shown_character => @target} %>
 
 <div>
   <%= link_to "Trade", new_proposal_details_path(:id => @character.id, :proposal_type => 'Trade', :target_id => @target.id) %>
