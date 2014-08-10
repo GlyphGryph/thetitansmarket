@@ -1,5 +1,4 @@
 Immediate goals:
-Add a 'reply' button to messages in the index AND add the interaciton menu to the character show pages and the character overview page character list for quick interactions
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions
 Allow "qualities" (tags and values) to be associated with items.
