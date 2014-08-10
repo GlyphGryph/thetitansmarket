@@ -1,12 +1,12 @@
 Immediate goals:
-HP damage reduces the ability/increases the cost for performing certain tasks
-Happy damage reduces the ability/increases the cost of performing certain tasks.
-Some action costs should be based on what their target is (example: Investigation)
 --STYLE BREAK--
   Standardize info-block labels
   Handle span lists and list lists in info blocks
 --/STYLE BREAK--
+Characters are "killed" if their happiness or health drops to zero.
 --CONTENT BREAK--
+Characters get the condition "Struggle", which reduces their happiness by 1 each turn.
+Characters get the condition "Regeneration", which increases their health by 1 each turn. Increase the damage from Starvation to 3 as a response.
 Forage requires wildlands to forage in
 Add explore result that results in a concussion and the loss of a knowledge
 Add the "dissattisfaction" condition to decrease happiness each turn.
@@ -32,6 +32,7 @@ Turn "Eat" into an explicit (free) action that lets you target some food quality
 Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality.
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
+Some action costs should be based on what their target is (example: Investigation)
 
 --FAR FUTURE--
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
