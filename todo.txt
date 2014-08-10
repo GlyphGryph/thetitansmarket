@@ -1,8 +1,4 @@
 Immediate goals:
---STYLE BREAK--
-  Standardize info-block labels
-  Handle span lists and list lists in info blocks
---/STYLE BREAK--
 Characters are "killed" if their happiness or health drops to zero.
 --CONTENT BREAK--
 Characters get the condition "Struggle", which reduces their happiness by 1 each turn.
