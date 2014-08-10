@@ -2,8 +2,8 @@ Immediate goals:
 Add a 'reply' button to messages in the index AND add the interaciton menu to the character show pages and the character overview page character list for quick interactions
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions
-Make sure proposals track the turn they were created, and push old proposals into history. Make sure to change their state to closed, and add grey styling for closed/ignored proposals.
-HP damage reduces the ability/increases the cost for performing certain tasks.
+Allow "qualities" (tags and values) to be associated with items.
+HP damage reduces the ability/increases the cost for performing certain tasks, based on qualities.
 Happy damage reduces the ability/increases the cost of performing certain tasks.
 --STYLE BREAK--
   Standardize info-block labels
@@ -27,7 +27,6 @@ Allow creation of traits
 Allow players to add additional gestures/texts
 Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
 Might want to handle building a message out over several pages, thinking about it...
-Allow "qualities" (tags and values) to be associated with items.
 Add teaching/learning proposals in exchange for goods.
 Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
 Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
