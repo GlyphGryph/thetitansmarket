@@ -1,6 +1,6 @@
 Immediate goals:
+Errors in the world turning allow for free execution of queued actions for one player
 Allow "qualities" (tags and values) to be associated with actions.
-Refactor my class objects so other parts of the app don't have to "call" their lambdas.
 HP damage reduces the ability/increases the cost for performing certain tasks, based on qualities.
 Happy damage reduces the ability/increases the cost of performing certain tasks.
 --STYLE BREAK--
@@ -47,6 +47,5 @@ Max Happiness (max_happy)
 Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organized multitasker, big heart]
 
 BUGLIST AND SECURITY CONCERNS:
-By editing the URL, people will be able to send Proposals across worlds. Additionally, need to enforce that offered and asked items are properly limited to items from their respective owners.
+Need to enforce that offered and asked items are properly limited to items from their respective owners.
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
-Errors in the world turning allow for free execution of queued actions for one player
