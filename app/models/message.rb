@@ -35,6 +35,7 @@ class Message < ActiveRecord::Base
   end
   
   def add_text(text)
+    self.body ||= []
     self.body << {'type' => 'text', 'value' => text}
   end
 

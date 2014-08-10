@@ -1,6 +1,4 @@
 Immediate goals:
-Bugfix: Investigating Language doesn't properly do so.
-"Pondering" the Gesture knowledge opens up the Language knowledge, which replaces the selection of gestures with the ability to type out messages freehand to those who also have this knowledge.
 Add a 'reply' button to messages in the index AND add the interaciton menu to the character show pages and the character overview page character list for quick interactions
 Remove display of duplicates in the ponder screen
 Remove the "contains" column from character_possessions

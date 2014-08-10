@@ -1,11 +1,22 @@
 <div>
   <h4>Compose your message</h4>
-  <div>
+  <% if @character.knows?('language') && @target.knows?('language') %>
     <% index = 1 %>
-    <%= hidden_field_tag("message_components[#{index}][type]","gesture") %> 
-    <% @gestures.each do |gesture| %>
-      <%= radio_button_tag("message_components[#{index}][value]", gesture.id, :required => 'required') %>
-      <%= label_tag("message_components_#{gesture.id}", "#{gesture.name}: #{gesture.description}") %>
+    <%= hidden_field_tag("message_components[#{index}][type]","text") %> 
+    <%= text_field_tag("message_components[#{index}][value]") %>
+  <% elsif @character.knows?('gestures') %>
+    <% if @character.knows?('language') %>
+      <div><%= @target.name %> can't speak your language.</div>
     <% end %>
-  </div>
+    <div>
+      <% index = 1 %>
+      <%= hidden_field_tag("message_components[#{index}][type]","gesture") %> 
+      <% @gestures.each do |gesture| %>
+        <%= radio_button_tag("message_components[#{index}][value]", gesture.id, :required => 'required') %>
+        <%= label_tag("message_components_#{gesture.id}", "#{gesture.name}: #{gesture.description}") %>
+      <% end %>
+    </div>
+  <% else %>
+    You can't figure out how to communicate with that person.
+  <% end %>
 </div>

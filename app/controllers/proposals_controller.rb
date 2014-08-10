@@ -53,7 +53,6 @@ class ProposalsController < ApplicationController
       if(@character.knows?('gestures') && @target.knows?('gestures'))
         @gestures = Gesture.all
       end
-      @speaks = (@character.knows?('language') && @target.knows('language'))
     end
   end
 
@@ -105,8 +104,11 @@ class ProposalsController < ApplicationController
               all_components_good = false
               error += " Bad component #{component['value']}."
             end
+          elsif(component['type']=="text")
+            message.add_text(component['value'])
           else
-            error += " Only gestures are valid at the moment. Textboxes are not yet implemented."
+            all_components_good = false
+            error += "Could not recognize the type of Message requested."
           end
         end
 

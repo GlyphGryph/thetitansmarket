@@ -1,11 +1,12 @@
 class Thought
   extend CollectionTracker
-  attr_reader :id, :sources, :description
+  attr_reader :id, :sources, :consider, :research
 
   def initialize(id, params={})
     @id = id
-    @description = params[:description]
+    @consider = params[:consider]
     @sources = params[:sources]
+    @research = params[:research]
     self.class.add(@id, self)
   end
 end
@@ -16,7 +17,8 @@ Thought.new("basic_farming",
       'possession' => ['food', 'wildlands'],
       'condition' => ['hunger'],
     },
-    :description => "You wonder if you could grow your own food, given the opportunity.",
+    :consider => "You wonder if you could grow your own food, given the opportunity.",
+    :research => "You dicover the secrets of agriculture!"
   }
 )
 
@@ -26,6 +28,7 @@ Thought.new("language",
       'possession' => [],
       'condition' => [],
     },
-    :description => "There has to be a better way to communicate than waving your arms around...",
+    :consider => "There has to be a better way to communicate than waving your arms around...",
+    :research => "You dicover the secrets of language!"
   }
 )

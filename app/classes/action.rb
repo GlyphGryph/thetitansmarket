@@ -68,7 +68,7 @@ Action.new("ponder",
           if(!character.knows?(thought.id) && !character.considers?(thought.id))
             character.consider(thought.id)
             succeeded = true
-            text << thought.description
+            text << thought.consider
           end
         end
       end
@@ -96,18 +96,22 @@ Action.new("investigate",
     :result => lambda { |character, character_action|
       target_type = character_action.target_type
       target = character_action.target.get
-      if(target_type == 'idea')
-        if(target.id == 'basic_farming')
-          if(character.knows?("basic_farming"))
-            return "You consider your ideas for #{target.name} more fully, but don't think further investigation will accomplish anything here."
-          else
-            character.learn('basic_farming')
-            return "Eureka! You discover the secrets of #{target.name}!"
-          end
+      text = ["You dig deeper into the possibilities of #{target.name}."]
+
+      if(target_type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
+        if(character.knows?(target.id))
+          return "You consider your ideas for #{target.name} more fully, but don't think further investigation will accomplish anything here."
+        else
+          character.learn(target.id)
+          text << Thought.find(target.id).research
+          succeeded = true
         end
       else
-        return "Don't be asburd! You can't investigate #{target.name}, you can only investigate ideas!"
+        text << "Don't be asburd! You can't investigate #{target.name}, you can only investigate ideas!"
       end
+
+      text = text.join(" ")
+      return text
     },
     :cost => lambda { |character| return 3 },
     :available => lambda { |character|
