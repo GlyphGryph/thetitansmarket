@@ -15,7 +15,8 @@ class Action
     @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
     @valid_targets = params[:valid_targets] || {}
-    @qualities = params[:qualities] || {}
+    @physical_cost_penalty = params[:physical_cost_penalty] || 0
+    @mental_cost_penalty = params[:mental_cost_penalty] || 0
     self.class.add(@id, self)
   end
 
@@ -23,16 +24,30 @@ class Action
     return @available.call(character)
   end
 
-  def cost(character, target_type = nil, target_id = nil)
+  def unmodified_cost(character, target_type = nil, target_id = nil)
+    cost = 0
     if(self.cost_requires_target?)
       if(target_type && target_id)
-        return @targeted_cost.call(character, target_type, target_id)
+        cost = @targeted_cost.call(character, target_type, target_id)
       else
         raise "Calculating the cost for #{self.name} requires a target."
       end
     else
-      return @base_cost
+      cost = @base_cost
     end
+    return cost
+  end
+    
+  def cost(character, target_type = nil, target_id = nil)
+    cost = self.unmodified_cost(character, target_type, target_id)
+    # Note: If an action costs at least 1ap, the modifier should not be able to reduce the cost below zero
+    # If an action is already free, it cannot be reduced at all (although it can be increased)
+    modifier = 0
+    modifier += @physical_cost_penalty * character.fraction_hp_missing
+    modifier += @mental_cost_penalty * character.fraction_happy_missing
+    modifier = modifier.round
+
+    cost += modifier
   end
 
   def cost_requires_target?
@@ -53,6 +68,8 @@ end
 # :result => lambda {|character, target| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :base_cost  => base ap cost
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
+# :physical_cost_penalty => The maximum amount of ap cost increase for injury
+# :mental_cost_penalty => The maximum amount of ap cost increase for sadness
 # :valid_targets => {'type_name' => ['id', 'id']} // Types are possessions, knowledges, ideas, conditions, characters. 'all' can be used in place of an id to indicate that every object of that type is a valid target. Knowledges are specifically known knowledges, and ideas are considered knowledges.
 # }
 
@@ -69,6 +86,8 @@ Action.new("forage",
       end
     },
     :base_cost => 3,
+    :physical_cost_penalty => 5,
+    :mental_cost_penalty => 5,
   }
 )
 Action.new("explore", 
@@ -78,6 +97,8 @@ Action.new("explore",
       return character.world.explore_with(character)
     },
     :base_cost => 5,
+    :physical_cost_penalty => 10,
+    :mental_cost_penalty => 5,
   }
 )
 Action.new("ponder",
@@ -113,6 +134,7 @@ Action.new("ponder",
     :requires_target => true,
     :valid_targets => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
     :target_prompt => "What would you like to ponder?",
+    :mental_cost_penalty => 10,
   }
 )
 Action.new("investigate",
@@ -145,6 +167,8 @@ Action.new("investigate",
     :requires_target => true,
     :valid_targets => {"idea"=>['all']},
     :target_prompt => "What would you like to investigate?",
+    :mental_cost_penalty => 10,
+    :physical_cost_penalty => 5
   }
 )
 Action.new("clear_land",
@@ -162,7 +186,9 @@ Action.new("clear_land",
     :base_cost => 8,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("wildlands")
-    }
+    },
+    :physical_cost_penalty => 30,
+    :mental_cost_penalty => 8
   }
 )
 Action.new("plant",
@@ -189,7 +215,9 @@ Action.new("plant",
     :base_cost => 5,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
-    }
+    },
+    :physical_cost_penalty => 5,
+    :mental_cost_penalty => 2,
   }
 )
 Action.new("harvest",
@@ -212,6 +240,8 @@ Action.new("harvest",
     :base_cost => 5,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("farm")
-    }
+    },
+    :physical_cost_penalty => 10,
+    :mental_cost_penalty => 2,
   }
 )

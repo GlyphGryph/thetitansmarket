@@ -133,7 +133,22 @@ class Character < ActiveRecord::Base
     elsif(!knows?(knowledge_id))
       self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => true)
     end
- 
+  end
+
+  def fraction_hp_remaining
+    return self.hp / self.max_hp
+  end
+
+  def fraction_hp_missing
+    1 - self.fraction_hp_remaining
+  end
+
+  def fraction_happy_remaining
+    return self.happy / self.max_happy
+  end
+
+  def fraction_happy_missing
+    1 - self.fraction_happy_remaining
   end
   
   def possesses?(possession_id)

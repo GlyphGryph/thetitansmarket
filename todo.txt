@@ -1,7 +1,7 @@
 Immediate goals:
-Allow "qualities" (tags and values) to be associated with actions.
-HP damage reduces the ability/increases the cost for performing certain tasks, based on qualities.
+HP damage reduces the ability/increases the cost for performing certain tasks
 Happy damage reduces the ability/increases the cost of performing certain tasks.
+Some action costs should be based on what their target is (example: Investigation)
 --STYLE BREAK--
   Standardize info-block labels
   Handle span lists and list lists in info blocks
@@ -39,6 +39,7 @@ Allow hiding items, and a config to hide new items be default. Also allow making
 Allow creation of broadcasts
 Pull the item list from the worlds instead of from a global item list, and vary the resulting items, esp. qualities. Change the current item stuff to be templates rather than final definitions, with multiple options for various bits to build the real item base.
 Have lots of variant wildlands with their own forage results, and have deposits be an attribute on wildlands. Deposits will be hidden until something something something.
+Add remembered tasks. Make sure the task is remembered as a % of task completed.
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)
