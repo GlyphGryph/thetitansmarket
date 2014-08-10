@@ -1,7 +1,7 @@
 class Gesture
   extend CollectionTracker
   include Targetable
-  attr_reader :id, :description, :name, :result
+  attr_reader :id, :description, :name
 
   def initialize(id, params={})
     @id = id
@@ -18,6 +18,10 @@ class Gesture
     @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
     self.class.add(@id, self)
+  end
+
+  def result(viewer, actor, target)
+    @result.call(viewer, actor, target)
   end
 end
 

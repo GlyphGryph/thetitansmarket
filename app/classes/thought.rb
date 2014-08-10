@@ -4,9 +4,9 @@ class Thought
 
   def initialize(id, params={})
     @id = id
-    @consider = params[:consider]
-    @sources = params[:sources]
-    @research = params[:research]
+    @consider = params[:consider] || "Error, no consideration found"
+    @sources = params[:sources] || {} 
+    @research = params[:research] || "Error, no research found"
     self.class.add(@id, self)
   end
 end

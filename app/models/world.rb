@@ -42,18 +42,18 @@ class World < ActiveRecord::Base
   end
 
   def explore_with(character)
-    found = self.world_explorations.sample
-    if(!found)
+    world_exploration = self.world_explorations.sample
+    if(!world_exploration)
       throw "Error: Ran out of explorations on world #{self.id}: #{self.name}"
     end
 
     # Chances of failure will stay in the pool forever
-    if(found.exploration_id == 'nothing')
-      return found.get.result.call(character)
+    if(world_exploration.exploration_id == 'nothing')
+      return world_exploration.get.result(character)
     else
       # Other explorations, however, can only be executed once
-      result = found.get.result.call(character)
-      found.destroy!
+      result = world_exploration.get.result(character)
+      world_exploration.destroy!
       return result
     end
   end

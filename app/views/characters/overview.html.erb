@@ -114,7 +114,7 @@
           <% else %>
             <% running_cost = 0 %>
             <% @character_actions.each do |character_action| %>
-              <% action_cost = character_action.get.cost.call(@character) %>
+              <% action_cost = character_action.get.cost(@character) %>
               <% running_cost += action_cost %>
               <div class="selection-element ">
                 <span class="<%= (running_cost > @character.ap)?'over-cost':''%>">
@@ -140,7 +140,7 @@
             <div class="options-element">
               <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: 
               <%= action.description %> 
-              (Cost: <%= action.cost.call(@character) %>)
+              (Cost: <%= action.cost(@character) %>)
             </div>
           <% end %>
         </div>

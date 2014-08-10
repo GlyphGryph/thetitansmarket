@@ -1,30 +1,57 @@
 class Action
   extend CollectionTracker
   include Targetable
-  attr_reader :id, :name, :description, :result, :cost, :available, :target_prompt, :requires_target
+  attr_reader :id, :name, :description, :available, :target_prompt
 
   def initialize(id, params={})
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
-    @result = params[:result] || lambda { |character, character_action| return "Function error." }
-    @cost = params[:cost] || lambda { |character| return 1 }
+    @result = params[:result] || lambda { |character, target| return "Function error." }
+    @base_cost = params[:base_cost] || 0
+    @targeted_cost = params[:targeted_cost] || lambda { |character, target| return 0 }
+    @cost_requires_target = params[:cost_requires_target]
     @available = params[:available] || lambda { |character| return true }
     @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
     @valid_targets = params[:valid_targets] || {}
+    @qualities = params[:qualities] || {}
     self.class.add(@id, self)
   end
 
   def available?(character)
     return @available.call(character)
   end
+
+  def cost(character, target_type = nil, target_id = nil)
+    if(self.cost_requires_target?)
+      if(target_type && target_id)
+        return @targeted_cost.call(character, target_type, target_id)
+      else
+        raise "Calculating the cost for #{self.name} requires a target."
+      end
+    else
+      return @base_cost
+    end
+  end
+
+  def cost_requires_target?
+    return @cost_requires_target
+  end
+
+  def result(character, target)
+    return @result.call(character, target)
+  end
+  
+  def requires_target?
+    return @requires_target
+  end
 end
 
 # Format for new actions
 # 'id', {:name => 'Name', :description=>"Multi-word description.", 
-# :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
-# :cost => lambda {|character| if(character.loves_chicken) return 5; else return 6;} // Takes a character, returns a digit
+# :result => lambda {|character, target| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
+# :base_cost  => base ap cost
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
 # :valid_targets => {'type_name' => ['id', 'id']} // Types are possessions, knowledges, ideas, conditions, characters. 'all' can be used in place of an id to indicate that every object of that type is a valid target. Knowledges are specifically known knowledges, and ideas are considered knowledges.
 # }
@@ -32,7 +59,7 @@ end
 Action.new("forage",
   { :name=>"Forage", 
     :description=>"You rummage through the underbrush.", 
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       if(Random.rand(2)==0)
         found = Plant.all.sample
         CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
@@ -41,29 +68,27 @@ Action.new("forage",
         return "You forage through the underbrush, but find only disappointment." 
       end
     },
-    :cost => lambda { |character| return 3 },
+    :base_cost => 3,
   }
 )
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
-    :result => lambda { |character, character_action| 
+    :result => lambda { |character, target| 
       return character.world.explore_with(character)
     },
-    :cost => lambda { |character| return 5 },
+    :base_cost => 5,
   }
 )
 Action.new("ponder",
   { :name=>"Ponder",
     :description=>"You think for a while.",
-    :result => lambda { |character, character_action|
-      target_type = character_action.target_type
-      target = character_action.target.get
+    :result => lambda { |character, target|
       found = false
       succeeded = false
       text = ["You ponder the #{target.name}."]
       Thought.all.each do |thought|
-        if(thought.sources[target_type] && thought.sources[target_type].include?(target.id))
+        if(thought.sources[target.class] && thought.sources[target.class].include?(target.id))
           found = true
           if(!character.knows?(thought.id) && !character.considers?(thought.id))
             character.consider(thought.id)
@@ -81,7 +106,7 @@ Action.new("ponder",
       text = text.join(" ")
       return text
     },
-    :cost => lambda { |character| return 3 },
+    :base_cost => 3,
     :available => lambda { |character|
       return character.knows?("cognition")
     },
@@ -113,7 +138,7 @@ Action.new("investigate",
       text = text.join(" ")
       return text
     },
-    :cost => lambda { |character| return 3 },
+    :base_cost => 3,
     :available => lambda { |character|
       return (character.knows?("cognition") && !character.ideas.empty?)
     },
@@ -134,7 +159,7 @@ Action.new("clear_land",
         return "You attempted to clear a field, but it failed."
       end
     },
-    :cost => lambda { |character| return 8 },
+    :base_cost => 8,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("wildlands")
     }
@@ -161,7 +186,7 @@ Action.new("plant",
         end
       end
     },
-    :cost => lambda { |character| return 5 },
+    :base_cost => 5,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
     }
@@ -184,7 +209,7 @@ Action.new("harvest",
         return "You attempted to harvest a field, but it failed."
       end
     },
-    :cost => lambda { |character| return 5 },
+    :base_cost => 5,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("farm")
     }

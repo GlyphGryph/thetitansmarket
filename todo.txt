@@ -1,7 +1,6 @@
 Immediate goals:
-Remove display of duplicates in the ponder screen
-Remove the "contains" column from character_possessions
-Allow "qualities" (tags and values) to be associated with items.
+Allow "qualities" (tags and values) to be associated with actions.
+Refactor my class objects so other parts of the app don't have to "call" their lambdas.
 HP damage reduces the ability/increases the cost for performing certain tasks, based on qualities.
 Happy damage reduces the ability/increases the cost of performing certain tasks.
 --STYLE BREAK--
@@ -33,7 +32,7 @@ Add an "execution" method to possessions. Run this for each item each time the w
 Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess.
 Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality.
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
-
+Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
 
 --FAR FUTURE--
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.

@@ -1,6 +1,6 @@
 class Activity
   extend CollectionTracker
-  attr_reader :id, :name, :description, :result, :cost, :available, :target_prompt, :requires_target
+  attr_reader :id, :name, :description, :cost, :available, :target_prompt, :requires_target
 
   def initialize(id, params={})
     @id = id
@@ -13,6 +13,10 @@ class Activity
 
   def available?(character)
     return @available.call(character)
+  end
+
+  def result(character, target)
+    return @result.call(character, target)
   end
 end
 

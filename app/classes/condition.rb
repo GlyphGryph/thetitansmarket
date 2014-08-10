@@ -1,6 +1,6 @@
 class Condition
   extend CollectionTracker
-  attr_reader :id, :name, :description, :result
+  attr_reader :id, :name, :description
 
   def initialize(id, params={})
     @id = id
@@ -9,7 +9,11 @@ class Condition
     @result = params[:result] || lambda { |character| return "Condition Result Error" }
     self.class.add(@id, self)
   end
-end
+
+  def result(character)
+    @result.call(character)
+  end
+end 
 
 # Format for new items
 # 'id', {:name => 'Name', :description=>"Multi-word description."
