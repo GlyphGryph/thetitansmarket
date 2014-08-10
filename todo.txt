@@ -1,5 +1,4 @@
 Immediate goals:
-Errors in the world turning allow for free execution of queued actions for one player
 Allow "qualities" (tags and values) to be associated with actions.
 HP damage reduces the ability/increases the cost for performing certain tasks, based on qualities.
 Happy damage reduces the ability/increases the cost of performing certain tasks.

@@ -82,12 +82,18 @@ class World < ActiveRecord::Base
 
   def execute
     if(self.ready_to_execute?)
-      self.characters.each do |character|
-        character.execute
+      begin
+        ActiveRecord::Base.transaction do
+          self.characters.each do |character|
+            character.execute
+          end
+          self.turn += 1
+          self.last_turned = Time.now
+          self.save!
+        end
+      rescue => e
+        raise e
       end
-      self.turn += 1
-      self.last_turned = Time.now
-      self.save!
       return true
     else
       return false
