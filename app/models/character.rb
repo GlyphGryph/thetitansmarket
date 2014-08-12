@@ -136,19 +136,19 @@ class Character < ActiveRecord::Base
   end
 
   def fraction_hp_remaining
-    return self.hp / self.max_hp
+    return self.hp.to_f / self.max_hp.to_f
   end
 
   def fraction_hp_missing
-    1 - self.fraction_hp_remaining
+    1.0 - self.fraction_hp_remaining.to_f
   end
 
   def fraction_happy_remaining
-    return self.happy / self.max_happy
+    return self.happy.to_f / self.max_happy.to_f
   end
 
   def fraction_happy_missing
-    1 - self.fraction_happy_remaining
+    1.0 - self.fraction_happy_remaining.to_f
   end
   
   def possesses?(possession_id)

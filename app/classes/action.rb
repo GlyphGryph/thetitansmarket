@@ -43,8 +43,8 @@ class Action
     # Note: If an action costs at least 1ap, the modifier should not be able to reduce the cost below zero
     # If an action is already free, it cannot be reduced at all (although it can be increased)
     modifier = 0
-    modifier += @physical_cost_penalty * character.fraction_hp_missing
-    modifier += @mental_cost_penalty * character.fraction_happy_missing
+    modifier += @physical_cost_penalty.to_f * character.fraction_hp_missing
+    modifier += @mental_cost_penalty.to_f * character.fraction_happy_missing
     modifier = modifier.round
 
     cost += modifier
