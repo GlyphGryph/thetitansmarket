@@ -22,17 +22,36 @@ end
 # Format for new items
 # 'id', {:name => 'Name', :description=>"Multi-word description."
 # :result => lamda describing the code that will execute each turn for those with this condition
-Condition.new("hunger", 
+Condition.new("hunger",
   { :name=>"Hunger", 
     :description=>"You're in the mood for food.", 
     :result => lambda { |character| 
       if(character.eat)
         return "You gobble up a unit of food."
       else 
-        character.damage(1)
+        character.change_hp(-3)
+        character.change_happy(-1)
         return "You suffer from starvation."
       end
     },
   }
 )
 
+Condition.new("weariness",
+  { :name=>"Weariness", 
+    :description=>"Life keeps on keeping on.", 
+    :result => lambda { |character| 
+      character.change_happy(-1)
+      return "As time passes, your feel a weight settle on your soul."
+    },
+  }
+)
+Condition.new("resilience",
+  { :name=>"Resilience", 
+    :description=>"Pull yourself together, kid.", 
+    :result => lambda { |character| 
+      character.change_hp(1)
+      return "You feel your body recovering from the damage it's sustained."
+    },
+  }
+)

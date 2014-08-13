@@ -30,6 +30,8 @@ class Character < ActiveRecord::Base
 
   def default_relationships
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
+    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'weariness')
+    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :known => true)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :known => true)
@@ -45,8 +47,6 @@ class Character < ActiveRecord::Base
     new_happy = self.happy+value
     if(new_happy > self.max_happy)
       new_happy = self.max_happy
-    elsif(new_happy < 0)
-      new_happy = 0
     end
     # Only bother saving if the new happy is different
     if(self.happy != new_happy)
@@ -70,6 +70,21 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def change_hp(value)
+    # Change the ap, up to max or down to zero
+    new_hp = self.hp+value
+    if(new_hp > self.max_hp)
+      new_hp = self.max_hp
+    elsif(new_hp < 0)
+      new_hp = 0
+    end
+    # Only bother saving if the new ap is different
+    if(self.hp != new_hp)
+      self.hp = new_hp
+      self.save!
+    end  
+  end
+
   def consider(knowledge_id)
     unless(considers?(knowledge_id) || knows?(knowledge_id))
       self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)
@@ -87,11 +102,6 @@ class Character < ActiveRecord::Base
       cost+=character_action.get.cost(self)
     end
     return cost
-  end
-
-  def damage(amount=1)
-    self.hp-=amount
-    self.save!
   end
 
   def eat(amount=1)

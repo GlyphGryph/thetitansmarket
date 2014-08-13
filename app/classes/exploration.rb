@@ -39,7 +39,7 @@ Exploration.new("land_claim",
 Exploration.new("animal_attack", 
   { :name=>"Attacked!", 
     :result => lambda { |character| 
-      character.damage(Random.new.rand(1..5))
+      character.change_hp(Random.new.rand(-1..-5))
       return "You're attacked by a dangerous wild animal and injured!"
     },
   }
