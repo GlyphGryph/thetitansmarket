@@ -5,6 +5,10 @@ class CharacterPossession < ActiveRecord::Base
   attr_accessor :type, :contains
 
   def get
-    Possession.find(self.possession_id)
+    element = Possession.find(self.possession_id)
+    unless(element)
+      raise "Could not find action for CharacterPossession with id #{self.id}"
+    end
+    return element
   end
 end

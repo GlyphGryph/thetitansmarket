@@ -28,7 +28,7 @@ Exploration.new("nothing",
     },
   }
 )
-Exploration.new("land_claim", 
+Exploration.new("wildlands_claim", 
   { :name=>"Claimed Land", 
     :result => lambda { |character| 
       CharacterPossession.new(:character_id => character.id, :possession_id => "wildlands").save!
@@ -49,6 +49,30 @@ Exploration.new("artifact",
     :result => lambda { |character| 
       CharacterPossession.new(:character_id => character.id, :possession_id => "generic_object").save!
       return "You've discovered a Perfectly Generic Object."
+    },
+  }
+)
+Exploration.new("dolait_claim", 
+  { :name=>"a Dolait Grove", 
+    :result => lambda { |character| 
+      CharacterPossession.new(:character_id => character.id, :possession_id => "dolait_source").save!
+      return "You've discovered a Dolait Grove."
+    },
+  }
+)
+Exploration.new("tomatunk_claim", 
+  { :name=>"a Tomatunk Deposit", 
+    :result => lambda { |character| 
+      CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk_source").save!
+      return "You've discovered a Tomatunk Deposit."
+    },
+  }
+)
+Exploration.new("wampoon_claim", 
+  { :name=>"a Wampoon Deposit", 
+    :result => lambda { |character| 
+      CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon_source").save!
+      return "You've discovered a Wampoon Deposit."
     },
   }
 )

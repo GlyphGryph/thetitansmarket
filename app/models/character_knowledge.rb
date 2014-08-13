@@ -4,7 +4,11 @@ class CharacterKnowledge < ActiveRecord::Base
   validates_presence_of :knowledge_id
 
   def get
-    Knowledge.find(self.knowledge_id)
+    element = Knowledge.find(self.knowledge_id)
+    unless(element)
+      raise "Could not find action for CharacterKnowledge with id #{self.id}"
+    end
+    return element
   end
 
   def learn

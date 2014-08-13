@@ -14,7 +14,11 @@ class CharacterAction < ActiveRecord::Base
   validates_with CharacterActionValidator
 
   def get
-    Action.find(self.action_id)
+    element = Action.find(self.action_id) 
+    unless(element)
+      raise "Could not find action for CharacterAction with id #{self.id}"
+    end
+    return element
   end
 
   def target

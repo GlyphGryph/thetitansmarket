@@ -178,20 +178,22 @@ Action.new("investigate",
 )
 Action.new("clear_land",
   { :name=>"Clear Land",
-    :description=>"Turn a plot of wilderness into a plot of farmable field.",
+    :description=>"Turn a plot of wilderness or a grove into a plot of farmable field.",
     :result => lambda { |character, character_action|
-      if(character.possesses?("wildlands"))
-        character.character_possessions.where(:possession_id=>"wildlands").first.destroy!
+      character_possession = character_action.target
+      ActiveRecord::Base.transaction do
+        character_possession.destroy!
         CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-        return "You clear a field."
-      else
-        return "You attempted to clear a field, but it failed."
       end
+      return "You clear a field."
     },
     :base_cost => 8,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("wildlands")
     },
+    :requires_target => true,
+    :valid_targets => {"possession"=>['wildlands', 'dolait']},
+    :target_prompt => "What would you like to clear?",
     :physical_cost_penalty => 30,
     :mental_cost_penalty => 2
   }

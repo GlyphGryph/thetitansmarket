@@ -1,13 +1,5 @@
 Immediate goals:
 --CONTENT BREAK--
-Characters get the condition "Weariness", which reduces their happiness by 1 each turn.
-Characters get the condition "Resilience", which increases their health by 1 each turn.
-"Hunger" causes 2 health and one happy damage.
-Forage requires wildlands to forage in
-Add explore result that results in a concussion and the loss of a knowledge
-Add the "dissattisfaction" condition to decrease happiness each turn.
-Add Tomatunk and Wampoon deposits to the exploration pool.
-Add Dolait groves to the exploration pool. These can be cleared just like wildlands, but not used to forage.
 Clearing Dolait groves produces a large amount of Dolait resource.  
 Pondering Dolait allows acquisition of the "Harvest Dolait" knowledge, which allows the "Harvest" action, which generates a Dolait resource from a Dolait grove.
 Pondaring a Tomatunk deposit grants the "Tomatunk Collection" knowledge, which allows the "Collect Tomatunk" action, which generates a Tomatunk resource from a Tomatunk deposit at a less than 100% chance.
@@ -15,7 +7,11 @@ Add the "craft basic farming tools" action, make it dependent on the "Crafting" 
 Add the "craft basic dolait extraction tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Axe" item (basic_dolait_tool) from a Dolait and a Tomatunk. This makes the "Harvest Dolait" generate an additional Dolait.
 Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
 Add the "Fire" knowledge based on pondering Dolait.
+???Forage requires wildlands to forage in
+??Add explore result that results in a concussion and the loss of a knowledge
 --/CONTENT BREAK--
+Remove the "target_type" logic, get type from target directly instead
+Add "valid target types" logic to insure that inputs that are not valid targets raises an error when executing actions. Already a valid targets finder so this should be straightforward logic hooks. (For those without a valid_target_types there should NOT be a target!)
 Characters are "killed" if their happiness and health drops to zero.
 Rename "hp" to "health" and "happy" to "resolve" and "ap" to "vigor"
 Allow creation of traits
