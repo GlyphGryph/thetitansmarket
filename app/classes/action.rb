@@ -89,7 +89,7 @@ Action.new("forage",
         return "You forage through the underbrush, but find only disappointment." 
       end
     },
-    :base_cost => 3,
+    :base_cost => 2,
     :physical_cost_penalty => 2,
     :mental_cost_penalty => 2,
   }
