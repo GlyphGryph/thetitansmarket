@@ -90,8 +90,8 @@ Action.new("forage",
       end
     },
     :base_cost => 3,
-    :physical_cost_penalty => 5,
-    :mental_cost_penalty => 5,
+    :physical_cost_penalty => 2,
+    :mental_cost_penalty => 2,
   }
 )
 Action.new("explore", 
@@ -101,7 +101,7 @@ Action.new("explore",
       return character.world.explore_with(character)
     },
     :base_cost => 5,
-    :physical_cost_penalty => 10,
+    :physical_cost_penalty => 5,
     :mental_cost_penalty => 5,
   }
 )
@@ -139,7 +139,7 @@ Action.new("ponder",
     :requires_target => true,
     :valid_targets => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
     :target_prompt => "What would you like to ponder?",
-    :mental_cost_penalty => 10,
+    :mental_cost_penalty => 5,
   }
 )
 Action.new("investigate",
@@ -172,8 +172,8 @@ Action.new("investigate",
     :requires_target => true,
     :valid_targets => {"idea"=>['all']},
     :target_prompt => "What would you like to investigate?",
-    :mental_cost_penalty => 10,
-    :physical_cost_penalty => 5
+    :mental_cost_penalty => 4,
+    :physical_cost_penalty => 4
   }
 )
 Action.new("clear_land",
@@ -193,7 +193,7 @@ Action.new("clear_land",
       return character.knows?("basic_farming") && character.possesses?("wildlands")
     },
     :physical_cost_penalty => 30,
-    :mental_cost_penalty => 8
+    :mental_cost_penalty => 2
   }
 )
 Action.new("plant",
@@ -221,8 +221,8 @@ Action.new("plant",
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
     },
-    :physical_cost_penalty => 5,
-    :mental_cost_penalty => 2,
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 1,
   }
 )
 Action.new("harvest",
@@ -246,7 +246,7 @@ Action.new("harvest",
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("farm")
     },
-    :physical_cost_penalty => 10,
-    :mental_cost_penalty => 2,
+    :physical_cost_penalty => 4,
+    :mental_cost_penalty => 1,
   }
 )
