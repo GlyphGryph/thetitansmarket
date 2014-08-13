@@ -27,16 +27,16 @@ class World < ActiveRecord::Base
   end
 
   def build_exploration_pool
-    10.times do
+    50.times do
       self.world_explorations << WorldExploration.new(:world => self, :exploration_id => 'wildlands_claim')
     end
-    50.times do
+    10.times do
       self.world_explorations << WorldExploration.new(:world => self, :exploration_id => 'dolait_claim')
     end
-    50.times do
+    10.times do
       self.world_explorations << WorldExploration.new(:world => self, :exploration_id => 'wampoon_claim')
     end
-    50.times do
+    10.times do
       self.world_explorations << WorldExploration.new(:world => self, :exploration_id => 'tomatunk_claim')
     end
     10.times do
