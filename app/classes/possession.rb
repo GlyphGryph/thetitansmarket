@@ -8,6 +8,10 @@ class Possession
     @description = params[:description] || "Description Error"
     self.class.add(@id, self)
   end
+
+  def type
+    return "possession"
+  end
 end
 
 # Format for new items

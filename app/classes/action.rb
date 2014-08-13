@@ -7,7 +7,7 @@ class Action
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
-    @result = params[:result] || lambda { |character, target| return "Function error." }
+    @result = params[:result] || lambda { |character, action| return "Function error." }
     @base_cost = params[:base_cost] || 0
     @targeted_cost = params[:targeted_cost] || lambda { |character, target| return 0 }
     @cost_requires_target = params[:cost_requires_target]
@@ -61,11 +61,15 @@ class Action
   def requires_target?
     return @requires_target
   end
+
+  def type
+    return "action"
+  end
 end
 
 # Format for new actions
 # 'id', {:name => 'Name', :description=>"Multi-word description.", 
-# :result => lambda {|character, target| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
+# :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :base_cost  => base ap cost
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
 # :physical_cost_penalty => The maximum amount of ap cost increase for injury
@@ -76,7 +80,7 @@ end
 Action.new("forage",
   { :name=>"Forage", 
     :description=>"You rummage through the underbrush.", 
-    :result => lambda { |character, target|
+    :result => lambda { |character, character_action|
       if(Random.rand(2)==0)
         found = Plant.all.sample
         CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
@@ -93,7 +97,7 @@ Action.new("forage",
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
-    :result => lambda { |character, target| 
+    :result => lambda { |character, character_action| 
       return character.world.explore_with(character)
     },
     :base_cost => 5,
@@ -104,12 +108,13 @@ Action.new("explore",
 Action.new("ponder",
   { :name=>"Ponder",
     :description=>"You think for a while.",
-    :result => lambda { |character, target|
+    :result => lambda { |character, character_action|
+      target = character_action.target.get
       found = false
       succeeded = false
       text = ["You ponder the #{target.name}."]
       Thought.all.each do |thought|
-        if(thought.sources[target.class] && thought.sources[target.class].include?(target.id))
+        if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
           found = true
           if(!character.knows?(thought.id) && !character.considers?(thought.id))
             character.consider(thought.id)

@@ -8,6 +8,10 @@ class Knowledge
     @description = params[:description] || "Description Error"
     self.class.add(@id, self)
   end
+
+  def type
+    return "knowledge"
+  end
 end
 
 # Format for new items

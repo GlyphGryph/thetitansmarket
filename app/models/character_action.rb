@@ -27,7 +27,7 @@ class CharacterAction < ActiveRecord::Base
     elsif(self.target_type == "knowledge" || self.target_type =="idea")
       return CharacterKnowledge.find(self.target_id)
     else
-      raise "Invalid type provided. Could not find a rule to handle #{self.target_type}."
+      raise "Invalid type provided. Could not find a rule to handle #{self.target_type}, #{self.target_id} for #{self.get.name}."
     end
   end
 end

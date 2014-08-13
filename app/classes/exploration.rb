@@ -12,6 +12,10 @@ class Exploration
   def result(character)
     @result.call(character)
   end
+
+  def type
+    return "exploration"
+  end
 end
 
 # Format for new items

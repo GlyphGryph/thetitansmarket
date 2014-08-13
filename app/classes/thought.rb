@@ -9,6 +9,10 @@ class Thought
     @research = params[:research] || "Error, no research found"
     self.class.add(@id, self)
   end
+
+  def type
+    return "thought"
+  end
 end
 
 Thought.new("basic_farming",

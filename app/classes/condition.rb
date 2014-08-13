@@ -13,6 +13,10 @@ class Condition
   def result(character)
     @result.call(character)
   end
+
+  def type
+    return "condition"
+  end
 end 
 
 # Format for new items

@@ -9,6 +9,10 @@ class Plant
     @seed_name = params[:seed_name] || "ERROR: UNKNOWN"
     self.class.add(@id, self)
   end
+
+  def type
+    return "plant"
+  end
 end
 
 Plant.new("strawberry",

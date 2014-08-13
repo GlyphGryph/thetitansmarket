@@ -187,6 +187,10 @@ class Character < ActiveRecord::Base
     return self.recent_proposals.reject{|proposal| proposal.viewed_by?(self)}
   end
 
+  def type
+    "character"
+  end
+
   def execute
     self.unready
     cost_so_far = 0
@@ -197,7 +201,7 @@ class Character < ActiveRecord::Base
       action = character_action.get
       cost_so_far += action.cost(self)
       if(cost_so_far <= self.ap)
-        new_history << action.result(self, action)
+        new_history << action.result(self, character_action)
       end
     end
     if(cost_so_far > self.ap)

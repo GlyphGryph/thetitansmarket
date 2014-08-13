@@ -18,6 +18,10 @@ class Activity
   def result(character, target)
     return @result.call(character, target)
   end
+
+  def type
+    return "activity"
+  end
 end
 
 # Format for new activitys
