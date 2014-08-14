@@ -29,9 +29,9 @@ class Character < ActiveRecord::Base
   end
 
   def default_relationships
+    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'weariness')
-    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :known => true)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :known => true)
@@ -71,12 +71,26 @@ class Character < ActiveRecord::Base
   end
 
   def change_hp(value)
-    # Change the ap, up to max or down to zero
-    new_hp = self.hp+value
-    if(new_hp > self.max_hp)
-      new_hp = self.max_hp
-    elsif(new_hp < 0)
+    new_hp = self.hp
+    if(self.has_condition?('pure_grit') && value <= 0)
       new_hp = 0
+      change_happy(value)
+    else
+      # Change the ap, up to max or down to zero
+
+      new_hp += value
+      if(new_hp > self.max_hp)
+        new_hp = self.max_hp
+      elsif(new_hp < 1)
+        # Minimum hp is zero, which triggers PURE GRIT. Further damage is dealt to morale instead.
+        self.change_happy(new_hp*2)
+        new_hp = 0
+        self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
+      end
+
+      if(self.has_condition?('pure_grit') && new_hp > 0)
+        self.character_conditions.where(:condition_id => 'pure_grit').destroy_all
+      end
     end
     # Only bother saving if the new ap is different
     if(self.hp != new_hp)
@@ -123,6 +137,10 @@ class Character < ActiveRecord::Base
 
   def get
     return self
+  end
+
+  def has_condition?(condition_id)
+    return !(self.character_conditions.where(:condition_id => condition_id).empty?)
   end
 
   def ideas

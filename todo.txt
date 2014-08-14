@@ -1,7 +1,6 @@
 Immediate goals:
 --CONTENT BREAK--
 Add "nihilism" if morale is reduced to zero and execute immediately, remove if morale improves above zero. Remove the "Resilience" trait while this is in effect, and take 2 damage when acquired and each turn afterwards.
-Add "pure grit" if health is reduced to zero, health damage dealt while this condition persists is instead dealt double to morale, remove if health improves above zero.
 Add the "craft basic farming tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Hoe" item (basic_farming_tool) from a Dolait and a Tomatunk. This makes the "Harvest Field" action cost 1ap less.
 Add the "craft basic dolait extraction tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Axe" item (basic_dolait_tool) from a Dolait and a Tomatunk. This makes the "Harvest Dolait" generate an additional Dolait.
 Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.

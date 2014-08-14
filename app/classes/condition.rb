@@ -55,3 +55,11 @@ Condition.new("resilience",
     },
   }
 )
+Condition.new("pure_grit",
+  { :name=>"Pure Grit", 
+    :description=>"You're holding yourself together with nothing but willpower and determination at this point, but it can't last much longer...", 
+    :result => lambda { |character| 
+      return "This is a result."
+    },
+  }
+)
