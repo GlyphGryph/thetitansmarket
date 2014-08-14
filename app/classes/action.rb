@@ -185,6 +185,15 @@ Action.new("clear_land",
       ActiveRecord::Base.transaction do
         character_possession.destroy!
         CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+        if(character_possession.get.id == 'dolait')
+          15.times do
+            CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
+          end
+        elsif(character_possession.get.id == 'wildlands')
+          Random.new.rand(1..4).times do
+            CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
+          end
+        end
       end
       return "You clear a field."
     },
@@ -228,7 +237,7 @@ Action.new("plant",
     :mental_cost_penalty => 1,
   }
 )
-Action.new("harvest",
+Action.new("harvest_fields",
   { :name=>"Harvest Fields",
     :description=>"You harvest the crops.",
     :result => lambda { |character, character_action|
@@ -253,7 +262,7 @@ Action.new("harvest",
     :mental_cost_penalty => 1,
   }
 )
-Action.new("harvest",
+Action.new("harvest_dolait",
   { :name=>"Harvest Dolait",
     :description=>"You harvest some dolat from the grove.",
     :result => lambda { |character, character_action|
