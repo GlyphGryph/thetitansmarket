@@ -3,24 +3,4 @@
   <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
 </div>
 
-<div id="character-history">
-  <div class="info-block">
-    <div class="info-block-head">Recently...</div>
-    <div class="info-block-body">
-      <% @recent_history.each do |story| %>
-        <div class="story"><%= story %></div>
-      <% end %>
-    </div>
-  </div>
-
-  <% @history.each do |step| %>
-    <div class="info-block">
-      <div class="info-block-head">Earlier...</div>
-      <div class="info-block-body">
-        <% step.each do |story| %>
-          <div class="story"><%= story %></div>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-</div>
+<%= render :partial => "history", :locals => {:character => @character} %>

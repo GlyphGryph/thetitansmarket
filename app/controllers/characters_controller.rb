@@ -134,8 +134,6 @@ class CharactersController < ApplicationController
   end
 
   def history
-    @history = @character.earlier_history
-    @recent_history = @character.recent_history
   end
 
   def show

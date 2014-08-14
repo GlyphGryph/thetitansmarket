@@ -137,6 +137,7 @@ class Character < ActiveRecord::Base
   end
 
   def die
+    self.history << ["You have died."]
     self.world = nil
   end
 
