@@ -6,6 +6,8 @@ Add the "craft basic dolait extraction tools" action, make it dependent on the "
 Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
 Add the "Fire" knowledge based on pondering Dolait.
 --/CONTENT BREAK--
+If a character obtains both pure grit and nihilism at the same time, they become detached from the world and become a ghost.
+Have a special page to display ghosts, and let players see their ghosts.
 
 Remove the "target_type" logic, get type from target directly instead
 Add "valid target types" logic to insure that inputs that are not valid targets raises an error when executing actions. Already a valid targets finder so this should be straightforward logic hooks. (For those without a valid_target_types there should NOT be a target!)

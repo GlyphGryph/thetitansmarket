@@ -10,7 +10,6 @@ class Character < ActiveRecord::Base
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
 
   validates_presence_of :user
-  validates_presence_of :world
   validates_uniqueness_of :user, :scope => [:world]
 
   before_create :default_attributes
@@ -48,6 +47,22 @@ class Character < ActiveRecord::Base
     if(new_happy > self.max_happy)
       new_happy = self.max_happy
     end
+    
+    # If our morale falls to or below zero, add nihilism and remove resilience
+    if(!self.has_condition?("nihilism") && new_happy <= 0)
+      self.character_conditions.where(:condition_id => 'resilience').destroy_all
+      self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'nihilism')
+      if(self.has_condition?("pure_grit"))
+        self.die
+      end
+    end
+
+    # If we were suffering from nihilism, but we've regained morale, remove it and restore resilience
+    if(self.has_condition?("nihilism") && new_happy > 0)
+      self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
+      self.character_conditions.where(:condition_id => 'nihilism').destroy_all
+    end
+
     # Only bother saving if the new happy is different
     if(self.happy != new_happy)
       self.happy = new_happy
@@ -86,6 +101,9 @@ class Character < ActiveRecord::Base
         self.change_happy(new_hp*2)
         new_hp = 0
         self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
+        if(self.has_condition?('nihilism'))
+          self.die
+        end
       end
 
       if(self.has_condition?('pure_grit') && new_hp > 0)
@@ -116,6 +134,10 @@ class Character < ActiveRecord::Base
       cost+=character_action.get.cost(self)
     end
     return cost
+  end
+
+  def die
+    self.world = nil
   end
 
   def eat(amount=1)

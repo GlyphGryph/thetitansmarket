@@ -63,3 +63,12 @@ Condition.new("pure_grit",
     },
   }
 )
+Condition.new("nihilism",
+  { :name=>"Nihilism", 
+    :description=>"Is it even worth going on, if this is all life is?", 
+    :result => lambda { |character| 
+      character.change_hp(-2)
+      return "You feel your body falling apart, but can't bring yourself to care."
+    },
+  }
+)
