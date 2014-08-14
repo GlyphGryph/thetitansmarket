@@ -1,15 +1,13 @@
 Immediate goals:
 --CONTENT BREAK--
-Clearing Dolait groves produces a large amount of Dolait resource.  
-Pondering Dolait allows acquisition of the "Harvest Dolait" knowledge, which allows the "Harvest" action, which generates a Dolait resource from a Dolait grove.
-Pondaring a Tomatunk deposit grants the "Tomatunk Collection" knowledge, which allows the "Collect Tomatunk" action, which generates a Tomatunk resource from a Tomatunk deposit at a less than 100% chance.
+Add "nihilism" if morale is reduced to zero and execute immediately, remove if morale improves above zero. Remove the "Resilience" trait while this is in effect, and take 2 damage when acquired and each turn afterwards.
+Add "pure grit" if health is reduced to zero, health damage dealt while this condition persists is instead dealt double to morale, remove if health improves above zero.
 Add the "craft basic farming tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Hoe" item (basic_farming_tool) from a Dolait and a Tomatunk. This makes the "Harvest Field" action cost 1ap less.
 Add the "craft basic dolait extraction tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Axe" item (basic_dolait_tool) from a Dolait and a Tomatunk. This makes the "Harvest Dolait" generate an additional Dolait.
 Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
 Add the "Fire" knowledge based on pondering Dolait.
-???Forage requires wildlands to forage in
-??Add explore result that results in a concussion and the loss of a knowledge
 --/CONTENT BREAK--
+
 Remove the "target_type" logic, get type from target directly instead
 Add "valid target types" logic to insure that inputs that are not valid targets raises an error when executing actions. Already a valid targets finder so this should be straightforward logic hooks. (For those without a valid_target_types there should NOT be a target!)
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
@@ -29,6 +27,12 @@ Create "Cooking" knowledge based on pondering Fire, which grants the "cook" acti
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
 Some action costs should be based on what their target is (example: Investigation)
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
+Add teaching proposal!
+
+--CONTENT BREAK--
+???Forage requires wildlands to forage in, target_allowed stuff would need to work first though
+??Add explore result that results in a concussion and the loss of a knowledge - Should wait until things can be taught!
+--CONTENT BREAK--
 
 --FAR FUTURE--
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
