@@ -32,6 +32,11 @@ Possession.new("seed",
     :description=>"These seeds can be planted.", 
   }
 )
+Possession.new("dolait",
+  { :name=>"Dolait Chunk",
+    :description=>"This is a chunk of harvested dolait.",
+  }
+)
 
 Possession.new("wildlands", 
   { :name=>"Plot of Wilderness", 

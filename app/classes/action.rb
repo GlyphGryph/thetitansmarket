@@ -114,6 +114,7 @@ Action.new("ponder",
       succeeded = false
       text = ["You ponder the #{target.name}."]
       Thought.all.each do |thought|
+        p "Checking thought #{thought.inspect} for #{target.id}"
         if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
           found = true
           if(!character.knows?(thought.id) && !character.considers?(thought.id))
@@ -247,6 +248,25 @@ Action.new("harvest",
     :base_cost => 5,
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("farm")
+    },
+    :physical_cost_penalty => 4,
+    :mental_cost_penalty => 1,
+  }
+)
+Action.new("harvest",
+  { :name=>"Harvest Dolait",
+    :description=>"You harvest some dolat from the grove.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("dolait_source"))
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
+        return "You harvest some dolait."
+      else
+        return "You attempted to harvest some dolait, but it failed."
+      end
+    },
+    :base_cost => 5,
+    :available => lambda { |character|
+      return character.knows?("basic_dolait") && character.possesses?("dolait_source")
     },
     :physical_cost_penalty => 4,
     :mental_cost_penalty => 1,

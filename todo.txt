@@ -12,6 +12,7 @@ Add the "Fire" knowledge based on pondering Dolait.
 --/CONTENT BREAK--
 Remove the "target_type" logic, get type from target directly instead
 Add "valid target types" logic to insure that inputs that are not valid targets raises an error when executing actions. Already a valid targets finder so this should be straightforward logic hooks. (For those without a valid_target_types there should NOT be a target!)
+Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
 Characters are "killed" if their happiness and health drops to zero.
 Rename "hp" to "health" and "happy" to "resolve" and "ap" to "vigor"
 Allow creation of traits

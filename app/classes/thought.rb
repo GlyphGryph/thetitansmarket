@@ -17,22 +17,28 @@ end
 
 Thought.new("basic_farming",
   { :sources => {
-      'knowledge' => [],
       'possession' => ['food', 'wildlands'],
       'condition' => ['hunger'],
     },
     :consider => "You wonder if you could grow your own food, given the opportunity.",
-    :research => "You dicover the secrets of agriculture!"
+    :research => "You dicover the secrets of agriculture!",
   }
 )
 
 Thought.new("language",
   { :sources => {
       'knowledge' => ['gestures'],
-      'possession' => [],
-      'condition' => [],
     },
     :consider => "There has to be a better way to communicate than waving your arms around...",
-    :research => "You dicover the secrets of language!"
+    :research => "You dicover the secrets of language!",
+  }
+)
+
+Thought.new('basic_dolait',
+  { :sources => {
+      'possession' => ['dolait_source','dolait'],
+    },
+    :consider => "You wonder if you could do anything interesting with this substance...",
+    :research => "You figure out the basics of harvesting and working with dolait.",
   }
 )

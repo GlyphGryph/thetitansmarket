@@ -42,3 +42,8 @@ Knowledge.new("basic_farming",
     :description=>"You know how to clear, sow, and harvest the fields.", 
   }
 )
+Knowledge.new("basic_dolait", 
+  { :name=>"Dolait Working", 
+    :description=>"You know how to harvest and work with dolait.", 
+  }
+)
