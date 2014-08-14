@@ -8,7 +8,6 @@ class CharactersController < ApplicationController
     @character_actions = @character.character_actions
     @actions = @character.potential_actions
     @inventory = @character.character_possessions.inject({}) do |result, value|
-      logger.error value.id
       possession = value.get
       if(result[possession.id]) 
         result[possession.id][:count]+=1
