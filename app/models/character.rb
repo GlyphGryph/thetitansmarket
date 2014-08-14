@@ -1,3 +1,14 @@
+class CharacterValidator < ActiveModel::Validator
+  def validate(record)
+    if(record.world)
+      previous_characters_this_world = record.user.characters.where.not(:id=>record.id).where(:world => record.world)
+      if(previous_characters_this_world.count > 0)
+        record.errors[:character] << " can not join this world. Another character from this use has already joined it."
+      end
+    end
+  end
+end
+
 class Character < ActiveRecord::Base
   serialize :history
   belongs_to :user
@@ -10,7 +21,8 @@ class Character < ActiveRecord::Base
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
 
   validates_presence_of :user
-  validates_uniqueness_of :user, :scope => [:world]
+  include ActiveModel::Validations
+  validates_with CharacterValidator
 
   before_create :default_attributes
   after_create :default_relationships
