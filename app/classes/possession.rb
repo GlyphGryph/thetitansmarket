@@ -37,6 +37,16 @@ Possession.new("dolait",
     :description=>"This is a chunk of harvested dolait.",
   }
 )
+Possession.new("tomatunk",
+  { :name=>"Tomatunk Block",
+    :description=>"This is a block of gathered tomatunk.",
+  }
+)
+Possession.new("wampoon",
+  { :name=>"Wampoon Shard",
+    :description=>"This is a shard of gathered wampoon.",
+  }
+)
 
 Possession.new("wildlands", 
   { :name=>"Plot of Wilderness", 

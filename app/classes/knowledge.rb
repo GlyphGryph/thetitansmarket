@@ -43,7 +43,17 @@ Knowledge.new("basic_farming",
   }
 )
 Knowledge.new("basic_dolait", 
-  { :name=>"Dolait Working", 
-    :description=>"You know how to harvest and work with dolait.", 
+  { :name=>"Dolait Harvesting", 
+    :description=>"You know how to harvest dolait chunks.", 
+  }
+)
+Knowledge.new("basic_tomatunk", 
+  { :name=>"Tomatunk Gathering", 
+    :description=>"You know how to find tomatunk blocks.", 
+  }
+)
+Knowledge.new("basic_wampoon", 
+  { :name=>"Wampoon Gathering", 
+    :description=>"You know how to find wampoon shards", 
   }
 )

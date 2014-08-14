@@ -38,7 +38,31 @@ Thought.new('basic_dolait',
   { :sources => {
       'possession' => ['dolait_source','dolait'],
     },
-    :consider => "You wonder if you could do anything interesting with this substance...",
-    :research => "You figure out the basics of harvesting and working with dolait.",
+    :consider => "You could probably get more of this substance without too much difficulty...",
+    :research => "You figure out the basics of harvesting dolait.",
+  }
+)
+Thought.new('basic_tomatunk',
+  { :sources => {
+      'possession' => ['tomatunk_source','tomatunk'],
+    },
+    :consider => "You could probably more of this substance with sharp eyes and a bit of luck...",
+    :research => "You figure out the basics of gathering tomatunk.",
+  }
+)
+Thought.new('basic_wampoon',
+  { :sources => {
+      'possession' => ['wampoon_source','wampoon'],
+    },
+    :consider => "You could probably more of this substance with sharp eyes and a lot of luck...",
+    :research => "You figure out the basics of gathering wampoon.",
+  }
+)
+Thought.new('basic_wampoon',
+  { :sources => {
+      'possession' => ['wampoon_source','wampoon'],
+    },
+    :consider => "You could probably more of this substance with sharp eyes and a lot of luck...",
+    :research => "You figure out the basics of gathering wampoon.",
   }
 )

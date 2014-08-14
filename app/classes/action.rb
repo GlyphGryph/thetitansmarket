@@ -264,7 +264,7 @@ Action.new("harvest_fields",
 )
 Action.new("harvest_dolait",
   { :name=>"Harvest Dolait",
-    :description=>"You harvest some dolat from the grove.",
+    :description=>"You harvest some dolait from the grove.",
     :result => lambda { |character, character_action|
       if(character.possesses?("dolait_source"))
         CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
@@ -279,5 +279,44 @@ Action.new("harvest_dolait",
     },
     :physical_cost_penalty => 4,
     :mental_cost_penalty => 1,
+  }
+)
+Action.new("gather_tomatunk",
+  { :name=>"Gather Tomatunk",
+    :description=>"Go looking for chunks of tomatunk in the marsh.",
+    :result => lambda { |character, character_action|
+      if(Random.rand(3)==0)
+        found = Plant.all.sample
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+        return "You wade through the mud and find a hefty block of tomatunk!" 
+      else
+        return "You get soggy and dirty, but find only disappointment." 
+      end
+    },
+    :base_cost => 3,
+    :available => lambda { |character|
+      return character.knows?("basic_tomatunk") && character.possesses?("tomatunk_source")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 3,
+  }
+)
+Action.new("gather_wampoon",
+  { :name=>"Gather Wampoon",
+    :description=>"Go looking for wampoon in the barrens.",
+    :result => lambda { |character, character_action|
+      if(Random.rand(4)==0)
+        CharacterPossession.new(:character_id => character.id, :possession_id => "", :variant => farm.variant).save!
+        return "After only a few hours of effort, you find some wampoon scraps just sitting under a rock!"
+      else
+        return "The barrens seem as empty and worthless as they look from a distance, today..."
+      end
+    },
+    :base_cost => 3,
+    :available => lambda { |character|
+      return character.knows?("basic_wampoon") && character.possesses?("wampoon_source")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 3,
   }
 )
