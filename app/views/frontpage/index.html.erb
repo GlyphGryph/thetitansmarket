@@ -15,14 +15,22 @@
   <hr />
   <div class="character-list list">
     <% @characters.each do |character| %>
-      <div class="entry"><%= character.name%> (World <%= character.world.id %>, <%= character.world.name %>) 
-      <% if !character.ready? %>
-        <b>!Awaiting Actions!</b>
+      <% if character.world %>
+        <div class="entry">
+          <%= character.name %> (World <%= character.world.id %>, <%= character.world.name %>) 
+          <% if !character.ready? %>
+            <b>!Awaiting Actions!</b>
+          <% end %>
+          <% if character.unread_proposals.count > 0 %>
+            <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
+          <% end %>
+          <%= link_to "Take Control", character_overview_path(:id => character) -%>
+        </div> 
+      <% else %>
+        <div class="entry deceased">
+          <%= character.name %> [DECEASED] <%= link_to "View", show_character_path(:id => character) -%>
+        </div> 
       <% end %>
-      <% if character.unread_proposals.count > 0 %>
-        <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
-      <% end %>
-      <%= link_to "Take Control", character_overview_path(:id => character) %></div> 
     <% end %>
   </div>
 

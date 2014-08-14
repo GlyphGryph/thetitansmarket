@@ -1,5 +1,9 @@
 <div class="info-block" id="character-info">
-  <div class="info-block-head"><%= shown_character.name %> of <%= shown_character.world.name %></div>
+  <% if shown_character.world %>
+    <div class="info-block-head"><%= shown_character.name %> of <%= shown_character.world.name %></div>
+  <% else %>
+    <div class="info-block-head">The ghost of <%= shown_character.name %></div>
+  <% end %>
   <div class="info-block-body">
     <div class="data-block">
       <div class="data-element">

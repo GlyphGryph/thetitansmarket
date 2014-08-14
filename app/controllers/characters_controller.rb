@@ -5,24 +5,30 @@ class CharactersController < ApplicationController
 
   def overview
     @world = @character.world
-    @character_actions = @character.character_actions
-    @actions = @character.potential_actions
-    @inventory = @character.character_possessions.inject({}) do |result, value|
-      possession = value.get
-      if(result[possession.id]) 
-        result[possession.id][:count]+=1
-      else
-        result[possession.id]=OpenStruct.new(:value=>possession, :count=>1)
+    # If this character has no world, it is a ghost, and can't be shown the normal overview page
+    logger.error "\n\ng\n\n"+@world.inspect
+    if(@world.nil?)
+      redirect_to :action => :show
+    else
+      @character_actions = @character.character_actions
+      @actions = @character.potential_actions
+      @inventory = @character.character_possessions.inject({}) do |result, value|
+        possession = value.get
+        if(result[possession.id]) 
+          result[possession.id][:count]+=1
+        else
+          result[possession.id]=OpenStruct.new(:value=>possession, :count=>1)
+        end
+        result
       end
-      result
+      @knowledges = @character.knowledges.map(&:get)
+      @ideas = @character.ideas.map(&:get)
+      @conditions = @character.character_conditions.map(&:get)
+      @history = @character.recent_history
+      @queue_cost = @character.cost_of_all_actions
+      @other_characters = @world.characters.reject{|c| c==@character}
+      @unready_characters = @world.unready_characters
     end
-    @knowledges = @character.knowledges.map(&:get)
-    @ideas = @character.ideas.map(&:get)
-    @conditions = @character.character_conditions.map(&:get)
-    @history = @character.recent_history
-    @queue_cost = @character.cost_of_all_actions
-    @other_characters = @world.characters.reject{|c| c==@character}
-    @unready_characters = @world.unready_characters
   end
   
   def add_action
