@@ -267,7 +267,7 @@ Action.new("harvest_dolait",
     :description=>"You harvest some dolait from the grove.",
     :result => lambda { |character, character_action|
       if(character.possesses?("dolait_source"))
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "dolat").save!
         return "You harvest some dolait."
       else
         return "You attempted to harvest some dolait, but it failed."
@@ -287,7 +287,7 @@ Action.new("gather_tomatunk",
     :result => lambda { |character, character_action|
       if(Random.rand(3)==0)
         found = Plant.all.sample
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
         return "You wade through the mud and find a hefty block of tomatunk!" 
       else
         return "You get soggy and dirty, but find only disappointment." 
@@ -306,7 +306,7 @@ Action.new("gather_wampoon",
     :description=>"Go looking for wampoon in the barrens.",
     :result => lambda { |character, character_action|
       if(Random.rand(4)==0)
-        CharacterPossession.new(:character_id => character.id, :possession_id => "", :variant => farm.variant).save!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
         return "After only a few hours of effort, you find some wampoon scraps just sitting under a rock!"
       else
         return "The barrens seem as empty and worthless as they look from a distance, today..."

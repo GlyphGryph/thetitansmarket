@@ -66,3 +66,35 @@ Thought.new('basic_wampoon',
     :research => "You figure out the basics of gathering wampoon.",
   }
 )
+Thought.new('basic_crafting',
+  { :sources => {
+      'possession' => ['wampoon','dolait'],
+    },
+    :consider => "This substance has some interesting properties. There must be a use for it.",
+    :research => "You think you might be able to build some sort of tool out of the right materials. You have a few ideas already.",
+  }
+)
+Thought.new('craft_basket',
+  { :sources => {
+      'knowledge' => ['basic_crafting'],
+    },
+    :consider => "With a bit of dolait, you think you'll be able to figure out how to make a basket to aid in your gathering.",
+    :research => "Stripped and woven, dolait can be used to craft a useful carrying container."
+  }
+)
+Thought.new('craft_cutter',
+  { :sources => {
+      'knowledge' => ['basic_crafting'],
+    },
+    :consider => "With a bit of tomatunk, you think you'll be able to figure out how to make a simple cutting tool to aid in your harvesting and clearing.",
+    :research => "With the aid of a slab of stone, you've figured out a way to chip and grind away at the tomatunk until it forms a sharp edge opposite a safe grip."
+  }
+)
+Thought.new('craft_shaper',
+  { :sources => {
+      'knowledge' => ['basic_crafting'],
+    },
+    :consider => "Tomatunk and dolait are useful materials, but difficult to work with. You think you could build some tools to make cracking and warping less likely to occur when crafting tools.",   
+    :research => "An assortment of splitting and grinding tools that should make the process of shaping future tools more reliable."
+  }
+)

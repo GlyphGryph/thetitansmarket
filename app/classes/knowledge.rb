@@ -57,3 +57,23 @@ Knowledge.new("basic_wampoon",
     :description=>"You know how to find wampoon shards", 
   }
 )
+Knowledge.new("basic_crafting", 
+  { :name=>"Basic Crafting", 
+    :description=>"", 
+  }
+)
+Knowledge.new("craft_basket", 
+  { :name=>"Craft Basket", 
+    :description=>"", 
+  }
+)
+Knowledge.new("craft_cutter", 
+  { :name=>"Craft Cutter", 
+    :description=>"", 
+  }
+)
+Knowledge.new("craft_shaper", 
+  { :name=>"Craft Shaper", 
+    :description=>"", 
+  }
+)
