@@ -1,6 +1,5 @@
 Immediate goals:
 --CONTENT BREAK--
-Add "nihilism" if morale is reduced to zero and execute immediately, remove if morale improves above zero. Remove the "Resilience" trait while this is in effect, and take 2 damage when acquired and each turn afterwards.
 Add the "craft basic farming tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Hoe" item (basic_farming_tool) from a Dolait and a Tomatunk. This makes the "Harvest Field" action cost 1ap less.
 Add the "craft basic dolait extraction tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Axe" item (basic_dolait_tool) from a Dolait and a Tomatunk. This makes the "Harvest Dolait" generate an additional Dolait.
 Add the "craft basic gathering tools" action, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from two Dolait. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
@@ -22,13 +21,15 @@ Add teaching/learning proposals in exchange for goods.
 Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
 Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
 Add an "execution" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
-Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess.
-Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality.
+Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
+Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
 Some action costs should be based on what their target is (example: Investigation)
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
 Add teaching proposal!
+Investigate's cost is based on the idea to be investigated.
+Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
 
 --CONTENT BREAK--
 ???Forage requires wildlands to forage in, target_allowed stuff would need to work first though
@@ -42,6 +43,10 @@ Allow creation of broadcasts
 Pull the item list from the worlds instead of from a global item list, and vary the resulting items, esp. qualities. Change the current item stuff to be templates rather than final definitions, with multiple options for various bits to build the real item base.
 Have lots of variant wildlands with their own forage results, and have deposits be an attribute on wildlands. Deposits will be hidden until something something something.
 Add remembered tasks. Make sure the task is remembered as a % of task completed.
+"Strife", the knowledge of attacking other players, becomes a starting knowledge. Strife is a type of proposal that is automatically and immediately executed. The basic knowledge grants the "attack' proposal at a cost of 3ap(+10 from physical injury). The attacker has two 50% chances of dealing 1 damage to the defender, and the defender has one 50% chance of dealing 1 damage to the attacker. Attacking or being attacked by someone gives you the idea "brawling", which increases your odds when both attacking and defending to 75%.
+Considering another player gives several ideas depending. If they have possessions, you gain the idea of "theft", which allows you to try and steal items. If they are hurt, you gain the idea of "caretaking", which allows you to improve another player's healing for a turn.
+Add a settting to allow players to turn off auto-eating and force-starve themselves.
+Investigation knowledge model. Each "knowledge" is made up of several "pieces of the puzzle". Investigation offers several random selections from the pieces of the puzzle list and grants them to the player. When the player has all the pieces of the puzzle, they gain the knowledge. Players can share their pieces of the puzzle with other players. Earlier, basic knowledges may only have one piece to their puzzles.
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)
