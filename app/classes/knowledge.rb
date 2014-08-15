@@ -59,7 +59,7 @@ Knowledge.new("basic_wampoon",
 )
 Knowledge.new("basic_crafting", 
   { :name=>"Basic Crafting", 
-    :description=>"", 
+    :description=>"You know the basics of shaping tomatunk and dolait.", 
   }
 )
 Knowledge.new("craft_basket", 

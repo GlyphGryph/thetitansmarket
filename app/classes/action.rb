@@ -116,6 +116,7 @@ Action.new("ponder",
       Thought.all.each do |thought|
         p "Checking thought #{thought.inspect} for #{target.id}"
         if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
+          p "\n\nOH YEAH LETS GO\n\n"
           found = true
           if(!character.knows?(thought.id) && !character.considers?(thought.id))
             character.consider(thought.id)

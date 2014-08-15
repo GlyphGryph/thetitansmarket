@@ -68,7 +68,7 @@ Thought.new('basic_wampoon',
 )
 Thought.new('basic_crafting',
   { :sources => {
-      'possession' => ['wampoon','dolait'],
+      'possession' => ['tomatunk','dolait'],
     },
     :consider => "This substance has some interesting properties. There must be a use for it.",
     :research => "You think you might be able to build some sort of tool out of the right materials. You have a few ideas already.",
