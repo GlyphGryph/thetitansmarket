@@ -3,12 +3,11 @@
   <%= link_to "Back to Overview", character_overview_path(:id=>@character.id) %>
 </div>
 
-<%= render :partial => "show", :locals => {:shown_character => @target} %>
-
 <div>
   <%= link_to "Trade", new_proposal_details_path(:id => @character.id, :proposal_type => 'Trade', :target_id => @target.id) %>
   <%= link_to "Interact", new_proposal_details_path(:id => @character.id, :proposal_type => 'Interaction', :target_id => @target.id) %>
   <%= link_to "Send a message", new_proposal_details_path(:id => @character.id, :proposal_type => 'Message', :target_id => @target.id) %>
 </div>
 
+<%= render :partial => "show", :locals => {:shown_character => @target} %>
 
