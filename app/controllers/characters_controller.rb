@@ -145,6 +145,11 @@ class CharactersController < ApplicationController
     redirect_to :character_overview
   end
 
+  def wish
+    CharacterPossession.new(:character_id => @character.id, :possession_id => params[:possession_id]).save!
+    redirect_to :character_overview
+  end
+
 private
   def find_character
     @character = Character.find(params[:id])

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   # TODO TODO TODO GODMODE ROUTE - Should be removed before production! TODO TODO TODO #
       get 'character/:id/godmode' => 'characters#godmode', :as => :character_godmode
+      get 'character/:id/wish/:possession_id' => 'characters#wish', :as => :character_wish
   ######################################################################################
 
   get 'character/:id/proposal' => 'proposals#index', :as => :proposals
