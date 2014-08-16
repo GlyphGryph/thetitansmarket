@@ -194,7 +194,9 @@ class Character < ActiveRecord::Base
     if(considers?(knowledge_id))
       self.ideas.where(:knowledge_id => knowledge_id).first.learn
     elsif(!knows?(knowledge_id))
-      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => true)
+      new_knowledge = CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id)
+      self.character_knowledges << new_knowledge
+      new_knowledge.learn
     end
   end
 

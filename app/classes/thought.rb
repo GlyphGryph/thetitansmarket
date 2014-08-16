@@ -54,7 +54,7 @@ Thought.new('basic_wampoon',
   { :sources => {
       'possession' => ['wampoon_source','wampoon'],
     },
-    :consider => "You could probably more of this substance with sharp eyes and a lot of luck...",
+    :consider => "You could probably get more of this substance with sharp eyes and a lot of luck...",
     :research => "You figure out the basics of gathering wampoon.",
   }
 )
@@ -62,7 +62,7 @@ Thought.new('basic_wampoon',
   { :sources => {
       'possession' => ['wampoon_source','wampoon'],
     },
-    :consider => "You could probably more of this substance with sharp eyes and a lot of luck...",
+    :consider => "You could probably get more of this substance with sharp eyes and a lot of luck...",
     :research => "You figure out the basics of gathering wampoon.",
   }
 )

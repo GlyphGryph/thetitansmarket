@@ -13,6 +13,7 @@ class CharacterKnowledge < ActiveRecord::Base
 
   def learn
     self.known = true
+    self.get.learn_result(self.character, self)
     self.save!
   end
 end
