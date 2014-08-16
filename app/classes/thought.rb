@@ -21,7 +21,7 @@ Thought.new("basic_farming",
       'condition' => ['hunger'],
     },
     :consider => "You wonder if you could grow your own food, given the opportunity.",
-    :research => "You dicover the secrets of agriculture!",
+    :research => "You discover the secrets of agriculture!",
   }
 )
 
@@ -30,7 +30,7 @@ Thought.new("language",
       'knowledge' => ['gestures'],
     },
     :consider => "There has to be a better way to communicate than waving your arms around...",
-    :research => "You dicover the secrets of language!",
+    :research => "You discover the secrets of language!",
   }
 )
 

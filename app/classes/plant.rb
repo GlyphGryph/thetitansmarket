@@ -17,7 +17,7 @@ end
 
 Plant.new("strawberry",
   { :plant_name=>"Strawberry Bush",
-    :seed_name=>"Srawberry Seeds",
+    :seed_name=>"Strawberry Seeds",
     :food_name=>"Strawberries",
   }
 )
