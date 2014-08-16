@@ -204,7 +204,8 @@ Action.new("clear_land",
           end
         elsif(character_possession.get.id == 'wildlands')
           Random.new.rand(1..4).times do
-            CharacterPossession.new(:character_id => character.id, :possession_id => "food").save!
+            found = Plant.all.sample
+            CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => found.id).save!
           end
         end
       end
