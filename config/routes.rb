@@ -23,6 +23,10 @@ Rails.application.routes.draw do
   get 'character/:id/show' => 'characters#show', :as => :show_character
   get 'character/:id/history' => 'characters#history', :as => :character_history
 
+  # TODO TODO TODO GODMODE ROUTE - Should be removed before production! TODO TODO TODO #
+      get 'character/:id/godmode' => 'characters#godmode', :as => :character_godmode
+  ######################################################################################
+
   get 'character/:id/proposal' => 'proposals#index', :as => :proposals
   get 'character/:id/proposal/:proposal_id/show' => 'proposals#show', :as => :show_proposal
   get 'character/:id/proposal/new/:proposal_type' => 'proposals#new_target', :as => :new_proposal

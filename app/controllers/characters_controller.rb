@@ -138,6 +138,12 @@ class CharactersController < ApplicationController
 
   def show
   end
+  
+  ######## CHEAT ########
+  def godmode
+    @character.godmode
+    redirect_to :character_overview
+  end
 
 private
   def find_character

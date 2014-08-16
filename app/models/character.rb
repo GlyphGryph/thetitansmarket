@@ -215,6 +215,16 @@ class Character < ActiveRecord::Base
   def fraction_happy_missing
     1.0 - self.fraction_happy_remaining.to_f
   end
+
+  def godmode
+    self.hp=1000
+    self.max_hp=1000
+    self.ap=1000
+    self.max_ap=1000
+    self.happy=1000
+    self.max_happy=1000
+    self.save!
+  end
   
   def possesses?(possession_id)
     return !(self.character_possessions.where(:possession_id => possession_id).empty?)
