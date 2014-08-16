@@ -1,7 +1,6 @@
 Immediate goals:
 --CONTENT BREAK--
 Add the "craft cutter" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk for a 50% chance of success. This tool makes the "Harvest Field" action cost 1ap less.
-Add the "craft basket" action and knowledge, make it dependent on the "Crafting" knowledge, have it produce a "Basket" item (basic_gathering_tool) from a Dolait at a 50% chance of success. This makes the "Forage" and "Collect Tomatunk" action more likely to succeed, and gives a decent chance at collecting more than one food/tomatunk in an attempt.
 Add the "craft shaper" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk and 1 dolait for a 50% chance of success. This tool increases the chance of all crafting actions to succeed by 25%.
 --/CONTENT BREAK--
 Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations. Allow investigations to automatically create ideas.
