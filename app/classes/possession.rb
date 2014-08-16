@@ -17,11 +17,7 @@ end
 # Format for new items
 # 'id', {:name => 'Name', :description=>"Multi-word description." }
 
-Possession.new("generic_object", 
-  { :name=>"Perfectly Generic Object", 
-    :description=>"The only notable thing about this object is its complete lack of notable features.", 
-  }
-)
+# Materials
 Possession.new("food", 
   { :name=>"Food", 
     :description=>"This thing is, more or less, edible.", 
@@ -48,6 +44,7 @@ Possession.new("wampoon",
   }
 )
 
+# Land
 Possession.new("wildlands", 
   { :name=>"Plot of Wilderness", 
     :description=>"A plot of land, overgrown by bushes, shrubs, brambles and nettles.", 
@@ -78,3 +75,18 @@ Possession.new("wampoon_source",
     :description=>"A barren, rocky area with evidence of wampoon.", 
   }
 )
+
+# Artifacts
+Possession.new("generic_object", 
+  { :name=>"Perfectly Generic Object", 
+    :description=>"The only notable thing about this object is its complete lack of notable features.", 
+  }
+)
+
+Possession.new("basket", 
+  { :name=>"Basket", 
+    :description=>"This should increase the effectiveness of gathering, allowing you to collect more in a single trip.", 
+  }
+)
+
+

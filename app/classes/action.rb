@@ -83,8 +83,20 @@ Action.new("forage",
     :result => lambda { |character, character_action|
       if(Random.rand(2)==0)
         found = Plant.all.sample
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
-        return "You forage through the underbrush and discover a #{found.plant_name}. You quickly gather some #{found.food_name}. Food!" 
+        if(character.possesses?("basket"))
+          amount_found = Random.new.rand(3)+1
+          amount_found.times do
+            CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+          end
+          if(amount_found > 1)
+            return "You forage through the underbrush and discover a #{found.plant_name}. You quickly gather enough #{found.food_name} into your basket for #{amount_found.to_s} meals. Food!" 
+          else
+            return "You forage through the underbrush and discover a #{found.plant_name}. You quickly gather enough #{found.food_name} into your basket for one meal. Food!" 
+          end
+        else
+          CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+          return "You forage through the underbrush and discover a #{found.plant_name}. You quickly gather some #{found.food_name}. Food!" 
+        end
       else
         return "You forage through the underbrush, but find only disappointment." 
       end
@@ -268,7 +280,7 @@ Action.new("harvest_dolait",
     :description=>"You harvest some dolait from the grove.",
     :result => lambda { |character, character_action|
       if(character.possesses?("dolait_source"))
-        CharacterPossession.new(:character_id => character.id, :possession_id => "dolat").save!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
         return "You harvest some dolait."
       else
         return "You attempted to harvest some dolait, but it failed."
@@ -287,9 +299,20 @@ Action.new("gather_tomatunk",
     :description=>"Go looking for chunks of tomatunk in the marsh.",
     :result => lambda { |character, character_action|
       if(Random.rand(3)==0)
-        found = Plant.all.sample
-        CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-        return "You wade through the mud and find a hefty block of tomatunk!" 
+        if(character.possesses?("basket"))
+          amount_found = Random.new.rand(3)+1
+          amount_found.times do
+            CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+          end
+          if(amount_found > 1)
+            return "You wade through the mud and find #{amount_found.to_s} blocks of tomatunk, collecting them in your basket!" 
+          else
+            return "You wade through the mud and find a hefty block of tomatunk, which you add to your basket!" 
+          end
+        else
+          CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+          return "You wade through the mud and find a hefty block of tomatunk!" 
+        end
       else
         return "You get soggy and dirty, but find only disappointment." 
       end
@@ -319,5 +342,29 @@ Action.new("gather_wampoon",
     },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 3,
+  }
+)
+Action.new("craft_basket",
+  { :name=>"Craft Basket",
+    :description=>"Craft a simply tool to aid in gathering.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("dolait"))
+        character.character_possessions.where(:possession_id=>"dolait").first.destroy!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
+        if(Random.rand(2)==0)
+          return "You weave strips of dolait into a basket, and then treat the material to harden it."
+        else
+          return "The dolait tears before the basket is finished, wasting both time and materials."
+        end
+      else
+        return "You don't have any dolait left to make a basket with."
+      end
+    },
+    :base_cost => 7,
+    :available => lambda { |character|
+      return character.knows?("craft_basket") && character.possesses?("dolait")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
   }
 )
