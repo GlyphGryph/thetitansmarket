@@ -373,7 +373,7 @@ Action.new("craft_cutter",
   { :name=>"Craft Cutter",
     :description=>"Craft a simple cutting tool to aid in harvesting.",
     :result => lambda { |character, character_action|
-      if(character.possesses?("tomatunk"))
+      if(character.possesses?("tomatunk") && character.posseses?("dolait"))
         character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
         if(Random.rand(2)==0)
           CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
@@ -397,7 +397,7 @@ Action.new("craft_shaper_a",
   { :name=>"Craft Oblong Shaper",
     :description=>"Craft a simple oblong shaping tool to aid in crafting.",
     :result => lambda { |character, character_action|
-      if(character.possesses?("tomatunk"))
+      if(character.possesses?("tomatunk") && character.posseses?("dolait"))
         character.character_possessions.where(:possession_id=>"dolait").first.destroy!
         character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
         if(Random.rand(2)==0)
@@ -422,7 +422,7 @@ Action.new("craft_shaper_b",
   { :name=>"Craft Angled Shaper",
     :description=>"Craft a simple angled shaping tool to aid in crafting.",
     :result => lambda { |character, character_action|
-      if(character.possesses?("tomatunk"))
+      if(character.possesses?("tomatunk") && character.posseses?("dolait"))
         character.character_possessions.where(:possession_id=>"dolait").first.destroy!
         character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
         CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
