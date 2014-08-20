@@ -74,16 +74,17 @@ Knowledge.new("basic_crafting",
 )
 Knowledge.new("craft_basket", 
   { :name=>"Craft Basket", 
-    :description=>"", 
+    :description=>"Craft a basket from dolait.", 
   }
 )
 Knowledge.new("craft_cutter", 
-  { :name=>"Craft Cutter", 
-    :description=>"", 
+  { :name=>"Craft Simple Cutter", 
+    :description=>"Craft a simple cutting tool from tomatunk.", 
   }
 )
 Knowledge.new("craft_shaper", 
-  { :name=>"Craft Shaper", 
-    :description=>"", 
+  { :name=>"Craft Simple Shaper", 
+    :description=>"Craft a simple shaping tool from dolait and tomatunk.", 
   }
 )
+

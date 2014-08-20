@@ -347,12 +347,12 @@ Action.new("gather_wampoon",
 )
 Action.new("craft_basket",
   { :name=>"Craft Basket",
-    :description=>"Craft a simply tool to aid in gathering.",
+    :description=>"Craft a simple tool to aid in gathering.",
     :result => lambda { |character, character_action|
       if(character.possesses?("dolait"))
         character.character_possessions.where(:possession_id=>"dolait").first.destroy!
-        CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
         if(Random.rand(2)==0)
+          CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
           return "You weave strips of dolait into a basket, and then treat the material to harden it."
         else
           return "The dolait tears before the basket is finished, wasting both time and materials."
@@ -364,6 +364,106 @@ Action.new("craft_basket",
     :base_cost => 7,
     :available => lambda { |character|
       return character.knows?("craft_basket") && character.possesses?("dolait")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
+  }
+)
+Action.new("craft_cutter",
+  { :name=>"Craft Cutter",
+    :description=>"Craft a simple cutting tool to aid in harvesting.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("tomatunk"))
+        character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
+        if(Random.rand(2)==0)
+          CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
+          return "You craft a simple cutter."
+        else
+          return "You crack the cutter - it's useless, and the tomatunk has been wasted."
+        end
+      else
+        return "You don't have the tomatunk to make a cutter with."
+      end
+    },
+    :base_cost => 7,
+    :available => lambda { |character|
+      return character.knows?("craft_cutter") && character.possesses?("tomatunk")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
+  }
+)
+Action.new("craft_shaper_a",
+  { :name=>"Craft Oblong Shaper",
+    :description=>"Craft a simple oblong shaping tool to aid in crafting.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("tomatunk"))
+        character.character_possessions.where(:possession_id=>"dolait").first.destroy!
+        character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
+        if(Random.rand(2)==0)
+          CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_a").save!
+          return "You craft an oblong shaper."
+        else
+          return "Your oblong shaper breaks most of the way through the process. It's ruined."
+        end
+      else
+        return "You don't have the materials to craft a shaper."
+      end
+    },
+    :base_cost => 7,
+    :available => lambda { |character|
+      return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
+  }
+)
+Action.new("craft_shaper_b",
+  { :name=>"Craft Angled Shaper",
+    :description=>"Craft a simple angled shaping tool to aid in crafting.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("tomatunk"))
+        character.character_possessions.where(:possession_id=>"dolait").first.destroy!
+        character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
+        if(Random.rand(2)==0)
+          return "TODO"
+        else
+          return "TODO"
+        end
+      else
+        return "TODO"
+      end
+    },
+    :base_cost => 7,
+    :available => lambda { |character|
+      return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
+  }
+)
+Action.new("craft_shaper_c",
+  { :name=>"Craft Pronged Shaper",
+    :description=>"Craft a simple pronged shaping tool to aid in crafting.",
+    :result => lambda { |character, character_action|
+      if(character.possesses?("tomatunk"))
+        character.character_possessions.where(:possession_id=>"dolait").first.destroy!
+        character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
+        if(Random.rand(2)==0)
+          return "TODO"
+        else
+          return "TODO"
+        end
+      else
+        return "TODO"
+      end
+    },
+    :base_cost => 7,
+    :available => lambda { |character|
+      return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
+
     },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 2,

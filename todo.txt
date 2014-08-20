@@ -1,7 +1,7 @@
 Immediate goals:
 --CONTENT BREAK--
 Add the "craft cutter" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk for a 50% chance of success. This tool makes the "Harvest Field" action cost 1ap less.
-Add the "craft shaper" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk and 1 dolait for a 50% chance of success. This tool increases the chance of all crafting actions to succeed by 25%.
+Add the "craft shaper" actions (there should be three types) and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk and 1 dolait for a 50% chance of success. This tool increases the chance of all crafting actions to succeed by 10% per tool, and reduces the cost of crafting by 1 for each tool possessed (oblong, angled, and pronged shapers).
 --/CONTENT BREAK--
 Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations. Allow investigations to automatically create ideas.
 
@@ -34,6 +34,7 @@ Actions should return a full "status" object, with messages to pass, success or 
 --CONTENT BREAK--
 
 --FAR FUTURE--
+More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality.
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
 Allow creation of broadcasts
