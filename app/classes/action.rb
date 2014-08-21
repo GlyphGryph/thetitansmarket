@@ -8,8 +8,7 @@ class Action
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
     @result = params[:result] || lambda { |character, action| return "Function error." }
-    @base_cost = params[:base_cost] || 0
-    @targeted_cost = params[:targeted_cost] || lambda { |character, target| return 0 }
+    @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 }
     @cost_requires_target = params[:cost_requires_target]
     @available = params[:available] || lambda { |character| return true }
     @requires_target = params[:requires_target] || false
@@ -28,12 +27,12 @@ class Action
     cost = 0
     if(self.cost_requires_target?)
       if(target_type && target_id)
-        cost = @targeted_cost.call(character, target_type, target_id)
+        cost = @base_cost.call(character, target_type, target_id)
       else
         raise "Calculating the cost for #{self.name} requires a target."
       end
     else
-      cost = @base_cost
+      cost = @base_cost.call(character)
     end
     return cost
   end
@@ -101,7 +100,7 @@ Action.new("forage",
         return "You forage through the underbrush, but find only disappointment." 
       end
     },
-    :base_cost => 2,
+    :base_cost => lambda { |character, target=nil| return 2 },
     :physical_cost_penalty => 2,
     :mental_cost_penalty => 2,
   }
@@ -112,7 +111,7 @@ Action.new("explore",
     :result => lambda { |character, character_action| 
       return character.world.explore_with(character)
     },
-    :base_cost => 5,
+    :base_cost => lambda { |character, target=nil| return 5 },
     :physical_cost_penalty => 5,
     :mental_cost_penalty => 5,
   }
@@ -146,7 +145,7 @@ Action.new("ponder",
       text = text.join(" ")
       return text
     },
-    :base_cost => 3,
+    :base_cost => lambda { |character, target=nil| return 3 },
     :available => lambda { |character|
       return character.knows?("cognition")
     },
@@ -179,7 +178,7 @@ Action.new("investigate",
       text = text.join(" ")
       return text
     },
-    :base_cost => 3,
+    :base_cost => lambda { |character, target=nil| return 3 },
     :available => lambda { |character|
       return (character.knows?("cognition") && !character.ideas.empty?)
     },
@@ -211,7 +210,7 @@ Action.new("clear_land",
       end
       return "You clear a field."
     },
-    :base_cost => 8,
+    :base_cost => lambda { |character, target=nil| return 8 },
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("wildlands")
     },
@@ -243,7 +242,7 @@ Action.new("plant",
         end
       end
     },
-    :base_cost => 5,
+    :base_cost => lambda { |character, target=nil| return 5 },
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
     },
@@ -268,7 +267,7 @@ Action.new("harvest_fields",
         return "You attempted to harvest a field, but it failed."
       end
     },
-    :base_cost => 5,
+    :base_cost => lambda { |character, target=nil| return 5 },
     :available => lambda { |character|
       return character.knows?("basic_farming") && character.possesses?("farm")
     },
@@ -287,7 +286,7 @@ Action.new("harvest_dolait",
         return "You attempted to harvest some dolait, but it failed."
       end
     },
-    :base_cost => 5,
+    :base_cost => lambda { |character, target=nil| return 5 },
     :available => lambda { |character|
       return character.knows?("basic_dolait") && character.possesses?("dolait_source")
     },
@@ -318,7 +317,7 @@ Action.new("gather_tomatunk",
         return "You get soggy and dirty, but find only disappointment." 
       end
     },
-    :base_cost => 3,
+    :base_cost => lambda { |character, target=nil| return 3 },
     :available => lambda { |character|
       return character.knows?("basic_tomatunk") && character.possesses?("tomatunk_source")
     },
@@ -337,7 +336,7 @@ Action.new("gather_wampoon",
         return "The barrens seem as empty and worthless as they look from a distance, today..."
       end
     },
-    :base_cost => 3,
+    :base_cost => lambda { |character, target=nil| return 3 },
     :available => lambda { |character|
       return character.knows?("basic_wampoon") && character.possesses?("wampoon_source")
     },
@@ -361,7 +360,7 @@ Action.new("craft_basket",
         return "You don't have any dolait left to make a basket with."
       end
     },
-    :base_cost => 7,
+    :base_cost => lambda { |character, target=nil| return 7 },
     :available => lambda { |character|
       return character.knows?("craft_basket") && character.possesses?("dolait")
     },
@@ -385,7 +384,7 @@ Action.new("craft_cutter",
         return "You don't have the tomatunk to make a cutter with."
       end
     },
-    :base_cost => 7,
+    :base_cost => lambda { |character, target=nil| return 7 },
     :available => lambda { |character|
       return character.knows?("craft_cutter") && character.possesses?("tomatunk")
     },
@@ -410,7 +409,7 @@ Action.new("craft_shaper_a",
         return "You don't have the materials to craft a shaper."
       end
     },
-    :base_cost => 7,
+    :base_cost => lambda { |character, target=nil| return 7 },
     :available => lambda { |character|
       return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
     },
@@ -435,7 +434,7 @@ Action.new("craft_shaper_b",
         return "You don't have the materials to craft a shaper."
       end
     },
-    :base_cost => 7,
+    :base_cost => lambda { |character, target=nil| return 7 },
     :available => lambda { |character|
       return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
     },
@@ -460,7 +459,7 @@ Action.new("craft_shaper_c",
         return "You don't have the materials to craft a shaper."
       end
     },
-    :base_cost => 7,
+    :base_cost => lambda { |character, target=nil| return 7 },
     :available => lambda { |character|
       return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
 
