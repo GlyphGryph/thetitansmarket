@@ -360,7 +360,25 @@ Action.new("craft_basket",
         return "You don't have any dolait left to make a basket with."
       end
     },
-    :base_cost => lambda { |character, target=nil| return 7 },
+    :base_cost => lambda { |character, target=nil| 
+      base_value = 7
+      tools_possessed = 0
+      if(character.possesses?("shaper_a"))
+        tools_possessed += 1
+      end
+      if(character.possesses?("shaper_b"))
+        tools_possessed += 1
+      end
+      if(character.possesses?("shaper_c"))
+        tools_possessed += 1
+      end
+      if(tools_possessed > 2)
+        base_value -= 2
+      elsif(tools_possessed > 0)
+        base_value -= 1
+      end
+      return base_value
+    },
     :available => lambda { |character|
       return character.knows?("craft_basket") && character.possesses?("dolait")
     },
