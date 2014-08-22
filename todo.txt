@@ -3,8 +3,18 @@ Immediate goals:
 Add the "craft cutter" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk for a 50% chance of success. This tool makes the "Harvest Field" action cost 1ap less.
 Add the "craft shaper" actions (there should be three types) and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk and 1 dolait for a 50% chance of success. This tool increases the chance of all crafting actions to succeed by 10% per tool, and reduces the cost of crafting by 1 for each tool possessed (oblong, angled, and pronged shapers).
 --/CONTENT BREAK--
-Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations. Allow investigations to automatically create ideas.
 
+--REFACTOR BREAK--
+Actions stuff:
+ Break "consumed items" out of the results lambda.
+ Finish breaking "chance of success" out of the results lambda by implement the 'success modifiers' hash.
+ Improve the "impossible" results and item requirement checking logic, track the actual items that are missing for the building of more effective lack of requirement messages.
+ Implement a general lack of requirements message instead of having each action define it's own, though the action should still probably contribute a unique component. This is so we can have a complex "list all items and other things missing and the amounts that were required" sort of thing without complex message logic in the action definition.
+ Bring all the commented out actions up to date.
+--/REFACTOR BREAK--
+
+Implement checks for possessing multiple copies of an item on a character, not just whether or not an item exists but whether a character has at least a certain amount
+Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations. Allow investigations to automatically create ideas.
 Remove the "target_type" logic, get type from target directly instead
 Add "valid target types" logic to insure that inputs that are not valid targets raises an error when executing actions. Already a valid targets finder so this should be straightforward logic hooks. (For those without a valid_target_types there should NOT be a target!)
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
