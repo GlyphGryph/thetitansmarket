@@ -364,25 +364,35 @@ Action.new("forage",
 ##############
 # Scavenging #
 ##############
-# Action.new("harvest_dolait",
-#   { :name=>"Harvest Dolait",
-#     :description=>"You harvest some dolait from the grove.",
-#     :result => lambda { |character, character_action|
-#       if(character.possesses?("dolait_source"))
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
-#         return "You harvest some dolait."
-#       else
-#         return "You attempted to harvest some dolait, but it failed."
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 5 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_dolait") && character.possesses?("dolait_source")
-#     },
-#     :physical_cost_penalty => 4,
-#     :mental_cost_penalty => 1,
-#   }
-# )
+Action.new("harvest_dolait",
+  { :name=>"Harvest Dolait",
+    :description=>"You harvest some dolait from the grove.",
+    :base_success_chance => 75,
+    :result => lambda { |character, character_action|
+      CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
+      if(character.possesses?("dolait_source"))
+        return ActionOutcome.new(:success_cutter)
+      else
+        return ActionOutcome.new(:success)
+      end
+    },
+    :messages => {
+      :success_cutter => lambda { |args| "You use your cutter to harvest some fresh dolait." },
+      :success => lambda { |args| "You break off some fresh dolait branches." },
+      :failure => lambda { |args| "The dolait you find proves too tough to gather." },
+      :impossible => lambda { |args| "You couldn't gather dolait." },
+    },
+    :requires => {
+      :possession => [{:id => 'dolait_source', :quantity => 1},],
+      :knowledge => ['basic_dolait'],
+    },
+    :base_cost => lambda { |character, target=nil| return 5 },
+    :cost_modifiers => {
+      :damage => 4,
+      :despair => 1,
+    },
+  }
+)
 Action.new("gather_tomatunk",
   { :name=>"Gather Tomatunk",
     :description=>"Go looking for chunks of tomatunk in the marsh.",
