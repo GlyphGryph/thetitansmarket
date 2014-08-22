@@ -404,7 +404,7 @@ Action.new("gather_tomatunk",
       end
     },
     :messages => {
-      :basket_success => lambda { |args| "You wade until you find some tomatunk. You gather #{args[1]} of tomatunk into your basket." },
+      :basket_success => lambda { |args| "You wade until you find some tomatunk. You gather #{args[0]} of tomatunk into your basket." },
       :success => lambda { |args| "You wade through the mud and find a hefty block of tomatunk!" },
       :failure => lambda { |args| "You get soggy and dirty looking for tomatunk, but find only disappointment." },
       :impossible => lambda { |args| "You couldn't gather tomatunk." },
