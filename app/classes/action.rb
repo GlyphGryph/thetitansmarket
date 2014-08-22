@@ -1,7 +1,7 @@
 class Action
   extend CollectionTracker
   include Targetable
-  attr_reader :id, :name, :description, :available, :target_prompt
+  attr_reader :id, :name, :description, :target_prompt
 
   def initialize(id, params={})
     @id = id
@@ -10,10 +10,10 @@ class Action
     @result = params[:result] || lambda { |character, action| return "Function error." }
     @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 }
     @cost_requires_target = params[:cost_requires_target]
-    @available = params[:available] || lambda { |character| return true }
+    @requires = params[:requires] || {}
+    @custom_require = params[:custom_require] || lambda { |character| return true }
     @messages = params[:messages] || {}
     @base_success_chance = params[:base_success_chance] || 100
-    @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
     @valid_targets = params[:valid_targets] || {}
     @physical_cost_penalty = params[:physical_cost_penalty] || 0
@@ -22,7 +22,20 @@ class Action
   end
 
   def available?(character)
-    return @available.call(character)
+    available = true
+    if(@requires)
+      if(@requires[:possession])
+        @requires[:possession].each do |possession|
+          available = available && character.possesses?(possession[0])
+        end
+      end
+      if(@requires[:knowledge])
+        @requires[:knowledge].each do |knowledge|
+          available = available && character.knows?(knowledge)
+        end
+      end
+    end
+    return available && @custom_require.call(character)
   end
 
   def unmodified_cost(character, target_type = nil, target_id = nil)
@@ -56,7 +69,9 @@ class Action
   end
 
   def result(character, target)
-    if(Random.new.rand(1..100) <= @base_success_chance)
+    if(!self.available?(character))
+      outcome = ActionOutcome.new(:impossible)
+    elsif(Random.new.rand(1..100) <= @base_success_chance)
       outcome = ActionOutcome.new(:failure)
     else
       outcome = @result.call(character, target)
@@ -68,7 +83,7 @@ class Action
   end
   
   def requires_target?
-    return @requires_target
+    return @requires[:target]
   end
 
   def type
@@ -95,9 +110,24 @@ class ActionOutcome
 end
 
 # Format for new actions
-# 'id', {:name => 'Name', :description=>"Multi-word description.", 
+# 'id', {:name => 'Name', 
+# :description=>"Multi-word description.", 
+# :base_success_chance => % number
+# :success_modifiers => {
+#   :possession => { :item_id => modifier number, :item_id => modifier number }
+#   :knowledge => { :knowledge_id => modifier number, :knowledge_id => modifier number }
+#   :condition => { :condition_id => modifier number, :condition_id => modifier number }
+#   :trait => { :condition_id => modifier number, :condition_id => modifier number }
+# }
 # :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
-# :base_cost  => base ap cost
+# :base_cost  => lambda { |character, target| return cost }
+# :requires => {
+#   :possession => [ [:item_id => amount], [:item_id => amount] ]
+#   :knowledge => [ :knowledge_id, :knowledge_id ]
+#   :condition => [ :condition_id, :condition_id ]
+#   :trait => [ :trait_id, :trait_id ]
+#   :target => true/false
+# }
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
 # :physical_cost_penalty => The maximum amount of ap cost increase for injury
 # :mental_cost_penalty => The maximum amount of ap cost increase for sadness
@@ -488,29 +518,31 @@ Action.new("forage",
 #     :mental_cost_penalty => 2,
 #   }
 # )
-# Action.new("craft_shaper_c",
-#   { :name=>"Craft Pronged Shaper",
-#     :description=>"Craft a simple pronged shaping tool to aid in crafting.",
-#     :result => lambda { |character, character_action|
-#       if(character.possesses?("tomatunk") && character.possesses?("dolait"))
-#         character.character_possessions.where(:possession_id=>"dolait").first.destroy!
-#         character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
-#         if(Random.rand(2)==0)
-#           return "You craft a pronged shaper."
-#         else
-#           return "Your pronged shaper breaks most of the way through the process. It's ruined."
-#         end
-#       else
-#         return "You don't have the materials to craft a shaper."
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 7 },
-#     :available => lambda { |character|
-#       return character.knows?("craft_cutter") && character.possesses?("tomatunk") && character.possesses?("dolait")
-# 
-#     },
-#     :physical_cost_penalty => 3,
-#     :mental_cost_penalty => 2,
-#   }
-# )
+Action.new("craft_shaper_c",
+  { :name=>"Craft Pronged Shaper",
+    :description=>"Craft a simple pronged shaping tool to aid in crafting.",
+    :base_success_chance => 50, 
+    :result => lambda { |character, character_action|
+      character.character_possessions.where(:possession_id=>"dolait").first.destroy!
+      character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
+      CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
+      if(Random.rand(2)==0)
+        return ActionOutcome.new(:success)
+      else
+        return ActionOutcome.new(:failure)
+      end
+    },
+    :messages => {
+      :success => lambda { |args| "You craft a pronged shaper." },
+      :failure => lambda { |args| "Your pronged shaper breaks most of the way through the process. It's ruined." },
+      :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
+    },
+    :base_cost => lambda { |character, target=nil| return 7 },
+    :requires => {
+      :possession => [[:tomatunk, 1], [:dolait,1]],
+      :knowledge => [:craft_cutter],
+    },
+    :physical_cost_penalty => 3,
+    :mental_cost_penalty => 2,
+  }
+)
