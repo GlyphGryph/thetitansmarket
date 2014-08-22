@@ -276,7 +276,7 @@ class Character < ActiveRecord::Base
       action = character_action.get
       cost_so_far += action.cost(self)
       if(cost_so_far <= self.ap)
-        new_history << action.result(self, character_action)
+        new_history << action.result(self, character_action).message
       end
     end
     if(cost_so_far > self.ap)

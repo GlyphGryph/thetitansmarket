@@ -54,7 +54,8 @@ class Action
   end
 
   def result(character, target)
-    return @result.call(character, target)
+    message = @result.call(character, target)
+    return ActionResult.new(true, 0, message, type)
   end
   
   def requires_target?
@@ -63,6 +64,21 @@ class Action
 
   def type
     return "action"
+  end
+end
+
+class ActionResult
+  attr_accessor :status, :cost, :message, :type
+
+  def initialize(status=true, cost=0, message="Error: No Message Provided", type="untyped")
+    @status = status
+    @cost = cost
+    @message = message
+    @type = type
+  end
+
+  def succeeded?
+    return @status
   end
 end
 
