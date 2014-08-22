@@ -9,6 +9,7 @@ class Action
     @description = params[:description] || "Description Error"
 
     @base_success_chance = params[:base_success_chance] || 100
+    @success_modifiers = params[:success_modifiers] || {}
 
     @consumes = params[:consumes] || []
     @requires = params[:requires] || {}
@@ -80,7 +81,7 @@ class Action
     if(!self.available?(character))
       outcome = ActionOutcome.new(:impossible)
     else
-      success_chance = self.success_chance
+      success_chance = self.success_chance(character)
       @consumes.each do |consumed|
         consumed[:quantity].times do
           character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
@@ -105,8 +106,16 @@ class Action
     return @requires[:target]
   end
 
-  def success_chance
-    @base_success_chance
+  def success_chance(character)
+    chance = @base_success_chance
+    if(@success_modifiers[:possession])
+      @success_modifiers[:possession].each do |possession|
+        if character.possesses?(possession[:id])
+          chance += possession[:modifier]
+        end
+      end
+    end
+    return chance
   end
 
   def type
@@ -368,6 +377,11 @@ Action.new("harvest_dolait",
   { :name=>"Harvest Dolait",
     :description=>"You harvest some dolait from the grove.",
     :base_success_chance => 75,
+    :success_modifiers => {
+      :possession => [
+        {:id => 'cutter', :modifier => 25},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
       if(character.possesses?("dolait_source"))
