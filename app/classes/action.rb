@@ -80,12 +80,13 @@ class Action
     if(!self.available?(character))
       outcome = ActionOutcome.new(:impossible)
     else
+      success_chance = self.success_chance
       @consumes.each do |consumed|
         consumed[:quantity].times do
           character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
         end
       end
-      if(Random.new.rand(1..100) > @base_success_chance)
+      if(Random.new.rand(1..100) > success_chance)
         outcome = ActionOutcome.new(:failure)
       else
         outcome = @result.call(character, target)
@@ -94,11 +95,18 @@ class Action
     success = (outcome.status != :failure)
     message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
     message = message.call(outcome.arguments)
+    if(success_chance < 100)
+      message += " (#{ success ? "Success" : "Failure"}: #{success_chance}% chance of success)"
+    end
     return ActionResult.new(success, message, self.id)
   end
   
   def requires_target?
     return @requires[:target]
+  end
+
+  def success_chance
+    @base_success_chance
   end
 
   def type
