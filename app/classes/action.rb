@@ -12,6 +12,7 @@ class Action
     @cost_requires_target = params[:cost_requires_target]
     @available = params[:available] || lambda { |character| return true }
     @messages = params[:messages] || {}
+    @base_success_chance = params[:base_success_chance] || 100
     @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
     @valid_targets = params[:valid_targets] || {}
@@ -55,7 +56,11 @@ class Action
   end
 
   def result(character, target)
-    outcome = @result.call(character, target)
+    if(Random.new.rand(1..100) <= @base_success_chance)
+      outcome = ActionOutcome.new(:failure)
+    else
+      outcome = @result.call(character, target)
+    end
     success = (outcome.status != :failure)
     message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
     message = message.call(outcome.arguments)
@@ -101,23 +106,20 @@ end
 
 Action.new("forage",
   { :name=>"Forage", 
-    :description=>"You rummage through the underbrush.", 
+    :description => "You rummage through the underbrush.", 
+    :base_success_chance => 50,
     :result => lambda { |character, character_action|
-      if(Random.rand(2)==0)
-        found = Plant.all.sample
-        if(character.possesses?("basket"))
-          amount_found = Random.new.rand(3)+1
-          amount_found.times do
-            CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
-          end
-          amount_found_string = (amount_found > 1) ? "#{amount_found} meals" : "#{amount_found} meal"
-          return ActionOutcome.new(:basket_success, found.plant_name, found.food_name, amount_found_string)
-        else
+      found = Plant.all.sample
+      if(character.possesses?("basket"))
+        amount_found = Random.new.rand(3)+1
+        amount_found.times do
           CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
-          return ActionOutcome.new(:success, found.plant_name, found.food_name)
         end
+        amount_found_string = (amount_found > 1) ? "#{amount_found} meals" : "#{amount_found} meal"
+        return ActionOutcome.new(:basket_success, found.plant_name, found.food_name, amount_found_string)
       else
-        return ActionOutcome.new(:failure)
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+        return ActionOutcome.new(:success, found.plant_name, found.food_name)
       end
     },
     :messages => {
