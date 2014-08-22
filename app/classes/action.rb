@@ -85,7 +85,7 @@ class Action
           character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
         end
       end
-      if(Random.new.rand(1..100) <= @base_success_chance)
+      if(Random.new.rand(1..100) > @base_success_chance)
         outcome = ActionOutcome.new(:failure)
       else
         outcome = @result.call(character, target)
@@ -351,6 +351,11 @@ Action.new("forage",
 #     :mental_cost_penalty => 1,
 #   }
 # )
+
+
+##############
+# Scavenging #
+##############
 # Action.new("harvest_dolait",
 #   { :name=>"Harvest Dolait",
 #     :description=>"You harvest some dolait from the grove.",
@@ -401,25 +406,50 @@ Action.new("forage",
 #     :mental_cost_penalty => 3,
 #   }
 # )
-# Action.new("gather_wampoon",
-#   { :name=>"Gather Wampoon",
-#     :description=>"Go looking for wampoon in the barrens.",
-#     :result => lambda { |character, character_action|
-#       if(Random.rand(4)==0)
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
-#         return "After only a few hours of effort, you find some wampoon scraps just sitting under a rock!"
-#       else
-#         return "The barrens seem as empty and worthless as they look from a distance, today..."
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 3 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_wampoon") && character.possesses?("wampoon_source")
-#     },
-#     :physical_cost_penalty => 3,
-#     :mental_cost_penalty => 3,
-#   }
-# )
+Action.new("gather_wampoon",
+  { :name=>"Gather Wampoon",
+    :description=>"Go looking for wampoon in the barrens.",
+    :base_success_chance => 25,
+    :result => lambda { |character, character_action|
+      CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
+      return ActionOutcome.new(:success)
+    },
+    :messages => {
+      :success => lambda { |args| "After hours of searching, you find some scraps of wampoon under a rock." },
+      :failure => lambda { |args| "The barrens are as empty as they appear - you don't find a single shard of wampoon." },
+      :impossible => lambda { |args| "You couldn't gather wampoon." },
+    },
+    :requires => {
+      :possession => [{:id=>"wampoon_source", :quantity=>1},],
+      :knowledge => [:basic_wampoon],
+    },
+    :base_cost => lambda { |character, target=nil| return 3 },
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 3,
+    },
+  }
+)
+
+#    :messages => {
+#      :success => lambda { |args| "" },
+#      :failure => lambda { |args| "" },
+#      :impossible => lambda { |args| "" },
+#    },
+#    :consumes => [{:id => ""}],
+#    :requires => {
+#      :knowledge => [:],
+#    },
+#    :base_cost => lambda { |character, target=nil| 
+#      return 7
+#    },
+#    :cost_modifiers => {
+#      :possession => [
+#        {:id => '', :modifier => 0.0},
+#      ],
+#      :damage => 0,
+#      :despair => 0,
+#    },
 
 ############
 # Crafting #
@@ -430,6 +460,7 @@ Action.new("craft_basket",
     :base_success_chance => 50,
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
+      return ActionOutcome.new(:success)
     },
     :messages => {
       :success => lambda { |args| "You weave strips of dolait into a basket, and then treat the material to harden it." },
@@ -440,9 +471,7 @@ Action.new("craft_basket",
     :requires => {
       :knowledge => [:craft_basket],
     },
-    :base_cost => lambda { |character, target=nil| 
-      return 7
-    },
+    :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {
       :possession => [
         {:id => 'shaper_a', :modifier => -0.7},
