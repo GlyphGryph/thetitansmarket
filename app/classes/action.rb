@@ -64,6 +64,13 @@ class Action
     if(@cost_modifiers[:despair])
       modifier += @cost_modifiers[:despair].to_f * character.despair_fraction
     end
+    if(@cost_modifiers[:possession])
+      @cost_modifiers[:possession].each do |possession|
+        if character.possesses?(possession[:id])
+          modifier += possession[:modifier]
+        end
+      end
+    end
     modifier = modifier.round
 
     cost += modifier
@@ -434,25 +441,14 @@ Action.new("craft_basket",
       :knowledge => [:craft_basket],
     },
     :base_cost => lambda { |character, target=nil| 
-      base_value = 7
-      tools_possessed = 0
-      if(character.possesses?("shaper_a"))
-        tools_possessed += 1
-      end
-      if(character.possesses?("shaper_b"))
-        tools_possessed += 1
-      end
-      if(character.possesses?("shaper_c"))
-        tools_possessed += 1
-      end
-      if(tools_possessed > 2)
-        base_value -= 2
-      elsif(tools_possessed > 0)
-        base_value -= 1
-      end
-      return base_value
+      return 7
     },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
       :damage => 3,
       :despair => 2,
     },
@@ -477,6 +473,11 @@ Action.new("craft_cutter",
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
       :damage => 3,
       :despair => 2,
     },
@@ -502,6 +503,11 @@ Action.new("craft_shaper_a",
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
       :damage => 3,
       :despair => 2,
     },
@@ -526,6 +532,11 @@ Action.new("craft_shaper_b",
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
       :damage => 3,
       :despair => 2,
     },
@@ -550,6 +561,11 @@ Action.new("craft_shaper_c",
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
       :damage => 3,
       :despair => 2,
     },
