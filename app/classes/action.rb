@@ -10,6 +10,7 @@ class Action
     @result = params[:result] || lambda { |character, action| return "Function error." }
     @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 }
     @cost_requires_target = params[:cost_requires_target]
+    @consumes = params[:consumes] || []
     @requires = params[:requires] || {}
     @custom_require = params[:custom_require] || lambda { |character| return true }
     @messages = params[:messages] || {}
@@ -71,10 +72,17 @@ class Action
   def result(character, target)
     if(!self.available?(character))
       outcome = ActionOutcome.new(:impossible)
-    elsif(Random.new.rand(1..100) <= @base_success_chance)
-      outcome = ActionOutcome.new(:failure)
     else
-      outcome = @result.call(character, target)
+      @consumes.each do |consumed|
+        consumed[:quantity].times do
+          character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
+        end
+      end
+      if(Random.new.rand(1..100) <= @base_success_chance)
+        outcome = ActionOutcome.new(:failure)
+      else
+        outcome = @result.call(character, target)
+      end
     end
     success = (outcome.status != :failure)
     message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
@@ -119,6 +127,7 @@ end
 #   :condition => { :condition_id => modifier number, :condition_id => modifier number }
 #   :trait => { :condition_id => modifier number, :condition_id => modifier number }
 # }
+# :consumed => [ [:item_id, #], [:item_id, #] ]
 # :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :base_cost  => lambda { |character, target| return cost }
 # :requires => {
@@ -522,9 +531,8 @@ Action.new("craft_shaper_c",
   { :name=>"Craft Pronged Shaper",
     :description=>"Craft a simple pronged shaping tool to aid in crafting.",
     :base_success_chance => 50, 
+    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :result => lambda { |character, character_action|
-      character.character_possessions.where(:possession_id=>"dolait").first.destroy!
-      character.character_possessions.where(:possession_id=>"tomatunk").first.destroy!
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
       if(Random.rand(2)==0)
         return ActionOutcome.new(:success)
