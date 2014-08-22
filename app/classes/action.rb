@@ -27,7 +27,7 @@ class Action
     if(@requires)
       if(@requires[:possession])
         @requires[:possession].each do |possession|
-          available = available && character.possesses?(possession[0])
+          available = available && character.possesses?(possession[:id])
         end
       end
       if(@requires[:knowledge])
@@ -547,7 +547,7 @@ Action.new("craft_shaper_c",
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :requires => {
-      :possession => [[:tomatunk, 1], [:dolait,1]],
+      :possession => [{:id => :tomatunk, :quantity => 1}, {:id => :dolait, :quantity => 1}],
       :knowledge => [:craft_cutter],
     },
     :physical_cost_penalty => 3,
