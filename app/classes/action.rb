@@ -375,37 +375,43 @@ Action.new("forage",
 #     :mental_cost_penalty => 1,
 #   }
 # )
-# Action.new("gather_tomatunk",
-#   { :name=>"Gather Tomatunk",
-#     :description=>"Go looking for chunks of tomatunk in the marsh.",
-#     :result => lambda { |character, character_action|
-#       if(Random.rand(3)==0)
-#         if(character.possesses?("basket"))
-#           amount_found = Random.new.rand(3)+1
-#           amount_found.times do
-#             CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-#           end
-#           if(amount_found > 1)
-#             return "You wade through the mud and find #{amount_found.to_s} blocks of tomatunk, collecting them in your basket!" 
-#           else
-#             return "You wade through the mud and find a hefty block of tomatunk, which you add to your basket!" 
-#           end
-#         else
-#           CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-#           return "You wade through the mud and find a hefty block of tomatunk!" 
-#         end
-#       else
-#         return "You get soggy and dirty, but find only disappointment." 
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 3 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_tomatunk") && character.possesses?("tomatunk_source")
-#     },
-#     :physical_cost_penalty => 3,
-#     :mental_cost_penalty => 3,
-#   }
-# )
+Action.new("gather_tomatunk",
+  { :name=>"Gather Tomatunk",
+    :description=>"Go looking for chunks of tomatunk in the marsh.",
+    :base_success_chance => 34,
+    :result => lambda { |character, character_action|
+      if(character.possesses?("basket"))
+        amount_found = Random.new.rand(3)+1
+        amount_found.times do
+          CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+        end
+        if(amount_found > 1)
+          return ActionOutcome.new(:basket_success, "#{amount_found.to_s} blocks")
+        else
+          return ActionOutcome.new(:basket_success, "1 block")
+        end
+      else
+        CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+        return ActionOutcome.new(:success)
+      end
+    },
+    :messages => {
+      :basket_success => lambda { |args| "You wade until you find some tomatunk. You gather #{args[1]} of tomatunk into your basket." },
+      :success => lambda { |args| "You wade through the mud and find a hefty block of tomatunk!" },
+      :failure => lambda { |args| "You get soggy and dirty looking for tomatunk, but find only disappointment." },
+      :impossible => lambda { |args| "You couldn't gather tomatunk." },
+    },
+    :requires => {
+      :possession => [{:id => 'tomatunk_source', :quantity => 1},],
+      :knowledge => [:basic_tomatunk],
+    },
+    :base_cost => lambda { |character, target=nil| return 3 },
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 3,
+    },
+  }
+)
 Action.new("gather_wampoon",
   { :name=>"Gather Wampoon",
     :description=>"Go looking for wampoon in the barrens.",
