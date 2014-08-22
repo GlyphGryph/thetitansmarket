@@ -538,11 +538,7 @@ Action.new("craft_shaper_c",
     :base_success_chance => 50, 
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
-      if(Random.rand(2)==0)
-        return ActionOutcome.new(:success)
-      else
-        return ActionOutcome.new(:failure)
-      end
+      return ActionOutcome.new(:success)
     },
     :messages => {
       :success => lambda { |args| "You craft a pronged shaper." },
@@ -552,7 +548,7 @@ Action.new("craft_shaper_c",
     :base_cost => lambda { |character, target=nil| return 7 },
     :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
-      :knowledge => [:craft_cutter],
+      :knowledge => [:craft_shaper],
     },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 2,
