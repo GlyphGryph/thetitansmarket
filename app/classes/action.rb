@@ -20,8 +20,7 @@ class Action
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
 
     @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 } 
-    @physical_cost_penalty = params[:physical_cost_penalty] || 0
-    @mental_cost_penalty = params[:mental_cost_penalty] || 0
+    @cost_modifiers = params[:cost_modifiers] || {}
 
     self.class.add(@id, self)
   end
@@ -58,9 +57,13 @@ class Action
     cost = self.unmodified_cost(character, target_type, target_id)
     # Note: If an action costs at least 1ap, the modifier should not be able to reduce the cost below zero
     # If an action is already free, it cannot be reduced at all (although it can be increased)
-    modifier = 0
-    modifier += @physical_cost_penalty.to_f * character.fraction_hp_missing
-    modifier += @mental_cost_penalty.to_f * character.fraction_happy_missing
+    modifier = 0.0
+    if(@cost_modifiers[:damage])
+      modifier += @cost_modifiers[:damage].to_f * character.damage_fraction
+    end
+    if(@cost_modifiers[:despair])
+      modifier += @cost_modifiers[:despair].to_f * character.despair_fraction
+    end
     modifier = modifier.round
 
     cost += modifier
@@ -164,8 +167,10 @@ Action.new("forage",
       :failure => lambda { |args| "You forage through the underbrush, but find only disappointment." },
     },
     :base_cost => lambda { |character, target=nil| return 2 },
-    :physical_cost_penalty => 2,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 2,
+      :despair => 2,
+    },
   }
 )
 # 
@@ -447,8 +452,10 @@ Action.new("craft_basket",
       end
       return base_value
     },
-    :physical_cost_penalty => 3,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 2,
+    },
   }
 )
 Action.new("craft_cutter",
@@ -469,8 +476,10 @@ Action.new("craft_cutter",
       :knowledge => [:craft_cutter],
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :physical_cost_penalty => 3,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 2,
+    },
   }
 )
 
@@ -492,8 +501,10 @@ Action.new("craft_shaper_a",
       :knowledge => [:craft_shaper],
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :physical_cost_penalty => 3,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 2,
+    },
   }
 )
 Action.new("craft_shaper_b",
@@ -514,8 +525,10 @@ Action.new("craft_shaper_b",
       :knowledge => [:craft_shaper],
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :physical_cost_penalty => 3,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 2,
+    },
   }
 )
 Action.new("craft_shaper_c",
@@ -536,7 +549,9 @@ Action.new("craft_shaper_c",
       :knowledge => [:craft_shaper],
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :physical_cost_penalty => 3,
-    :mental_cost_penalty => 2,
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 2,
+    },
   }
 )
