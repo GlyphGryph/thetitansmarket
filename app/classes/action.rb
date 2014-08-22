@@ -7,18 +7,22 @@ class Action
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
-    @result = params[:result] || lambda { |character, action| return "Function error." }
-    @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 }
-    @cost_requires_target = params[:cost_requires_target]
+
+    @base_success_chance = params[:base_success_chance] || 100
+
     @consumes = params[:consumes] || []
     @requires = params[:requires] || {}
     @custom_require = params[:custom_require] || lambda { |character| return true }
+    @result = params[:result] || lambda { |character, action| return "Function error." }
     @messages = params[:messages] || {}
-    @base_success_chance = params[:base_success_chance] || 100
-    @target_prompt = params[:target_prompt] || "Targeting Prompt error"
+
     @valid_targets = params[:valid_targets] || {}
+    @target_prompt = params[:target_prompt] || "Targeting Prompt error"
+
+    @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 } 
     @physical_cost_penalty = params[:physical_cost_penalty] || 0
     @mental_cost_penalty = params[:mental_cost_penalty] || 0
+
     self.class.add(@id, self)
   end
 
@@ -46,15 +50,7 @@ class Action
 
   def unmodified_cost(character, target_type = nil, target_id = nil)
     cost = 0
-    if(self.cost_requires_target?)
-      if(target_type && target_id)
-        cost = @base_cost.call(character, target_type, target_id)
-      else
-        raise "Calculating the cost for #{self.name} requires a target."
-      end
-    else
-      cost = @base_cost.call(character)
-    end
+    cost = @base_cost.call(character)
     return cost
   end
     
@@ -68,10 +64,6 @@ class Action
     modifier = modifier.round
 
     cost += modifier
-  end
-
-  def cost_requires_target?
-    return @cost_requires_target
   end
 
   def result(character, target)
@@ -495,11 +487,11 @@ Action.new("craft_shaper_a",
       :failure => lambda { |args| "Your oblong shaper breaks most of the way through the process. It's ruined." },
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
-    :base_cost => lambda { |character, target=nil| return 7 },
     :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
       :knowledge => [:craft_shaper],
     },
+    :base_cost => lambda { |character, target=nil| return 7 },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 2,
   }
@@ -517,11 +509,11 @@ Action.new("craft_shaper_b",
       :failure => lambda { |args| "Your angled shaper breaks most of the way through the process. It's ruined." },
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
-    :base_cost => lambda { |character, target=nil| return 7 },
     :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
       :knowledge => [:craft_shaper],
     },
+    :base_cost => lambda { |character, target=nil| return 7 },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 2,
   }
@@ -539,11 +531,11 @@ Action.new("craft_shaper_c",
       :failure => lambda { |args| "Your pronged shaper breaks most of the way through the process. It's ruined." },
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
-    :base_cost => lambda { |character, target=nil| return 7 },
     :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
       :knowledge => [:craft_shaper],
     },
+    :base_cost => lambda { |character, target=nil| return 7 },
     :physical_cost_penalty => 3,
     :mental_cost_penalty => 2,
   }
