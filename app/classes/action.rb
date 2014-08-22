@@ -36,6 +36,11 @@ class Action
         end
       end
     end
+    if(@consumes)
+      @consumes.each do |possession|
+        available = available && character.possesses?(possession[:id])
+      end
+    end
     return available && @custom_require.call(character)
   end
 
@@ -127,9 +132,9 @@ end
 #   :condition => { :condition_id => modifier number, :condition_id => modifier number }
 #   :trait => { :condition_id => modifier number, :condition_id => modifier number }
 # }
-# :consumed => [ [:item_id, #], [:item_id, #] ]
 # :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :base_cost  => lambda { |character, target| return cost }
+# :consumes => [ [:item_id, #], [:item_id, #] ]
 # :requires => {
 #   :possession => [ [:item_id => amount], [:item_id => amount] ]
 #   :knowledge => [ :knowledge_id, :knowledge_id ]
@@ -531,7 +536,6 @@ Action.new("craft_shaper_c",
   { :name=>"Craft Pronged Shaper",
     :description=>"Craft a simple pronged shaping tool to aid in crafting.",
     :base_success_chance => 50, 
-    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
       if(Random.rand(2)==0)
@@ -546,8 +550,8 @@ Action.new("craft_shaper_c",
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
     :base_cost => lambda { |character, target=nil| return 7 },
+    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
-      :possession => [{:id => :tomatunk, :quantity => 1}, {:id => :dolait, :quantity => 1}],
       :knowledge => [:craft_cutter],
     },
     :physical_cost_penalty => 3,
