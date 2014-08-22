@@ -215,17 +215,7 @@ class Character < ActiveRecord::Base
   def fraction_happy_missing
     1.0 - self.fraction_happy_remaining.to_f
   end
-
-  def godmode
-    self.hp=1000
-    self.max_hp=1000
-    self.ap=1000
-    self.max_ap=1000
-    self.happy=1000
-    self.max_happy=1000
-    self.save!
-  end
-  
+ 
   def possesses?(possession_id, quantity=1)
     return (self.character_possessions.where(:possession_id => possession_id).size >= quantity)
   end
@@ -305,5 +295,16 @@ class Character < ActiveRecord::Base
     self.history << new_history
     self.save!
     self.character_actions.destroy_all
+  end
+
+  # Dev cheats
+  def godmode
+    self.hp=1000
+    self.max_hp=1000
+    self.ap=1000
+    self.max_ap=1000
+    self.happy=1000
+    self.max_happy=1000
+    self.save!
   end
 end

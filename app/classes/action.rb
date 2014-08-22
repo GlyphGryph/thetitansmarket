@@ -38,7 +38,7 @@ class Action
     end
     if(@consumes)
       @consumes.each do |required|
-        available = available && character.possesses?(required[:id])
+        available = available && character.possesses?(required[:id], required[:quantity])
       end
     end
     return available && @custom_require.call(character)
@@ -550,7 +550,7 @@ Action.new("craft_shaper_c",
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 2}],
+    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
       :knowledge => [:craft_cutter],
     },

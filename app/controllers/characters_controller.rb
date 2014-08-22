@@ -146,8 +146,25 @@ class CharactersController < ApplicationController
   end
 
   def wish
-    CharacterPossession.new(:character_id => @character.id, :possession_id => params[:possession_id]).save!
-    redirect_to :character_overview
+    if(params[:type] == "possession")
+      quantity = (params[:quantity] || 1).to_i
+      if(Possession.find(params[:target_id]))
+        quantity.times do
+          CharacterPossession.new(:character_id => @character.id, :possession_id => params[:target_id]).save!
+        end
+        notice = "Acquired #{quantity} of #{params[:target_id]}"
+      else
+        notice = "Wish failed, invalid id #{params[:target_id]}."
+      end
+    elsif(params[:type] == "knowledge")
+      if(Knowledge.find(params[:target_id]))
+        @character.learn(params[:target_id])
+        notice = "Learned #{params[:target_id]}"
+      else
+        notice = "Wish failed, invalid id #{params[:target_id]}."
+      end
+    end
+    redirect_to :character_overview, :notice => notice
   end
 
 private

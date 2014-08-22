@@ -23,9 +23,9 @@ Rails.application.routes.draw do
   get 'character/:id/show' => 'characters#show', :as => :show_character
   get 'character/:id/history' => 'characters#history', :as => :character_history
 
-  # TODO TODO TODO GODMODE ROUTE - Should be removed before production! TODO TODO TODO #
+  # TODO TODO TODO CHEAT ROUTES - Should be removed before production! TODO TODO TODO #
       get 'character/:id/godmode' => 'characters#godmode', :as => :character_godmode
-      get 'character/:id/wish/:possession_id' => 'characters#wish', :as => :character_wish
+      get 'character/:id/wish/:type/:target_id(/:quantity)' => 'characters#wish', :as => :character_wish
   ######################################################################################
 
   get 'character/:id/proposal' => 'proposals#index', :as => :proposals
