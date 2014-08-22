@@ -226,8 +226,8 @@ class Character < ActiveRecord::Base
     self.save!
   end
   
-  def possesses?(possession_id)
-    return !(self.character_possessions.where(:possession_id => possession_id).empty?)
+  def possesses?(possession_id, quantity=1)
+    return (self.character_possessions.where(:possession_id => possession_id).size >= quantity)
   end
 
   def potential_actions

@@ -26,19 +26,19 @@ class Action
     available = true
     if(@requires)
       if(@requires[:possession])
-        @requires[:possession].each do |possession|
-          available = available && character.possesses?(possession[:id])
+        @requires[:possession].each do |required|
+          available = available && character.possesses?(required[:id], required[:quantity])
         end
       end
       if(@requires[:knowledge])
-        @requires[:knowledge].each do |knowledge|
-          available = available && character.knows?(knowledge)
+        @requires[:knowledge].each do |required|
+          available = available && character.knows?(required)
         end
       end
     end
     if(@consumes)
-      @consumes.each do |possession|
-        available = available && character.possesses?(possession[:id])
+      @consumes.each do |required|
+        available = available && character.possesses?(required[:id])
       end
     end
     return available && @custom_require.call(character)
@@ -550,7 +550,7 @@ Action.new("craft_shaper_c",
       :impossible => lambda { |args| "You don't have the materials to craft a shaper." },
     },
     :base_cost => lambda { |character, target=nil| return 7 },
-    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
+    :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 2}],
     :requires => {
       :knowledge => [:craft_cutter],
     },
