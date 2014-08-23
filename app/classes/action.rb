@@ -143,7 +143,7 @@ end
 
 # Format for new actions
 # 'id', {:name => 'Name', 
-# :description=>"Multi-word description.", 
+# :description => "Multi-word description.", 
 # :base_success_chance => % number
 # :success_modifiers => {
 #   :possession => { :item_id => modifier number, :item_id => modifier number }
@@ -171,7 +171,7 @@ end
 # Basic Actions #
 #################
 Action.new("forage",
-  { :name=>"Forage", 
+  { :name => "Forage", 
     :description => "You rummage through the underbrush.", 
     :base_success_chance => 50,
     :result => lambda { |character, character_action|
@@ -207,8 +207,8 @@ Action.new("forage",
 # Discovery and Research #
 ##########################
 Action.new("explore", 
-  { :name=>"Explore", 
-    :description=>"You explore the wilds.", 
+  { :name => "Explore", 
+    :description => "You explore the wilds.", 
     :base_success_chance => 100,
     :result => lambda { |character, character_action| 
       return ActionOutcome.new(:success, character.world.explore_with(character))
@@ -226,8 +226,8 @@ Action.new("explore",
 )
 
 Action.new("ponder",
-  { :name=>"Ponder",
-    :description=>"You think for a while.",
+  { :name => "Ponder",
+    :description => "You think for a while.",
     :base_success_chance => 100,
     :result => lambda { |character, character_action|
       target = character_action.target.get
@@ -273,8 +273,8 @@ Action.new("ponder",
   }
 )
 # Action.new("investigate",
-#   { :name=>"Investigate",
-#     :description=>"Pursue a promising idea.",
+#   { :name => "Investigate",
+#     :description => "Pursue a promising idea.",
 #     :result => lambda { |character, character_action|
 #       target_type = character_action.target_type
 #       target = character_action.target.get
@@ -311,8 +311,8 @@ Action.new("ponder",
 # Farming #
 ###########
 # Action.new("clear_land",
-#   { :name=>"Clear Land",
-#     :description=>"Turn a plot of wilderness or a grove into a plot of farmable field.",
+#   { :name => "Clear Land",
+#     :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
 #     :result => lambda { |character, character_action|
 #       character_possession = character_action.target
 #       ActiveRecord::Base.transaction do
@@ -343,8 +343,8 @@ Action.new("ponder",
 #   }
 # )
 # Action.new("plant",
-#   { :name=>"Sow Fields",
-#     :description=>"You plant your seeds.",
+#   { :name => "Sow Fields",
+#     :description => "You plant your seeds.",
 #     :result => lambda { |character, character_action|
 #       if(character.possesses?("field") && character.possesses?("seed"))
 #         seed = character.character_possessions.where(:possession_id => "seed").first
@@ -372,11 +372,11 @@ Action.new("ponder",
 #   }
 # )
 # Action.new("harvest_fields",
-#   { :name=>"Harvest Fields",
-#     :description=>"You harvest the crops.",
+#   { :name => "Harvest Fields",
+#     :description => "You harvest the crops.",
 #     :result => lambda { |character, character_action|
 #       if(character.possesses?("farm"))
-#         farm = character.character_possessions.where(:possession_id=>"farm").first
+#         farm = character.character_possessions.where(:possession_id => "farm").first
 #         5.times do
 #           CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
 #         end
@@ -402,8 +402,8 @@ Action.new("ponder",
 # Scavenging #
 ##############
 Action.new("harvest_dolait",
-  { :name=>"Harvest Dolait",
-    :description=>"You harvest some dolait from the grove.",
+  { :name => "Harvest Dolait",
+    :description => "You harvest some dolait from the grove.",
     :base_success_chance => 75,
     :success_modifiers => {
       :possession => [
@@ -436,8 +436,8 @@ Action.new("harvest_dolait",
   }
 )
 Action.new("gather_tomatunk",
-  { :name=>"Gather Tomatunk",
-    :description=>"Go looking for chunks of tomatunk in the marsh.",
+  { :name => "Gather Tomatunk",
+    :description => "Go looking for chunks of tomatunk in the marsh.",
     :base_success_chance => 34,
     :result => lambda { |character, character_action|
       if(character.possesses?("basket"))
@@ -473,8 +473,8 @@ Action.new("gather_tomatunk",
   }
 )
 Action.new("gather_wampoon",
-  { :name=>"Gather Wampoon",
-    :description=>"Go looking for wampoon in the barrens.",
+  { :name => "Gather Wampoon",
+    :description => "Go looking for wampoon in the barrens.",
     :base_success_chance => 25,
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
@@ -486,7 +486,7 @@ Action.new("gather_wampoon",
       :impossible => lambda { |args| "You couldn't gather wampoon." },
     },
     :requires => {
-      :possession => [{:id=>"wampoon_source", :quantity=>1},],
+      :possession => [{:id => "wampoon_source", :quantity=>1},],
       :knowledge => [:basic_wampoon],
     },
     :base_cost => lambda { |character, target=nil| return 3 },
@@ -521,8 +521,8 @@ Action.new("gather_wampoon",
 # Crafting #
 ############
 Action.new("craft_basket",
-  { :name=>"Craft Basket",
-    :description=>"Craft a simple tool to aid in gathering.",
+  { :name => "Craft Basket",
+    :description => "Craft a simple tool to aid in gathering.",
     :base_success_chance => 50,
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
@@ -550,8 +550,8 @@ Action.new("craft_basket",
   }
 )
 Action.new("craft_cutter",
-  { :name=>"Craft Cutter",
-    :description=>"Craft a simple cutting tool to aid in harvesting.",
+  { :name => "Craft Cutter",
+    :description => "Craft a simple cutting tool to aid in harvesting.",
     :base_success_chance => 50,
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
@@ -580,8 +580,8 @@ Action.new("craft_cutter",
 )
 
 Action.new("craft_shaper_a",
-  { :name=>"Craft Oblong Shaper",
-    :description=>"Craft a simple oblong shaping tool to aid in crafting.",
+  { :name => "Craft Oblong Shaper",
+    :description => "Craft a simple oblong shaping tool to aid in crafting.",
     :base_success_chance => 50, 
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
@@ -609,8 +609,8 @@ Action.new("craft_shaper_a",
   }
 )
 Action.new("craft_shaper_b",
-  { :name=>"Craft Angled Shaper",
-    :description=>"Craft a simple angled shaping tool to aid in crafting.",
+  { :name => "Craft Angled Shaper",
+    :description => "Craft a simple angled shaping tool to aid in crafting.",
     :base_success_chance => 50, 
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
@@ -638,8 +638,8 @@ Action.new("craft_shaper_b",
   }
 )
 Action.new("craft_shaper_c",
-  { :name=>"Craft Pronged Shaper",
-    :description=>"Craft a simple pronged shaping tool to aid in crafting.",
+  { :name => "Craft Pronged Shaper",
+    :description => "Craft a simple pronged shaping tool to aid in crafting.",
     :base_success_chance => 50, 
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
