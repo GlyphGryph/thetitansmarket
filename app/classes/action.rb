@@ -17,7 +17,7 @@ class Action
     @result = params[:result] || lambda { |character, action| return "Function error." }
     @messages = params[:messages] || {}
 
-    @valid_targets = params[:valid_targets] || {}
+    @valid_targets = @requires[:target] || {}
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
 
     @base_cost = params[:base_cost] || lambda { |character, target=nil| return 0 } 
@@ -103,7 +103,7 @@ class Action
   end
   
   def requires_target?
-    return @requires[:target]
+    return !!@requires[:target]
   end
 
   def success_chance(character)
@@ -189,6 +189,7 @@ Action.new("forage",
       :basket_success => lambda { |args| "You forage through the underbrush and discover a #{args[0]}. You gather enough #{args[1]} into your basket for #{args[2]}. Food!" },
       :success => lambda { |args| "You forage through the underbrush and discover a #{args[0]}. You gather some #{args[1]}. Food!" },
       :failure => lambda { |args| "You forage through the underbrush, but find only disappointment." },
+      :impossible => lambda { |args| "You could not forage." },
     },
     :base_cost => lambda { |character, target=nil| return 2 },
     :cost_modifiers => {
@@ -197,57 +198,71 @@ Action.new("forage",
     },
   }
 )
-# 
-# Action.new("explore", 
-#   { :name=>"Explore", 
-#     :description=>"You explore the wilds.", 
-#     :result => lambda { |character, character_action| 
-#       return character.world.explore_with(character)
-#     },
-#     :base_cost => lambda { |character, target=nil| return 5 },
-#     :physical_cost_penalty => 5,
-#     :mental_cost_penalty => 5,
-#   }
-# )
-# Action.new("ponder",
-#   { :name=>"Ponder",
-#     :description=>"You think for a while.",
-#     :result => lambda { |character, character_action|
-#       target = character_action.target.get
-#       found = false
-#       succeeded = false
-#       text = ["You ponder the #{target.name}."]
-#       Thought.all.each do |thought|
-#         p "Checking thought #{thought.inspect} for #{target.id}"
-#         if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
-#           p "\n\nOH YEAH LETS GO\n\n"
-#           found = true
-#           if(!character.knows?(thought.id) && !character.considers?(thought.id))
-#             character.consider(thought.id)
-#             succeeded = true
-#             text << thought.consider
-#           end
-#         end
-#       end
-#       if(!found)
-#         text << "It reveals nothing about life's ineffable mysteries."
-#       elsif(!succeeded)
-#         text << "Nothing new comes to mind."
-#       end
-# 
-#       text = text.join(" ")
-#       return text
-#     },
-#     :base_cost => lambda { |character, target=nil| return 3 },
-#     :available => lambda { |character|
-#       return character.knows?("cognition")
-#     },
-#     :requires_target => true,
-#     :valid_targets => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
-#     :target_prompt => "What would you like to ponder?",
-#     :mental_cost_penalty => 5,
-#   }
-# )
+Action.new("explore", 
+  { :name=>"Explore", 
+    :description=>"You explore the wilds.", 
+    :base_success_chance => 100,
+    :result => lambda { |character, character_action| 
+      return ActionOutcome.new(:success, character.world.explore_with(character))
+    },
+    :messages => {
+      :success => lambda { |args| args[0] },
+      :impossible => lambda { |args| "You could not explore." },
+    },
+    :base_cost => lambda { |character, target=nil| return 5 },
+    :cost_modifiers => {
+      :damage => 5,
+      :despair => 5,
+    },
+  }
+)
+Action.new("ponder",
+  { :name=>"Ponder",
+    :description=>"You think for a while.",
+    :base_success_chance => 100,
+    :result => lambda { |character, character_action|
+      target = character_action.target.get
+      found = false
+      succeeded = false
+      text = ["You ponder the #{target.name}."]
+      Thought.all.each do |thought|
+        if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
+          found = true
+          if(!character.knows?(thought.id) && !character.considers?(thought.id))
+            character.consider(thought.id)
+            succeeded = true
+            text << thought.consider
+          end
+        end
+      end
+      if(!found)
+        text = text.join(" ")
+        return ActionOutcome.new(:failure, text)
+      elsif(!succeeded)
+        text = text.join(" ")
+        return ActionOutcome.new(:already_pondered, text)
+      end
+
+      text = text.join(" ")
+      return ActionOutcome.new(:success, text)
+    },
+    :messages => {
+      :success => lambda { |args| args[0] },
+      :already_pondered => lambda { |args| "#{args[0]} Nothing new comes to mind." },
+      :failure => lambda { |args| "#{args[0] || "You ponder the unknown object."} It reveals nothing about life's inscrutable mysteries." },
+      :impossible => lambda { |args| "You could not think." },
+    },
+    :requires => {
+      :knowledge => ['cognition'],
+      :target => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
+    },
+    :target_prompt => "What would you like to ponder?",
+    :base_cost => lambda { |character, target=nil| return 3 },
+    :cost_modifiers => {
+      :despair => 5,
+    },
+  }
+)
 # Action.new("investigate",
 #   { :name=>"Investigate",
 #     :description=>"Pursue a promising idea.",
