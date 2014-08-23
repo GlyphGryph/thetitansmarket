@@ -13,7 +13,6 @@ class Action
 
     @consumes = params[:consumes] || []
     @requires = params[:requires] || {}
-    @custom_require = params[:custom_require] || lambda { |character| return true }
     @result = params[:result] || lambda { |character, action| return "Function error." }
     @messages = params[:messages] || {}
 
@@ -39,13 +38,18 @@ class Action
           available = available && character.knows?(required)
         end
       end
+      if(@requires[:custom])
+        @requires[:custom].each do |required|
+          available = available && required.call(character)
+        end
+      end
     end
     if(@consumes)
       @consumes.each do |required|
         available = available && character.possesses?(required[:id], required[:quantity])
       end
     end
-    return available && @custom_require.call(character)
+    return available
   end
 
   def unmodified_cost(character, target_type = nil, target_id = nil)
@@ -79,7 +83,11 @@ class Action
 
   def result(character, target)
     if(!self.available?(character))
-      outcome = ActionOutcome.new(:impossible)
+      if(target)
+        outcome = ActionOutcome.new(:impossible)
+      else
+        outcome = ActionOutcome.new(:impossible, target.target.get.name)
+      end
     else
       success_chance = self.success_chance(character)
       @consumes.each do |consumed|
@@ -88,7 +96,11 @@ class Action
         end
       end
       if(Random.new.rand(1..100) > success_chance)
-        outcome = ActionOutcome.new(:failure)
+        if(target)
+          outcome = ActionOutcome.new(:failure)
+        else
+          outcome = ActionOutcome.new(:failure, target.target.get.name)
+        end
       else
         outcome = @result.call(character, target)
       end
@@ -272,40 +284,47 @@ Action.new("ponder",
     },
   }
 )
-# Action.new("investigate",
-#   { :name => "Investigate",
-#     :description => "Pursue a promising idea.",
-#     :result => lambda { |character, character_action|
-#       target_type = character_action.target_type
-#       target = character_action.target.get
-#       text = ["You dig deeper into the possibilities of #{target.name}."]
-# 
-#       if(target_type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
-#         if(character.knows?(target.id))
-#           return "You consider your ideas for #{target.name} more fully, but don't think further investigation will accomplish anything here."
-#         else
-#           character.learn(target.id)
-#           text << Thought.find(target.id).research
-#           succeeded = true
-#         end
-#       else
-#         text << "Don't be asburd! You can't investigate #{target.name}, you can only investigate ideas!"
-#       end
-# 
-#       text = text.join(" ")
-#       return text
-#     },
-#     :base_cost => lambda { |character, target=nil| return 3 },
-#     :available => lambda { |character|
-#       return (character.knows?("cognition") && !character.ideas.empty?)
-#     },
-#     :requires_target => true,
-#     :valid_targets => {"idea"=>['all']},
-#     :target_prompt => "What would you like to investigate?",
-#     :mental_cost_penalty => 4,
-#     :physical_cost_penalty => 4
-#   }
-# )
+Action.new("investigate",
+  { :name => "Investigate",
+    :description => "Pursue a promising idea.",
+    :base_success_chance => 100,
+    :result => lambda { |character, character_action|
+      target_type = character_action.target_type
+      target = character_action.target.get
+
+      if(target_type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
+        if(character.knows?(target.id))
+          return ActionOutcome.new(:already_investigated, target.name)
+        else
+          character.learn(target.id)
+          thought_research = Thought.find(target.id).research
+          succeeded = true
+        end
+      else
+        return ActionOutcome.new(:impossible, target.name)
+      end
+
+      return ActionOutcome.new(:success, target.name, thought_research)
+    },
+    :messages => {
+      :success => lambda { |args| "You dig deeper into the possibilities of #{args[0]}. #{args[1]}" },
+      :already_investigated => lambda { |args| "You consider your ideas for #{args[0]} more fully, but don't think further investigation will accomplish anything here." },
+      :failure => lambda { |args| "You fail to learn anything about #{args[0]}." },
+      :impossible => lambda { |args| "Don't be absurd! You can't investigate #{args[0]}, you can only investigate ideas!" },
+    },
+    :requires => {
+      :knowledge => ['cognition'],
+      :target => {"idea"=>['all']},
+      :custom => [ lambda { |character| !character.ideas.empty? } ]
+    },
+    :target_prompt => "What would you like to investigate?",
+    :base_cost => lambda { |character, target=nil| return 3 },
+    :cost_modifiers => {
+      :damage => 4,
+      :despair => 4,
+    },
+  }
+)
 
 ###########
 # Farming #
