@@ -167,6 +167,9 @@ end
 # :valid_targets => {'type_name' => ['id', 'id']} // Types are possessions, knowledges, ideas, conditions, characters. 'all' can be used in place of an id to indicate that every object of that type is a valid target. Knowledges are specifically known knowledges, and ideas are considered knowledges.
 # }
 
+#################
+# Basic Actions #
+#################
 Action.new("forage",
   { :name=>"Forage", 
     :description => "You rummage through the underbrush.", 
@@ -198,6 +201,11 @@ Action.new("forage",
     },
   }
 )
+
+
+##########################
+# Discovery and Research #
+##########################
 Action.new("explore", 
   { :name=>"Explore", 
     :description=>"You explore the wilds.", 
@@ -216,6 +224,7 @@ Action.new("explore",
     },
   }
 )
+
 Action.new("ponder",
   { :name=>"Ponder",
     :description=>"You think for a while.",
@@ -297,6 +306,10 @@ Action.new("ponder",
 #     :physical_cost_penalty => 4
 #   }
 # )
+
+###########
+# Farming #
+###########
 # Action.new("clear_land",
 #   { :name=>"Clear Land",
 #     :description=>"Turn a plot of wilderness or a grove into a plot of farmable field.",
