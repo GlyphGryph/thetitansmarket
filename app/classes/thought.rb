@@ -46,7 +46,7 @@ Thought.new('basic_tomatunk',
   { :sources => {
       'possession' => ['tomatunk_source','tomatunk'],
     },
-    :consider => "You could probably more of this substance with sharp eyes and a bit of luck...",
+    :consider => "You could probably get more of this substance with sharp eyes and a bit of luck...",
     :research => "You figure out the basics of gathering tomatunk.",
   }
 )
