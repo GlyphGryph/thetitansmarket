@@ -46,10 +46,32 @@ class Action
     end
     if(@consumes)
       @consumes.each do |required|
-        available = available && character.possesses?(required[:id], required[:quantity])
+        # Consumed targets must have full specifications in the requires hash
+        if(required != :target)
+          available = available && character.possesses?(required[:id], required[:quantity])
+        end
       end
     end
     return available
+  end
+
+  def executable?(character, character_action)
+    available = self.available?(character)
+    if(@requires)
+      if(@requires[:target])
+        if(character_action.target && character_action.target.get)
+          valid_target_types = @requires[:target].keys
+          found = false
+          valid_target_types.each do |type|
+            target_ids = @requires[:target][type]
+            found = found || target_ids.include?('all') || target_ids.include?(character_action.target.get.id)
+          end
+          available = available && character_action.target.get.id
+        else
+          available = false
+        end
+      end
+    end
   end
 
   def unmodified_cost(character, target_type = nil, target_id = nil)
@@ -81,28 +103,32 @@ class Action
     cost += modifier
   end
 
-  def result(character, target)
-    if(!self.available?(character))
-      if(target)
+  def result(character, character_action)
+    if(!self.executable?(character, character_action))
+      if(character_action)
         outcome = ActionOutcome.new(:impossible)
       else
-        outcome = ActionOutcome.new(:impossible, target.target.get.name)
+        outcome = ActionOutcome.new(:impossible, character_action.target.get.name)
       end
     else
       success_chance = self.success_chance(character)
-      @consumes.each do |consumed|
-        consumed[:quantity].times do
-          character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
-        end
-      end
       if(Random.new.rand(1..100) > success_chance)
-        if(target)
+        if(character_action)
           outcome = ActionOutcome.new(:failure)
         else
-          outcome = ActionOutcome.new(:failure, target.target.get.name)
+          outcome = ActionOutcome.new(:failure, character_action.target.get.name)
         end
       else
-        outcome = @result.call(character, target)
+        outcome = @result.call(character, character_action)
+      end
+      @consumes.each do |consumed|
+        if(consumed==:target)
+          character_action.target.destroy!
+        else
+          consumed[:quantity].times do
+            character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
+          end
+        end
       end
     end
     success = (outcome.status != :failure)
@@ -329,38 +355,45 @@ Action.new("investigate",
 ###########
 # Farming #
 ###########
-# Action.new("clear_land",
-#   { :name => "Clear Land",
-#     :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
-#     :result => lambda { |character, character_action|
-#       character_possession = character_action.target
-#       ActiveRecord::Base.transaction do
-#         character_possession.destroy!
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-#         if(character_possession.get.id == 'dolait')
-#           15.times do
-#             CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
-#           end
-#         elsif(character_possession.get.id == 'wildlands')
-#           Random.new.rand(1..4).times do
-#             found = Plant.all.sample
-#             CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => found.id).save!
-#           end
-#         end
-#       end
-#       return "You clear a field."
-#     },
-#     :base_cost => lambda { |character, target=nil| return 8 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_farming") && character.possesses?("wildlands")
-#     },
-#     :requires_target => true,
-#     :valid_targets => {"possession"=>['wildlands', 'dolait']},
-#     :target_prompt => "What would you like to clear?",
-#     :physical_cost_penalty => 30,
-#     :mental_cost_penalty => 2
-#   }
-# )
+Action.new("clear_land",
+  { :name => "Clear Land",
+    :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
+    :base_success => 100,
+    :result => lambda { |character, character_action|
+      target = character_action.target.get
+      CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+      if(target.id == 'dolait')
+        15.times do
+          CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
+        end
+      elsif(target.id == 'wildlands')
+        Random.new.rand(1..4).times do
+          found = Plant.all.sample
+          CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => found.id).save!
+        end
+      end
+      return ActionOutcome.new(:success, target.name)
+      return "You clear a field."
+    },
+    :messages => {
+      :success => lambda { |args| "You clear your #{args[0]} and turn it into a field." },
+      :failure => lambda { |args| "You fail to clear the land." },
+      :impossible => lambda { |args| "You couldn't clear the land." },
+    },
+    :consumes => [:target],
+    :requires => {
+      :knowledge => ['basic_farming'],
+      :target => {"possession"=>['wildlands', 'dolait_source']},
+    },
+    :target_prompt => "What would you like to clear?",
+    :base_cost => lambda { |character, target=nil| return 8 },
+    :cost_modifiers => {
+      :damage => 10,
+      :despair => 2,
+    },
+  }
+)
+
 # Action.new("plant",
 #   { :name => "Sow Fields",
 #     :description => "You plant your seeds.",
@@ -415,7 +448,7 @@ Action.new("investigate",
 #     :mental_cost_penalty => 1,
 #   }
 # )
-
+# 
 
 ##############
 # Scavenging #
