@@ -1,6 +1,5 @@
 Immediate goals:
 --CONTENT BREAK--
-Add the "craft cutter" action and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk for a 50% chance of success. This tool makes the "Harvest Field" action cost 1ap less.
 Add the "craft shaper" actions (there should be three types) and knowledge, make it dependent on the "Crafting" knowledge, at the cost of 1 tomatunk and 1 dolait for a 50% chance of success. This tool increases the chance of all crafting actions to succeed by 10% per tool, and reduces the cost of crafting by 1 for each tool possessed (oblong, angled, and pronged shapers).
 --/CONTENT BREAK--
 
