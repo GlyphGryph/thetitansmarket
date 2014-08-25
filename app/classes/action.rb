@@ -622,6 +622,13 @@ Action.new("craft_basket",
   { :name => "Craft Basket",
     :description => "Craft a simple tool to aid in gathering.",
     :base_success_chance => 50,
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 15},
+        {:id => 'shaper_b', :modifier => 15},
+        {:id => 'shaper_c', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
       return ActionOutcome.new(:success)
@@ -651,6 +658,13 @@ Action.new("craft_cutter",
   { :name => "Craft Cutter",
     :description => "Craft a simple cutting tool to aid in harvesting.",
     :base_success_chance => 50,
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 15},
+        {:id => 'shaper_b', :modifier => 15},
+        {:id => 'shaper_c', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
       return ActionOutcome.new(:success)
@@ -681,6 +695,13 @@ Action.new("craft_shaper_a",
   { :name => "Craft Oblong Shaper",
     :description => "Craft a simple oblong shaping tool to aid in crafting.",
     :base_success_chance => 50, 
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 15},
+        {:id => 'shaper_b', :modifier => 15},
+        {:id => 'shaper_c', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
       return ActionOutcome.new(:success)
@@ -710,6 +731,13 @@ Action.new("craft_shaper_b",
   { :name => "Craft Angled Shaper",
     :description => "Craft a simple angled shaping tool to aid in crafting.",
     :base_success_chance => 50, 
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 15},
+        {:id => 'shaper_b', :modifier => 15},
+        {:id => 'shaper_c', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
       return ActionOutcome.new(:success)
@@ -739,6 +767,13 @@ Action.new("craft_shaper_c",
   { :name => "Craft Pronged Shaper",
     :description => "Craft a simple pronged shaping tool to aid in crafting.",
     :base_success_chance => 50, 
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 15},
+        {:id => 'shaper_b', :modifier => 15},
+        {:id => 'shaper_c', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, character_action|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
       return ActionOutcome.new(:success)
