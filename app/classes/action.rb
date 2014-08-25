@@ -43,6 +43,55 @@ class Action
           available = available && required.call(character)
         end
       end
+      if(@requires[:target])
+        # Character must have at least one of the valid targets
+        found = false
+        # If characters are a valid target, this is always true
+        if(@valid_targets.keys.include?('character'))
+          found = true
+        else
+          @valid_targets.each do |type, values|
+            # If it's one of the others, find a match
+            if(type==:possession)
+              if(values.include?('all'))
+                found = found || character.character_possessions.length > 0
+              else
+                values.each do |possibility|
+                  found = found || character.possesses?(possibility)
+                end
+              end
+            elsif(type==:idea)
+              if(values.include?('all'))
+                found = found || character.ideas.length > 0
+              else
+                values.each do |possibility|
+                  found = found || character.considers?(possibility)
+                end
+              end
+            elsif(type==:knowledge)
+              if(values.include?('all'))
+                found = found || character.knowledges.length > 0
+              else
+                values.each do |possibility|
+                  found = found || character.knows?(possibility)
+                end
+              end
+            elsif(type==:condition)
+              if(values.include?('all'))
+                found = found || character.character_conditions.length > 0
+              else
+                values.each do |possibility|
+                  found = found || character.has_condition?(possibility)
+                end
+              end
+            end
+            if(found)
+              break
+            end
+          end
+        end
+        available = available && found
+      end
     end
     if(@consumes)
       @consumes.each do |required|
@@ -301,7 +350,7 @@ Action.new("ponder",
     },
     :requires => {
       :knowledge => ['cognition'],
-      :target => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
+      :target => {:possession=>['all'], :condition=>['all'], :knowledge=>['all'], :character=>['all']},
     },
     :target_prompt => "What would you like to ponder?",
     :base_cost => lambda { |character, target=nil| return 3 },
@@ -340,7 +389,7 @@ Action.new("investigate",
     },
     :requires => {
       :knowledge => ['cognition'],
-      :target => {"idea"=>['all']},
+      :target => {:idea=>['all']},
       :custom => [ lambda { |character| !character.ideas.empty? } ]
     },
     :target_prompt => "What would you like to investigate?",
@@ -383,7 +432,7 @@ Action.new("clear_land",
     :consumes => [:target],
     :requires => {
       :knowledge => ['basic_farming'],
-      :target => {"possession"=>['wildlands', 'dolait_source']},
+      :target => {:possession=>['wildlands', 'dolait_source']},
     },
     :target_prompt => "What would you like to clear?",
     :base_cost => lambda { |character, target=nil| return 8 },
@@ -414,7 +463,7 @@ Action.new("plant",
     ],
     :requires => {
       :knowledge => ['basic_farming'],
-      :target => {"possession"=>['seed']},
+      :target => {:possession=>['seed']},
     },
     :target_prompt => "What would you like to plant?",
     :base_cost => lambda { |character, target=nil| return 5 },

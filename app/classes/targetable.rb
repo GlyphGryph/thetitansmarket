@@ -4,7 +4,7 @@ module Targetable
     valid = {}
     @valid_targets.each do |target_type, values|
       target_objects = []
-      if(target_type == "possession")
+      if(target_type == :possession)
         if(values.include?('all'))
           target_objects = actor.character_possessions
         else
@@ -14,7 +14,7 @@ module Targetable
             end
           end
         end
-      elsif(target_type == "knowledge")
+      elsif(target_type == :knowledge)
         if(values.include?('all'))
           # Only pull from knowledges ACTUALLY known.
           target_objects = actor.knowledges
@@ -25,7 +25,7 @@ module Targetable
             end
           end
         end
-      elsif(target_type == "idea")
+      elsif(target_type == :idea)
         if(values.include?('all'))
           # Only pull from knowledges considered but not yet known.
           target_objects = actor.ideas
@@ -36,11 +36,11 @@ module Targetable
             end
           end
         end
-      elsif(target_type == "character")
+      elsif(target_type == :character)
         if(values.include?('all'))
           target_objects = actor.world.characters
         end
-      elsif(target_type == "condition")
+      elsif(target_type == :condition)
         if(values.include?('all'))
           target_objects = actor.character_conditions
         else
@@ -59,7 +59,7 @@ module Targetable
   end
 
   def requires_target?
-    return requires_target
+    return requires[:target]
   end
 
   def targetable(type, id)
