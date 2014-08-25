@@ -450,7 +450,8 @@ Action.new("plant",
     :result => lambda { |character, character_action|
       seed = character_action.target
       CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => seed.variant).save!
-      return ActionOutcome.new(:success, seed.get.name)
+      seed_name = Plant.find(seed.variant).seed_name
+      return ActionOutcome.new(:success, seed_name)
     },
     :messages => {
       :success => lambda { |args| "You plow a field and plant your #{args[0]}." },
@@ -473,32 +474,41 @@ Action.new("plant",
     },
   }
 )
-# Action.new("harvest_fields",
-#   { :name => "Harvest Fields",
-#     :description => "You harvest the crops.",
-#     :result => lambda { |character, character_action|
-#       if(character.possesses?("farm"))
-#         farm = character.character_possessions.where(:possession_id => "farm").first
-#         5.times do
-#           CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
-#         end
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-#         food_name = Plant.find(farm.variant).food_name
-#         farm.destroy!
-#         return "You harvest a field of #{food_name}, gaining 5 food."
-#       else
-#         return "You attempted to harvest a field, but it failed."
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 5 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_farming") && character.possesses?("farm")
-#     },
-#     :physical_cost_penalty => 4,
-#     :mental_cost_penalty => 1,
-#   }
-# )
-# 
+Action.new("harvest_fields",
+  { :name => "Harvest Fields",
+    :description => "You harvest the crops.",
+    :base_success => 100,
+    :result => lambda { |character, character_action|
+      farm = character_action.target
+      amount = 5
+      amount.times do
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
+      end
+      CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+      food_name = Plant.find(farm.variant).food_name
+      return ActionOutcome.new(:success, food_name, amount)
+    },
+    :messages => {
+      :success => lambda { |args| "You harvest a field of #{args[0]}, gaining #{args[1]} food." },
+      :failure => lambda { |args| "The harvest failed." },
+      :impossible => lambda { |args| "You could not harvest." },
+    },
+    :consumes => [
+      :target,
+    ],
+    :requires => {
+      :knowledge => ['basic_farming'],
+      :target => {:possession=>['farm']},
+    },
+    :target_prompt => "What would you like to harvest?",
+    :base_cost => lambda { |character, target=nil| return 5 },
+    :cost_modifiers => {
+      :damage => 4,
+      :despair => 1,
+    },
+  }
+)
+
 
 ##############
 # Scavenging #
@@ -598,26 +608,6 @@ Action.new("gather_wampoon",
     },
   }
 )
-
-#    :messages => {
-#      :success => lambda { |args| "" },
-#      :failure => lambda { |args| "" },
-#      :impossible => lambda { |args| "" },
-#    },
-#    :consumes => [{:id => ""}],
-#    :requires => {
-#      :knowledge => [:],
-#    },
-#    :base_cost => lambda { |character, target=nil| 
-#      return 7
-#    },
-#    :cost_modifiers => {
-#      :possession => [
-#        {:id => '', :modifier => 0.0},
-#      ],
-#      :damage => 0,
-#      :despair => 0,
-#    },
 
 ############
 # Crafting #
