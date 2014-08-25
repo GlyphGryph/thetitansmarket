@@ -545,6 +545,9 @@ Action.new("harvest_dolait",
     },
     :base_cost => lambda { |character, target=nil| return 5 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'cutter', :modifier => -1},
+      ],
       :damage => 4,
       :despair => 1,
     },
