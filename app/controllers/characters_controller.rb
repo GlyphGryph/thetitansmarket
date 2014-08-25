@@ -69,15 +69,15 @@ class CharactersController < ApplicationController
     @targets = {}
     @action.targets(@character).each do |key, value|
       label = "Unknown Type"
-      if(key == "possession")
+      if(key == :possession)
         label = "Possessions"
-      elsif(key == "condition")
+      elsif(key == :condition)
         label = "Conditions"
-      elsif(key == "character")
+      elsif(key == :character)
         label = "Characters"
-      elsif(key == "knowledge")
+      elsif(key == :knowledge)
         label = "Knowledge"
-      elsif(key == "idea")
+      elsif(key == :idea)
         label = "Ideas"
       end
       @targets[key] = OpenStruct.new(:label => label, :values => value)
