@@ -394,35 +394,36 @@ Action.new("clear_land",
   }
 )
 
-# Action.new("plant",
-#   { :name => "Sow Fields",
-#     :description => "You plant your seeds.",
-#     :result => lambda { |character, character_action|
-#       if(character.possesses?("field") && character.possesses?("seed"))
-#         seed = character.character_possessions.where(:possession_id => "seed").first
-#         character.character_possessions.where(:possession_id => "field").first.destroy!
-#         CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => seed.variant).save!
-#         seed_name = Plant.find(seed.variant).seed_name
-#         seed.destroy!
-#         return "You plow a field and plant your #{seed_name}."
-#       else
-#         if(!character.possesses?("field"))
-#           return "You have no field to sow."
-#         elsif(!character.possesses?("seed"))
-#           return "You have no seeds to sow in the field"
-#         else
-#           return "We don't know why sowing the field didn't work, but it didn't."
-#         end
-#       end
-#     },
-#     :base_cost => lambda { |character, target=nil| return 5 },
-#     :available => lambda { |character|
-#       return character.knows?("basic_farming") && character.possesses?("field") && character.possesses?("seed")
-#     },
-#     :physical_cost_penalty => 3,
-#     :mental_cost_penalty => 1,
-#   }
-# )
+Action.new("plant",
+  { :name => "Sow Fields",
+    :description => "You plant your seeds.",
+    :base_success => 100,
+    :result => lambda { |character, character_action|
+      seed = character_action.target
+      CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => seed.variant).save!
+      return ActionOutcome.new(:success, seed.get.name)
+    },
+    :messages => {
+      :success => lambda { |args| "You plow a field and plant your #{args[0]}." },
+      :failure => lambda { |args| "You failed to sow the field." },
+      :impossible => lambda { |args| "You could not sow the field." },
+    },
+    :consumes => [
+      {:id => 'field', :quantity => 1}, 
+      :target,
+    ],
+    :requires => {
+      :knowledge => ['basic_farming'],
+      :target => {"possession"=>['seed']},
+    },
+    :target_prompt => "What would you like to plant?",
+    :base_cost => lambda { |character, target=nil| return 5 },
+    :cost_modifiers => {
+      :damage => 3,
+      :despair => 1,
+    },
+  }
+)
 # Action.new("harvest_fields",
 #   { :name => "Harvest Fields",
 #     :description => "You harvest the crops.",
