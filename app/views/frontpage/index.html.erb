@@ -34,7 +34,27 @@
     <% end %>
   </div>
 
+  <hr />
+  <div class="debug">
+    <p><b>Since the game is currently in active development and only available to tests, it can be convenient to be able to skip ahead or otherwise ignore certain sections of the game. As such, there are a few 'cheats' available to testers, listed below. To enable this, enter the commands into the url bar at the end of the address while viewing a character overview screen.</b></p>
+    <p>
+      <b>/godmode</b>    ::This gives your character 1000hp, 1000happiness, and 1000vigor.<br />
+      <b>/wish/possession/a/b</b>    ::This allows you to gain an item of your choice. 'a' should be replaced with the item id, and 'b' is optional but can be replaced with the desired quantitity of that item<br />
+      <b>/wish/knowledge/a</b>   ::This gives you a specific knowledge. Replace 'a' with the desired knowledge id.<br />
+    </p>
 
+    <div>
+      <b>Item ids:</b> <span style="color:red">(WARNING: Do not attempt to wish for seeds, farms, or food! The wish command does not work with these items.)</span><br />
+      <% Possession.all.each do |item| %>
+        <%= item.id %>,
+      <% end %>
+    </div>
+    <div>
+      <b>Knowledge ids:</b><br />
+      <% Knowledge.all.each do |item| %>
+        <%= item.id %>,
+      <% end %>
+    </div>
 <% else %>
   Welcome! Please log in or register!
 <% end %>
