@@ -121,6 +121,7 @@ class Action
         end
       end
     end
+    return available
   end
 
   def unmodified_cost(character, target_type = nil, target_id = nil)
@@ -153,6 +154,7 @@ class Action
   end
 
   def result(character, character_action)
+    success_chance = self.success_chance(character)
     if(!self.executable?(character, character_action))
       if(character_action)
         outcome = ActionOutcome.new(:impossible)
@@ -160,7 +162,6 @@ class Action
         outcome = ActionOutcome.new(:impossible, character_action.target.get.name)
       end
     else
-      success_chance = self.success_chance(character)
       if(Random.new.rand(1..100) > success_chance)
         if(character_action)
           outcome = ActionOutcome.new(:failure)
@@ -183,9 +184,10 @@ class Action
     success = (outcome.status != :failure)
     message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
     message = message.call(outcome.arguments)
-    if(success_chance < 100)
+    if(outcome.status != :impossible && success_chance < 100)
       message += " (#{ success ? "Success" : "Failure"}: #{success_chance}% chance of success)"
     end
+    message += " (Required: #{@requires.inspect} / Consumed: #{@consumes.inspect})"
     return ActionResult.new(success, message, self.id)
   end
   
