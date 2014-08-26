@@ -301,11 +301,26 @@ class Character < ActiveRecord::Base
     while(continue_processing)
       next_up = self.character_actions.first
       # Stop processing if there are no more actions or the next action is too expensive
-      if(next_up && next_up.get.cost(self) <= self.ap)
-        self.change_ap(-next_up.get.cost(self))
-        action = next_up.get
-        new_history << action.result(self, next_up.target).message
-        next_up.destroy!
+      if(next_up)
+        cost_remaining = next_up.get.cost(self)
+        if(next_up.stored_ap)
+          cost_remaining -= next_up.stored_ap
+        end
+        # If we have a negative cost somehow, treat it as a free action
+        if(cost_remaining < 0)
+          cost_remaining = 0
+        end
+        if(cost_remaining <= self.ap)
+          self.change_ap(-next_up.get.cost(self))
+          action = next_up.get
+          new_history << action.result(self, next_up.target).message
+          next_up.destroy!
+        else
+          next_up.stored_ap = self.ap
+          self.change_ap(-self.ap)
+          next_up.save!
+          continue_processing = false
+        end
       else
         continue_processing = false
       end

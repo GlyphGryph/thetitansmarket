@@ -134,6 +134,9 @@
                   <% if character_action.get.requires_target? %>
                     (<%= character_action.target.get.name %>)
                   <% end %>
+                  <% if character_action.stored_ap %>
+                    (Partially completed: <%= character_action.stored_ap %>ap spent)
+                  <% end %>
                   <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>
               </div>
