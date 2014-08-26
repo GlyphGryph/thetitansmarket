@@ -6,8 +6,10 @@ class ActionTarget
       return CharacterCondition.find(id)
     elsif(type == "character")
       return Character.find(id)
-    elsif(type == "knowledge" || target_type =="idea")
+    elsif(type == "knowledge" || type =="idea")
       return CharacterKnowledge.find(id)
+    elsif(type == nil)
+      return nil
     else
       raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
     end

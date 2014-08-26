@@ -274,27 +274,8 @@ class Character < ActiveRecord::Base
 
   def execute
     self.unready
-    cost_so_far = 0
+    
     new_history = []
-
-    # Process this character's actions
-    self.character_actions.each do |character_action|
-      action = character_action.get
-      cost_so_far += action.cost(self)
-      if(cost_so_far <= self.ap)
-        new_history << action.result(self, character_action).message
-      end
-    end
-    if(cost_so_far > self.ap)
-      new_history << "You ran out of energy partway through, and couldn't finish what you had planned to do."
-    end
-
-    # Close out any unclosed proposals this character made this turn
-    self.recent_proposals.each do |proposal|
-      if(proposal.status == 'open')
-        proposal.cancel
-      end
-    end
 
     # Restore character's lost ap for their next turn, before conditions potentially reduce it again
     self.ap = self.max_ap
@@ -308,9 +289,30 @@ class Character < ActiveRecord::Base
       end
     end
 
+    # Close out any unclosed proposals this character made this turn
+    self.recent_proposals.each do |proposal|
+      if(proposal.status == 'open')
+        proposal.cancel
+      end
+    end
+
+    # Process this character's queued actions until we run out of actions or run out of ap
+    continue_processing = true
+    while(continue_processing)
+      next_up = self.character_actions.first
+      # Stop processing if there are no more actions or the next action is too expensive
+      if(next_up && next_up.get.cost(self) <= self.ap)
+        self.change_ap(-next_up.get.cost(self))
+        action = next_up.get
+        new_history << action.result(self, next_up.target).message
+        next_up.destroy!
+      else
+        continue_processing = false
+      end
+    end
+
     self.history << new_history
     self.save!
-    self.character_actions.destroy_all
   end
 
   # Dev cheats
