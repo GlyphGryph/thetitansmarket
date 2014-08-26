@@ -52,11 +52,17 @@ class Character < ActiveRecord::Base
   def add_action(action_id, target_type=nil, target_id=nil)
     action = Action.find(action_id)
     cost = action.cost(self)
-    if(false)  #cost <= self.ap)
-      action.result(self, target)
+    if(cost <= self.ap)
+      self.change_ap(-cost)
+      if(target_type)
+        self.recent_history << action.result(self, target).message
+      else
+        self.recent_history << action.result(self).message
+      end
     else
       CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id).save!
     end
+    self.save!
   end
 
   def can_add_action?(action_id)
