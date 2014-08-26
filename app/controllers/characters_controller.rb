@@ -40,9 +40,8 @@ class CharactersController < ApplicationController
       redirect_to :find_action_target
       return
     end
-    character_action = CharacterAction.new(:character => @character, :action_id => action.id)
     respond_to do |format|
-      if(character_action.save)
+      if(@character.add_action(action.id))
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => character_action.errors.full_messages.to_sentence}
@@ -54,9 +53,8 @@ class CharactersController < ApplicationController
     action = Action.find(params[:action_id])
     target_type = params[:target_type]
     target_id = params[:target_id]
-    character_action = CharacterAction.new(:character => @character, :action_id => action.id, :target_type => target_type, :target_id => target_id)
     respond_to do |format|
-      if(character_action.save)
+      if(@character.add_action(action.id, target_type, target_id))
         format.html { redirect_to character_overview_path }
       else
         format.html { redirect_to character_overview_path, :alert => character_action.errors.full_messages.to_sentence}

@@ -49,6 +49,16 @@ class Character < ActiveRecord::Base
   end
   
   # Checks whether or not this character can add this action
+  def add_action(action_id, target_type=nil, target_id=nil)
+    action = Action.find(action_id)
+    cost = action.cost(self)
+    if(false)  #cost <= self.ap)
+      action.result(self, target)
+    else
+      CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id).save!
+    end
+  end
+
   def can_add_action?(action_id)
     return Action.find(action_id).available?(self)
   end

@@ -104,18 +104,18 @@ class Action
     return available
   end
 
-  def executable?(character, character_action)
+  def executable?(character, target=nil)
     available = self.available?(character)
     if(@requires)
       if(@requires[:target])
-        if(character_action.target && character_action.target.get)
+        if(target && target.get)
           valid_target_types = @requires[:target].keys
           found = false
           valid_target_types.each do |type|
             target_ids = @requires[:target][type]
-            found = found || target_ids.include?('all') || target_ids.include?(character_action.target.get.id)
+            found = found || target_ids.include?('all') || target_ids.include?(target.get.id)
           end
-          available = available && character_action.target.get.id
+          available = available && target.get.id
         else
           available = false
         end
@@ -153,27 +153,27 @@ class Action
     cost += modifier
   end
 
-  def result(character, character_action)
+  def result(character, target=nil)
     success_chance = self.success_chance(character)
-    if(!self.executable?(character, character_action))
-      if(character_action)
-        outcome = ActionOutcome.new(:impossible)
+    if(!self.executable?(character, target))
+      if(target)
+        outcome = ActionOutcome.new(:impossible, target.get.name)
       else
-        outcome = ActionOutcome.new(:impossible, character_action.target.get.name)
+        outcome = ActionOutcome.new(:impossible)
       end
     else
       if(Random.new.rand(1..100) > success_chance)
-        if(character_action)
-          outcome = ActionOutcome.new(:failure)
+        if(target)
+          outcome = ActionOutcome.new(:failure, target.get.name)
         else
-          outcome = ActionOutcome.new(:failure, character_action.target.get.name)
+          outcome = ActionOutcome.new(:failure)
         end
       else
-        outcome = @result.call(character, character_action)
+        outcome = @result.call(character, target)
       end
       @consumes.each do |consumed|
         if(consumed==:target)
-          character_action.target.destroy!
+          target.destroy!
         else
           consumed[:quantity].times do
             character.character_possessions.where(:possession_id=>consumed[:id]).first.destroy!
@@ -240,7 +240,7 @@ end
 #   :condition => { :condition_id => modifier number, :condition_id => modifier number }
 #   :trait => { :condition_id => modifier number, :condition_id => modifier number }
 # }
-# :result => lambda {|character, character_action| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
+# :result => lambda {|character, target| return "Some string based on what happens, possibly conditional on character state" }, // Takes a character, returns a string
 # :base_cost  => lambda { |character, target| return cost }
 # :consumes => [ [:item_id, #], [:item_id, #] ]
 # :requires => {
@@ -263,7 +263,7 @@ Action.new("forage",
   { :name => "Forage", 
     :description => "You rummage through the underbrush.", 
     :base_success_chance => 50,
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       found = Plant.all.sample
       if(character.possesses?("basket"))
         amount_found = Random.new.rand(3)+1
@@ -299,7 +299,7 @@ Action.new("explore",
   { :name => "Explore", 
     :description => "You explore the wilds.", 
     :base_success_chance => 100,
-    :result => lambda { |character, character_action| 
+    :result => lambda { |character, target| 
       return ActionOutcome.new(:success, character.world.explore_with(character))
     },
     :messages => {
@@ -318,8 +318,7 @@ Action.new("ponder",
   { :name => "Ponder",
     :description => "You think for a while.",
     :base_success_chance => 100,
-    :result => lambda { |character, character_action|
-      target = character_action.target.get
+    :result => lambda { |character, target|
       found = false
       succeeded = false
       text = ["You ponder the #{target.name}."]
@@ -365,11 +364,8 @@ Action.new("investigate",
   { :name => "Investigate",
     :description => "Pursue a promising idea.",
     :base_success_chance => 100,
-    :result => lambda { |character, character_action|
-      target_type = character_action.target_type
-      target = character_action.target.get
-
-      if(target_type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
+    :result => lambda { |character, target|
+      if(target.type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
         if(character.knows?(target.id))
           return ActionOutcome.new(:already_investigated, target.name)
         else
@@ -410,8 +406,7 @@ Action.new("clear_land",
   { :name => "Clear Land",
     :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
     :base_success => 100,
-    :result => lambda { |character, character_action|
-      target = character_action.target.get
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
       if(target.id == 'dolait')
         15.times do
@@ -449,10 +444,9 @@ Action.new("plant",
   { :name => "Sow Fields",
     :description => "You plant your seeds.",
     :base_success => 100,
-    :result => lambda { |character, character_action|
-      seed = character_action.target
-      CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => seed.variant).save!
-      seed_name = Plant.find(seed.variant).seed_name
+    :result => lambda { |character, target|
+      CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => target.variant).save!
+      seed_name = Plant.find(target.variant).seed_name
       return ActionOutcome.new(:success, seed_name)
     },
     :messages => {
@@ -480,14 +474,13 @@ Action.new("harvest_fields",
   { :name => "Harvest Fields",
     :description => "You harvest the crops.",
     :base_success => 100,
-    :result => lambda { |character, character_action|
-      farm = character_action.target
+    :result => lambda { |character, target|
       amount = 5
       amount.times do
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => farm.variant).save!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => target.variant).save!
       end
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-      food_name = Plant.find(farm.variant).food_name
+      food_name = Plant.find(target.variant).food_name
       return ActionOutcome.new(:success, food_name, amount)
     },
     :messages => {
@@ -527,7 +520,7 @@ Action.new("harvest_dolait",
         {:id => 'cutter', :modifier => 25},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
       if(character.possesses?("dolait_source"))
         return ActionOutcome.new(:success_cutter)
@@ -559,7 +552,7 @@ Action.new("gather_tomatunk",
   { :name => "Gather Tomatunk",
     :description => "Go looking for chunks of tomatunk in the marsh.",
     :base_success_chance => 34,
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       if(character.possesses?("basket"))
         amount_found = Random.new.rand(3)+1
         amount_found.times do
@@ -596,7 +589,7 @@ Action.new("gather_wampoon",
   { :name => "Gather Wampoon",
     :description => "Go looking for wampoon in the barrens.",
     :base_success_chance => 25,
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
       return ActionOutcome.new(:success)
     },
@@ -631,7 +624,7 @@ Action.new("craft_basket",
         {:id => 'shaper_c', :modifier => 15},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
       return ActionOutcome.new(:success)
     },
@@ -667,7 +660,7 @@ Action.new("craft_cutter",
         {:id => 'shaper_c', :modifier => 15},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
       return ActionOutcome.new(:success)
     },
@@ -704,7 +697,7 @@ Action.new("craft_shaper_a",
         {:id => 'shaper_c', :modifier => 15},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
       return ActionOutcome.new(:success)
     },
@@ -740,7 +733,7 @@ Action.new("craft_shaper_b",
         {:id => 'shaper_c', :modifier => 15},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
       return ActionOutcome.new(:success)
     },
@@ -776,7 +769,7 @@ Action.new("craft_shaper_c",
         {:id => 'shaper_c', :modifier => 15},
       ],
     },
-    :result => lambda { |character, character_action|
+    :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
       return ActionOutcome.new(:success)
     },
