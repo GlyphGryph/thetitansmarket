@@ -1,3 +1,19 @@
+class ActionTarget
+  def self.find(type, id)
+    if(type == "possession")
+      return CharacterPossession.find(id)
+    elsif(type == "condition")
+      return CharacterCondition.find(id)
+    elsif(type == "character")
+      return Character.find(id)
+    elsif(type == "knowledge" || target_type =="idea")
+      return CharacterKnowledge.find(id)
+    else
+      raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
+    end
+  end
+end
+
 class Action
   extend CollectionTracker
   include Targetable
@@ -319,6 +335,7 @@ Action.new("ponder",
     :description => "You think for a while.",
     :base_success_chance => 100,
     :result => lambda { |character, target|
+      target = target.get
       found = false
       succeeded = false
       text = ["You ponder the #{target.name}."]
@@ -365,6 +382,7 @@ Action.new("investigate",
     :description => "Pursue a promising idea.",
     :base_success_chance => 100,
     :result => lambda { |character, target|
+      target = target.get
       if(target.type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
         if(character.knows?(target.id))
           return ActionOutcome.new(:already_investigated, target.name)
@@ -407,6 +425,7 @@ Action.new("clear_land",
     :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
     :base_success => 100,
     :result => lambda { |character, target|
+      target = target.get
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
       if(target.id == 'dolait')
         15.times do

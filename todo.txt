@@ -1,5 +1,6 @@
 Immediate goals:
 Rework the AP spending system. Gain max ap each turn. If there are any queued actions, execute them immediately. If a player has enough ap remaining when they select an action, execute it immediately. If they do not, queue it.
+Clean up the error messages for the add_actions in the character controller.
 Add the ability to "remember" an item from the queue, and track the AP put into it. If this item is removed from the queue the stored AP is lost. Players can take other actions before the queued action, but only immediate ones. At the end of turn, any remaining ap is added to the amount stored in this action until enough remains to complete it. When complete, the next item in the queue is moved into memory.
 
 Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations.
