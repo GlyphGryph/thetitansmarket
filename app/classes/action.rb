@@ -1,21 +1,3 @@
-class ActionTarget
-  def self.find(type, id)
-    if(type == "possession")
-      return CharacterPossession.find(id)
-    elsif(type == "condition")
-      return CharacterCondition.find(id)
-    elsif(type == "character")
-      return Character.find(id)
-    elsif(type == "knowledge" || type =="idea")
-      return CharacterKnowledge.find(id)
-    elsif(type == nil)
-      return nil
-    else
-      raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
-    end
-  end
-end
-
 class Action
   extend CollectionTracker
   include Targetable
@@ -245,6 +227,24 @@ class ActionOutcome
   def initialize(status, *arguments)
     @status = status
     @arguments = arguments
+  end
+end
+
+class ActionTarget
+  def self.find(type, id)
+    if(type == "possession")
+      return CharacterPossession.find(id)
+    elsif(type == "condition")
+      return CharacterCondition.find(id)
+    elsif(type == "character")
+      return Character.find(id)
+    elsif(type == "knowledge" || type =="idea")
+      return CharacterKnowledge.find(id)
+    elsif(type == nil)
+      return nil
+    else
+      raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
+    end
   end
 end
 

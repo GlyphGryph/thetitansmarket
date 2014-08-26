@@ -60,7 +60,12 @@ class Character < ActiveRecord::Base
         self.recent_history << action.result(self).message
       end
     else
-      CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id).save!
+      if(self.ap > 0)
+        CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id, :stored_ap => self.ap).save!
+        self.change_ap(-self.ap)
+      else
+        CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id).save!
+      end
     end
     self.save!
   end
@@ -341,3 +346,4 @@ class Character < ActiveRecord::Base
     self.save!
   end
 end
+
