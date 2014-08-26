@@ -113,10 +113,10 @@
       </div>
     </div>
 
-    <div class="info-block  <%= (@queue_cost > @character.ap)?'over-cost':''%>" id="action-queue">
+    <div class="info-block  <%= (@queue_cost > @character.max_ap)?'over-cost':''%>" id="action-queue">
       <div class="info-block-head">
         Actions Queue
-        <div class="queue-cost"><%= @queue_cost %>/<%= @character.ap %></div>
+        <div class="queue-cost"><%= @queue_cost %>/<%= @character.max_ap %></div>
       </div>
       <div class="info-block-body">
         <div class="selections">
@@ -128,7 +128,7 @@
               <% action_cost = character_action.get.cost(@character) %>
               <% running_cost += action_cost %>
               <div class="selection-element ">
-                <span class="<%= (running_cost > @character.ap)?'over-cost':''%>">
+                <span class="<%= (running_cost > @character.max_ap)?'over-cost':''%>">
                   <%= action_cost %> -
                   <%= character_action.get.name %> 
                   <% if character_action.get.requires_target? %>
