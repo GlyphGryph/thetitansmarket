@@ -188,7 +188,7 @@ class Action
       message += " (#{ success ? "Success" : "Failure"}: #{success_chance}% chance of success)"
     end
     message += " (Required: #{@requires.inspect} / Consumed: #{@consumes.inspect})"
-    return ActionResult.new(success, message, self.id)
+    return ActionResult.new(self.id, success, message, outcome.status)
   end
   
   def requires_target?
@@ -213,12 +213,13 @@ class Action
 end
 
 class ActionResult
-  attr_accessor :success, :cost, :message, :type
+  attr_accessor :success, :cost, :message, :status
 
-  def initialize(success=true, message="Error: No Message Provided", type="untyped")
+  def initialize(action_id, success, message="Error: No Message Provided", status=:unknown)
     @success = success
     @message = message
-    @type = type
+    @action_id = action_id
+    @status = status
   end
 end
 

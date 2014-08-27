@@ -51,20 +51,32 @@ class Character < ActiveRecord::Base
   # Checks whether or not this character can add this action
   def add_action(action_id, target_type=nil, target_id=nil)
     action = Action.find(action_id)
+    target = ActionTarget.find(target_type, target_id) 
+    execute_action(action, target)
+  end
+
+  def execute_action(action, target)
     cost = action.cost(self)
     if(cost <= self.ap)
-      self.change_ap(-cost)
-      if(target_type)
-        self.recent_history << action.result(self, target).message
-      else
-        self.recent_history << action.result(self).message
+      result = action.result(self, target)
+      if(result.status != :impossible)
+        self.change_ap(-cost)
       end
+      self.recent_history << result.message
     else
       if(self.ap > 0)
-        CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id, :stored_ap => self.ap).save!
+        if(target)
+          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.type, :target_id => target.id, :stored_ap => self.ap).save!
+        else
+          CharacterAction.new(:character => self, :action_id => action.id, :stored_ap => self.ap).save!
+        end
         self.change_ap(-self.ap)
       else
-        CharacterAction.new(:character => self, :action_id => action.id, :target_type => target_type, :target_id => target_id).save!
+        if(target)
+          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.type, :target_id => target.id).save!
+        else
+          CharacterAction.new(:character => self, :action_id => action.id).save!
+        end
       end
     end
     self.save!
@@ -316,7 +328,7 @@ class Character < ActiveRecord::Base
           cost_remaining = 0
         end
         if(cost_remaining <= self.ap)
-          self.change_ap(-next_up.get.cost(self))
+          self.change_ap(-cost_remaining)
           action = next_up.get
           new_history << action.result(self, next_up.target).message
           next_up.destroy!
