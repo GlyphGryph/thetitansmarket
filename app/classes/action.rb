@@ -95,7 +95,8 @@ class Action
     end
     if(@consumes)
       @consumes.each do |required|
-        # Consumed targets must have full specifications in the requires hash
+        # Consumed targets already have full specifications in the requires hash, do not repeat here
+        # Otherwise, consumed items are still required
         if(required != :target)
           available = available && character.possesses?(required[:id], required[:quantity])
         end
@@ -115,7 +116,7 @@ class Action
             target_ids = @requires[:target][type]
             found = found || target_ids.include?('all') || target_ids.include?(target.get.id)
           end
-          available = available && target.get.id
+          available = available && !target.get.id.nil?
         else
           available = false
         end
@@ -386,19 +387,17 @@ Action.new("investigate",
     :base_success_chance => 100,
     :result => lambda { |character, target|
       target = target.get
-      if(target.type == 'idea' && Thought.find(target.id) && Knowledge.find(target.id))
+      if(target.type == 'knowledge' && Thought.find(target.id) && Knowledge.find(target.id))
         if(character.knows?(target.id))
           return ActionOutcome.new(:already_investigated, target.name)
         else
           character.learn(target.id)
           thought_research = Thought.find(target.id).research
-          succeeded = true
+          return ActionOutcome.new(:success, target.name, thought_research)
         end
       else
         return ActionOutcome.new(:impossible, target.name)
       end
-
-      return ActionOutcome.new(:success, target.name, thought_research)
     },
     :messages => {
       :success => lambda { |args| "You dig deeper into the possibilities of #{args[0]}. #{args[1]}" },
@@ -409,7 +408,6 @@ Action.new("investigate",
     :requires => {
       :knowledge => ['cognition'],
       :target => {:idea=>['all']},
-      :custom => [ lambda { |character| !character.ideas.empty? } ]
     },
     :target_prompt => "What would you like to investigate?",
     :base_cost => lambda { |character, target=nil| return 3 },
