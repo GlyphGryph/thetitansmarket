@@ -234,13 +234,13 @@ end
 class ActionTarget
   def self.find(type, id)
     if(type == "possession")
-      return CharacterPossession.find(id)
+      return CharacterPossession.where(:id=>id).first
     elsif(type == "condition")
-      return CharacterCondition.find(id)
+      return CharacterCondition.where(:id=>id).first
     elsif(type == "character")
-      return Character.find(id)
+      return Character.where(:id=>id).first
     elsif(type == "knowledge" || type =="idea")
-      return CharacterKnowledge.find(id)
+      return CharacterKnowledge.where(:id=>id).first
     elsif(type == nil)
       return nil
     else

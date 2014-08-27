@@ -66,14 +66,14 @@ class Character < ActiveRecord::Base
     else
       if(self.ap > 0)
         if(target)
-          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.type, :target_id => target.id, :stored_ap => self.ap).save!
+          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.get.type, :target_id => target.id, :stored_ap => self.ap).save!
         else
           CharacterAction.new(:character => self, :action_id => action.id, :stored_ap => self.ap).save!
         end
         self.change_ap(-self.ap)
       else
         if(target)
-          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.type, :target_id => target.id).save!
+          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.get.type, :target_id => target.id).save!
         else
           CharacterAction.new(:character => self, :action_id => action.id).save!
         end
@@ -328,9 +328,12 @@ class Character < ActiveRecord::Base
           cost_remaining = 0
         end
         if(cost_remaining <= self.ap)
-          self.change_ap(-cost_remaining)
           action = next_up.get
-          new_history << action.result(self, next_up.target).message
+          result = action.result(self, next_up.target)
+          new_history << result.message
+          if(result.status != :impossible)
+            self.change_ap(-cost_remaining)
+          end
           next_up.destroy!
         else
           next_up.stored_ap = self.ap
