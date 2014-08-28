@@ -15,29 +15,50 @@ class Trade < ActiveRecord::Base
     # The possessions offered are the ones we gain, the proffessions asked are the ones we lose
     asked = self.asked_character_possessions
     offered = self.offered_character_possessions
+    sender_message = ["You traded with #{receiver.name}."]
+    receiver_message = ["You traded with #{sender.name}."]
+    success = true
     # We want to do this as a transaction - if there's an error changing any of these, we want to roll them all back
-    ActiveRecord::Base.transaction do
-      sender = proposal.sender
-      receiver = proposal.receiver
-      asked.each do |character_possession|
-        # Make sure this is still owned by the right person
-        if(character_possession.character == receiver)
-          character_possession.character = sender
-          character_possession.save!
-        else
-          raise "The character no longer possesses this item."
+    begin
+      ActiveRecord::Base.transaction do
+        sender = proposal.sender
+        receiver = proposal.receiver
+        asked.each do |character_possession|
+          # Make sure this is still owned by the right person
+          if(character_possession && character_possession.character == receiver)
+            character_possession.character = sender
+            possession_name = character_possession.get.name
+            sender_message << ["You gained a #{possession_name}."]
+            receiver_message << ["You lost your #{possession_name}."]
+            character_possession.save!
+          else
+            sender_message << ["You failed to trade with #{receiver.name}. #{receiver.name} no longer possess one of the objects being asked for."]
+            receiver_message << ["You failed to trade with #{sender.name}. You no longer possess one of the objects being asked for."]
+            raise "The character no longer possesses this item."
+          end
+        end
+        offered.each do |character_possession|
+          if(character_possession.character == sender)
+            character_possession.character = receiver
+            possession_name = character_possession.get.name
+            sender_message << ["You lost your #{possession_name}."]
+            receiver_message << ["You gained a #{possession_name}."]
+            character_possession.save!
+          else
+            sender_message << ["You failed to trade with #{receiver.name}. You no longer possess one of the objects being offered."]
+            receiver_message << ["You failed to trade with #{sender.name}. #{sender.name} no longer possess one of the objects being offered."]
+            raise "The character no longer possesses this item."
+          end
         end
       end
-      offered.each do |character_possession|
-        if(character_possession.character == sender)
-          character_possession.character = receiver
-          character_possession.save!
-        else
-          raise "The character no longer possesses this item."
-        end
-      end
+    rescue
+      success = false
     end
-    return true
+    sender.recent_history << sender_message.join(" ")
+    sender.save!
+    receiver.recent_history << receiver_message.join(" ")
+    receiver.save!
+    return success
   end
 
   def decline
