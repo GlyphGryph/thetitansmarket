@@ -139,7 +139,7 @@ class ProposalsController < ApplicationController
     @proposal = Proposal.find(params[:proposal_id])
     if(@proposal.content_type == "Trade")
       if(@proposal.receiver  == @character)
-        @proposal.mark_read
+        @proposal.mark_read_for(@character)
         @character_gets = @proposal.content.offered_character_possessions
         @character_loses = @proposal.content.asked_character_possessions
       elsif(@proposal.sender  == @character)
