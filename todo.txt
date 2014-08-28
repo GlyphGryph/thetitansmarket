@@ -1,5 +1,4 @@
 Immediate goals:
-Clean up the error messages for the add_actions in the character controller.
 Fix problem where proposals can now be accepted when the original sender has no ap and the receiver has no ap. Either: Deduct ap from the original sender when the proposal is made, and don't allow acceptance unless the receiver has enough ap remaining. OR cancel any proposal someone tries to accept if either player doesn't have enough ap remaining, with a message why it was cancelled.
 
 Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations.
