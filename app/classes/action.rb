@@ -718,7 +718,7 @@ Action.new("craft_shaper_a",
       ],
     },
     :result => lambda { |character, target|
-      CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
+      CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_a").save!
       return ActionOutcome.new(:success)
     },
     :messages => {
