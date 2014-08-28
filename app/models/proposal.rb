@@ -40,6 +40,10 @@ class Proposal < ActiveRecord::Base
         self.status = 'accepted'
         self.viewed_by_sender = false
         self.save!
+      else
+        self.status = 'declined'
+        self.viewed_by_sender = false
+        self.save!
       end
       return success
     else

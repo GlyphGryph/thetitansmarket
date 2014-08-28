@@ -8,6 +8,10 @@ class Activity
     @description = params[:description] || "Description Error"
     @available = params[:available] || lambda { |character| return true }
     @result = params[:result] || lambda { |character, target| return "Function error." }
+    @cost = params[:cost] || {}
+    @accept_cost = @cost[:accept] || 0
+    @offer_cost = @cost[:offer] || 0
+    @messages = params[:messages] || {}
     self.class.add(@id, self)
   end
 
@@ -16,7 +20,31 @@ class Activity
   end
 
   def result(character, target)
-    return @result.call(character, target)
+    # If one of the players can't play the cost, skip this and return false with an appropriate message
+    # Otherwise execute the proposal assign an appropriate success message
+    if(@offer_cost <= character.ap && @accept_cost <= target.ap)
+      character.change_ap(-@offer_cost)
+      target.change_ap(-@accept_cost)
+      if(@result.call(character, target))
+        character.recent_history  << @messages[:success].call([target.name])
+        character.save!
+        target.recent_history  << @messages[:success].call([character.name])
+        target.save!
+        return true
+      end
+    end
+    message = "Attempted to #{self.name}."
+    if(@offer_cost > character.ap)
+      message += " #{character.name} did not have enough ap to complete the action."
+    end
+    if(@accept_cost > target.ap)
+      message += " #{target.name} did not have enough ap to complete the action. "
+    end
+    character.recent_history  << message
+    character.save!
+    target.recent_history  << message
+    target.save!
+    return false
   end
 
   def type
@@ -34,17 +62,18 @@ Activity.new("play",
   { :name=>"Play", 
     :description=>"Play around with another character, increasing your happiness a bit. Costs 2 ap, grants 1 happy.", 
     :result => lambda { |character, target|
-      ap_cost = 2
-      if(character.ap >= ap_cost && target.ap >= ap_cost)
-        character.change_happy(1)
-        character.change_ap(-2)
-        character.save!
-        target.change_happy(1)
-        target.change_ap(-2)
-        target.save!
-        return true;
-      end
-      return false;
+      character.change_happy(1)
+      character.save!
+      target.change_happy(1)
+      target.save!
+      return true
+    },
+    :messages => {
+      :success => lambda { |args| "You play with #{args[0]} for a while, and the world doesn't seem to rest nearly so heavily on your shoulders for a while." },
+    },
+    :cost => {
+      :accept => 2,
+      :offer => 2,
     },
     :available => lambda { |character|
       return character.knows?("play")

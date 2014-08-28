@@ -157,9 +157,9 @@ class ProposalsController < ApplicationController
       success = @proposal.accept
       respond_to do |format|
         if(success)
-          format.html { redirect_to proposals_path, :notice => "Proposal accepted." }
+          format.html { redirect_to character_overview_path, :notice => "Proposal accepted." }
         else
-          format.html { redirect_to proposals_path, :alert => @proposal.errors.full_messages.to_sentence}
+          format.html { redirect_to character_overview_path, :alert => @proposal.errors.full_messages.to_sentence}
         end
       end
     else
