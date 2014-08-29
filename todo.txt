@@ -1,8 +1,5 @@
 Immediate goals:
-Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
-Remove the "target_type" logic, get type from target directly instead
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
-Characters are "killed" if their happiness and health drops to zero.
 Rename "hp" to "health" and "happy" to "resolve" and "ap" to "vigor"
 Allow creation of traits
 Allow players to add additional gestures/texts
@@ -21,6 +18,7 @@ Improvements to the crafting system. Have "craft basket" and "craft cutting tool
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
 Add teaching proposal!
 Investigate's cost is based on the idea to be investigated.
+Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
 Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
 
 --REFACTOR BREAK--

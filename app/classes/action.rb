@@ -125,14 +125,14 @@ class Action
     return available
   end
 
-  def unmodified_cost(character, target_type = nil, target_id = nil)
+  def unmodified_cost(character, target)
     cost = 0
     cost = @base_cost.call(character)
     return cost
   end
     
-  def cost(character, target_type = nil, target_id = nil)
-    cost = self.unmodified_cost(character, target_type, target_id)
+  def cost(character, target=nil)
+    cost = self.unmodified_cost(character, target)
     # Note: If an action costs at least 1ap, the modifier should not be able to reduce the cost below zero
     # If an action is already free, it cannot be reduced at all (although it can be increased)
     modifier = 0.0
