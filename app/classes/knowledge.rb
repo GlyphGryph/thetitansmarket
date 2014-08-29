@@ -87,4 +87,8 @@ Knowledge.new("craft_shaper",
     :description=>"Craft a simple shaping tool from dolait and tomatunk.", 
   }
 )
-
+Knowledge.new("craft_toy",
+  { :name =>"Craft Simple Toy",
+    :description=>"Craft a simple toy to stave of weariness."
+  }
+)

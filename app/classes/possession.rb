@@ -107,3 +107,8 @@ Possession.new("shaper_c",
     :description=>"This should help increase the speed of crafting and improve the chances of success.", 
   }
 )
+Possession.new("simple_toy", 
+  { :name=>"Toy", 
+    :description=>"Spend some time playing with this by yourself and you might feel better.", 
+  }
+)

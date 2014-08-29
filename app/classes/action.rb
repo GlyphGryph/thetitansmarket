@@ -527,6 +527,50 @@ Action.new("harvest_fields",
   }
 )
 
+##########
+# Morale #
+##########
+Action.new("play_with_toy",
+  { :name => "Play With Toy",
+    :description => "Spend some time playing with one of your toys.",
+    :result => lambda { |character, target|
+      # Success
+      if(Random.new.rand(1..100) < 75)
+        character.change_happy(1)
+        toy = character.character_possessions.where(:possession_id => "simple_toy").first
+        if(Random.new.rand(1..100) < 25)
+          toy.destroy!
+          return ActionOutcome.new(:success_broken)
+        else
+          return ActionOutcome.new(:success)
+        end
+      else
+        if(Random.new.rand(1..100) < 25)
+          toy = character.character_possessions.where(:possession_id => "simple_toy").first
+          toy.destroy!
+          return ActionOutcome.new(:failure_broken)
+        else
+          return ActionOutcome.new(:failure)
+        end
+      end
+    },
+    :messages => {
+      :success_broken => lambda { |args| "You play with your toys for a little while, but one of them breaks. At least you feel a bit better." },
+      :success => lambda { |args| "You play with your toys for a little while. You feel better." },
+      :failure_broken => lambda { |args| "Playing with your toys just isn't helping today, and to make it worse one of them has broken." },
+      :failure => lambda { |args| "You're just not enjoying yourself. Your mind keeps getting distracted by other thoughts." },
+      :impossible => lambda { |args| "You couldn't play with your toys." },
+    },
+    :requires => {
+      :possession => [{:id => 'simple_toy', :quantity => 1},],
+    },
+    :base_cost => lambda { |character, target=nil| return 2 },
+    :cost_modifiers => {
+      :damage => 2,
+      :despair => 0,
+    },
+  }
+)
 
 ##############
 # Scavenging #
@@ -801,6 +845,42 @@ Action.new("craft_shaper_c",
     :consumes => [{:id => "dolait", :quantity => 1},{:id => "tomatunk", :quantity => 1}],
     :requires => {
       :knowledge => [:craft_shaper],
+    },
+    :base_cost => lambda { |character, target=nil| return 7 },
+    :cost_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => -0.7},
+        {:id => 'shaper_b', :modifier => -0.7},
+        {:id => 'shaper_c', :modifier => -0.7},
+      ],
+      :damage => 3,
+      :despair => 2,
+    },
+  }
+)
+Action.new("craft_toy",
+  { :name => "Craft Toy",
+    :description => "Craft a simple toy.",
+    :base_success_chance => 75, 
+    :success_modifiers => {
+      :possession => [
+        {:id => 'shaper_a', :modifier => 25},
+        {:id => 'shaper_b', :modifier => 25},
+        {:id => 'shaper_c', :modifier => 25},
+      ],
+    },
+    :result => lambda { |character, target|
+      CharacterPossession.new(:character_id => character.id, :possession_id => "simple_toy").save!
+      return ActionOutcome.new(:success)
+    },
+    :messages => {
+      :success => lambda { |args| "You craft a simple toy." },
+      :failure => lambda { |args| "The toy you made is already falling apart by the time you finish it. It's worthless." },
+      :impossible => lambda { |args| "You don't have the materials to craft a toy." },
+    },
+    :consumes => [{:id => "dolait", :quantity => 1}],
+    :requires => {
+      :knowledge => [:craft_toy],
     },
     :base_cost => lambda { |character, target=nil| return 7 },
     :cost_modifiers => {

@@ -1,6 +1,9 @@
 Immediate goals:
-Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations.
 Add a "craft toy" knowledge derived from pondering morale, and which prevents morale loss from weariness but has a 25% chance of "breaking" each turn and no longer preventing morale loss.
+
+URGENT: There's a bug when a character dies, hitting execute tries to pull up recent proposals and then (obviously) fails because dead characters are removed from their world.
+BUG: "You use your cutter to harvest some fresh dolait" when no cutter possesses.
+
 Remove the "target_type" logic, get type from target directly instead
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
 Characters are "killed" if their happiness and health drops to zero.
@@ -18,6 +21,7 @@ Have hunger actually require a certain amount of "nutrition" each turn, and food
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
 Some action costs should be based on what their target is (example: Investigation)
+Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations.
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
 Add teaching proposal!
 Investigate's cost is based on the idea to be investigated.

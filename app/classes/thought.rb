@@ -95,6 +95,14 @@ Thought.new('craft_shaper',
       'knowledge' => ['basic_crafting'],
     },
     :consider => "Tomatunk and dolait are useful materials, but difficult to work with. You think you could build some tools to make cracking and warping less likely to occur when crafting tools.",   
-    :research => "An assortment of splitting and grinding tools that should make the process of shaping future tools more reliable."
+    :research => "An assortment of splitting and grinding tools should make the process of shaping future tools more reliable."
+  }
+)
+Thought.new('craft_toy',
+  { :sources => {
+      'condition' => ['weariness'],
+    },
+    :consider => "You think you could use some strips of dolait to make simple toys to entertain yourself or others.",   
+    :research => "It probably won't last forever, and you might well get bored of it before it falls apart, but you think you can make a variety of small toys with what you've discovered."
   }
 )

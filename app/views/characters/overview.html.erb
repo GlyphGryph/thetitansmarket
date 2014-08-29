@@ -132,7 +132,6 @@
                   <%= action_cost %> -
                   <%= character_action.get.name %> 
                   <% if character_action.get.requires_target? %>
-                    <%= character_action.id %>
                     (<%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." %>)
                   <% end %>
                   <% if character_action.stored_ap %>
