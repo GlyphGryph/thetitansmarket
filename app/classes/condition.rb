@@ -29,7 +29,7 @@ Condition.new("hunger",
       if(character.eat)
         return "You gobble up a unit of food."
       else 
-        character.change_hp(-3)
+        character.change_health(-3)
         character.change_happy(-1)
         return "You suffer from starvation."
       end
@@ -50,7 +50,7 @@ Condition.new("resilience",
   { :name=>"Resilience", 
     :description=>"Pull yourself together, kid.", 
     :result => lambda { |character| 
-      character.change_hp(1)
+      character.change_health(1)
       return "You feel your body recovering from the damage it's sustained."
     },
   }
@@ -67,7 +67,7 @@ Condition.new("nihilism",
   { :name=>"Nihilism", 
     :description=>"Is it even worth going on, if this is all life is?", 
     :result => lambda { |character| 
-      character.change_hp(-2)
+      character.change_health(-2)
       return "You feel your body falling apart, but can't bring yourself to care."
     },
   }

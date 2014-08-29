@@ -28,8 +28,8 @@ class Character < ActiveRecord::Base
   after_create :default_relationships
   
   def default_attributes
-    self.max_hp ||= 10
-    self.hp ||= self.max_hp
+    self.max_health ||= 10
+    self.health ||= self.max_health
     self.max_ap ||= 10
     self.ap ||= self.max_ap
     self.max_happy ||= 10
@@ -130,34 +130,34 @@ class Character < ActiveRecord::Base
     end
   end
 
-  def change_hp(value)
-    new_hp = self.hp
+  def change_health(value)
+    new_health = self.health
     if(self.has_condition?('pure_grit') && value <= 0)
-      new_hp = 0
+      new_health = 0
       change_happy(value)
     else
       # Change the ap, up to max or down to zero
 
-      new_hp += value
-      if(new_hp > self.max_hp)
-        new_hp = self.max_hp
-      elsif(new_hp < 1)
-        # Minimum hp is zero, which triggers PURE GRIT. Further damage is dealt to morale instead.
-        self.change_happy(new_hp*2)
-        new_hp = 0
+      new_health += value
+      if(new_health > self.max_health)
+        new_health = self.max_health
+      elsif(new_health < 1)
+        # Minimum health is zero, which triggers PURE GRIT. Further damage is dealt to morale instead.
+        self.change_happy(new_health*2)
+        new_health = 0
         self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
         if(self.has_condition?('nihilism'))
           self.die
         end
       end
 
-      if(self.has_condition?('pure_grit') && new_hp > 0)
+      if(self.has_condition?('pure_grit') && new_health > 0)
         self.character_conditions.where(:condition_id => 'pure_grit').destroy_all
       end
     end
     # Only bother saving if the new ap is different
-    if(self.hp != new_hp)
-      self.hp = new_hp
+    if(self.health != new_health)
+      self.health = new_health
       self.save!
     end  
   end
@@ -237,12 +237,12 @@ class Character < ActiveRecord::Base
     end
   end
 
-  def hp_fraction
-    return self.hp.to_f / self.max_hp.to_f
+  def health_fraction
+    return self.health.to_f / self.max_health.to_f
   end
 
   def damage_fraction
-    1.0 - self.hp_fraction.to_f
+    1.0 - self.health_fraction.to_f
   end
 
   def happy_fraction
@@ -359,8 +359,8 @@ class Character < ActiveRecord::Base
 
   # Dev cheats
   def godmode
-    self.hp=1000
-    self.max_hp=1000
+    self.health=1000
+    self.max_health=1000
     self.ap=1000
     self.max_ap=1000
     self.happy=1000
