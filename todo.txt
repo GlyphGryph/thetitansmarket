@@ -1,6 +1,4 @@
 Immediate goals:
-URGENT: There's a bug when a character dies, hitting execute tries to pull up recent proposals and then (obviously) fails because dead characters are removed from their world.
-
 Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
 Remove the "target_type" logic, get type from target directly instead
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"

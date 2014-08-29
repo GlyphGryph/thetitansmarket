@@ -182,8 +182,12 @@ class Character < ActiveRecord::Base
   end
 
   def die
-    self.history << ["You have died."]
+    self.recent_history << "You have died."
     self.world = nil
+  end
+
+  def dead?
+    return self.world.nil?
   end
 
   def eat(amount=1)
@@ -292,10 +296,18 @@ class Character < ActiveRecord::Base
   def execute
     self.unready
     
-    new_history = []
+    self.history << []
+    new_history = self.recent_history
 
     # Restore character's lost ap for their next turn, before conditions potentially reduce it again
     self.ap = self.max_ap
+
+    # Close out any unclosed proposals this character made this turn
+    self.recent_proposals.each do |proposal|
+      if(proposal.status == 'open')
+        proposal.cancel
+      end
+    end
 
     # Process this character's active conditions
     self.character_conditions.each do |character_condition|
@@ -305,48 +317,43 @@ class Character < ActiveRecord::Base
         new_history << effect
       end
     end
-
-    # Close out any unclosed proposals this character made this turn
-    self.recent_proposals.each do |proposal|
-      if(proposal.status == 'open')
-        proposal.cancel
-      end
-    end
-
-    # Process this character's queued actions until we run out of actions or run out of ap
-    continue_processing = true
-    while(continue_processing)
-      next_up = self.character_actions.first
-      # Stop processing if there are no more actions or the next action is too expensive
-      if(next_up)
-        cost_remaining = next_up.get.cost(self)
-        if(next_up.stored_ap)
-          cost_remaining -= next_up.stored_ap
-        end
-        # If we have a negative cost somehow, treat it as a free action
-        if(cost_remaining < 0)
-          cost_remaining = 0
-        end
-        if(cost_remaining <= self.ap)
-          action = next_up.get
-          result = action.result(self, next_up.target)
-          new_history << result.message
-          if(result.status != :impossible)
-            self.change_ap(-cost_remaining)
+    
+    # Processing conditions may have killed us - if so, skip the beginning of next turn stuff
+    unless(self.dead?)
+      # Process this character's queued actions until we run out of actions or run out of ap
+      continue_processing = true
+      while(continue_processing)
+        next_up = self.character_actions.first
+        # Stop processing if there are no more actions or the next action is too expensive
+        if(next_up)
+          cost_remaining = next_up.get.cost(self)
+          if(next_up.stored_ap)
+            cost_remaining -= next_up.stored_ap
           end
-          next_up.destroy!
+          # If we have a negative cost somehow, treat it as a free action
+          if(cost_remaining < 0)
+            cost_remaining = 0
+          end
+          if(cost_remaining <= self.ap)
+            action = next_up.get
+            result = action.result(self, next_up.target)
+            new_history << result.message
+            if(result.status != :impossible)
+              self.change_ap(-cost_remaining)
+            end
+            next_up.destroy!
+          else
+            next_up.stored_ap = self.ap
+            self.change_ap(-self.ap)
+            next_up.save!
+            continue_processing = false
+          end
         else
-          next_up.stored_ap = self.ap
-          self.change_ap(-self.ap)
-          next_up.save!
           continue_processing = false
         end
-      else
-        continue_processing = false
       end
     end
 
-    self.history << new_history
     self.save!
   end
 
