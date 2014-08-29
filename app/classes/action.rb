@@ -586,7 +586,7 @@ Action.new("harvest_dolait",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
-      if(character.possesses?("dolait_source"))
+      if(character.possesses?("cutter"))
         return ActionOutcome.new(:success_cutter)
       else
         return ActionOutcome.new(:success)
