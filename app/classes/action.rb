@@ -452,8 +452,11 @@ Action.new("clear_land",
       :target => {:possession=>['wildlands', 'dolait_source']},
     },
     :target_prompt => "What would you like to clear?",
-    :base_cost => lambda { |character, target=nil| return 8 },
+    :base_cost => lambda { |character, target=nil| return 12 },
     :cost_modifiers => {
+      :possession => [
+        {:id => 'cutter', :modifier => -4},
+      ],
       :damage => 10,
       :despair => 2,
     },
