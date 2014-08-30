@@ -204,7 +204,7 @@ class Character < ActiveRecord::Base
   end
 
   def earlier_history
-    return history - recent_history
+    return history.slice(0,(history.length-1))
   end
 
   def get
