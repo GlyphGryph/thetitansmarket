@@ -271,8 +271,8 @@ end
 #   :target => true/false
 # }
 # :available => lambda {|character| return true or false} // Whether or not the player can currently do this action
-# :physical_cost_penalty => The maximum amount of ap cost increase for injury
-# :mental_cost_penalty => The maximum amount of ap cost increase for sadness
+# :physical_cost_penalty => The maximum amount of vigor cost increase for injury
+# :mental_cost_penalty => The maximum amount of vigor cost increase for sadness
 # :valid_targets => {'type_name' => ['id', 'id']} // Types are possessions, knowledges, ideas, conditions, characters. 'all' can be used in place of an id to indicate that every object of that type is a valid target. Knowledges are specifically known knowledges, and ideas are considered knowledges.
 # }
 
@@ -539,7 +539,7 @@ Action.new("play_with_toy",
     :result => lambda { |character, target|
       # Success
       if(Random.new.rand(1..100) < 75)
-        character.change_happy(1)
+        character.change_resolve(1)
         toy = character.character_possessions.where(:possession_id => "simple_toy").first
         if(Random.new.rand(1..100) < 25)
           toy.destroy!

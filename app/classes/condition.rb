@@ -30,7 +30,7 @@ Condition.new("hunger",
         return "You gobble up a unit of food."
       else 
         character.change_health(-3)
-        character.change_happy(-1)
+        character.change_resolve(-1)
         return "You suffer from starvation."
       end
     },
@@ -41,7 +41,7 @@ Condition.new("weariness",
   { :name=>"Weariness", 
     :description=>"Life keeps on keeping on.", 
     :result => lambda { |character| 
-      character.change_happy(-1)
+      character.change_resolve(-1)
       return "As time passes, your feel a weight settle on your soul."
     },
   }

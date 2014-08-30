@@ -30,10 +30,10 @@ class Character < ActiveRecord::Base
   def default_attributes
     self.max_health ||= 10
     self.health ||= self.max_health
-    self.max_ap ||= 10
-    self.ap ||= self.max_ap
-    self.max_happy ||= 10
-    self.happy ||= self.max_happy
+    self.max_vigor ||= 10
+    self.vigor ||= self.max_vigor
+    self.max_resolve ||= 10
+    self.resolve ||= self.max_resolve
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.history ||= [["You were born from the machine, and thrust into the world."]]
@@ -57,20 +57,20 @@ class Character < ActiveRecord::Base
 
   def execute_action(action, target)
     cost = action.cost(self)
-    if(cost <= self.ap)
+    if(cost <= self.vigor)
       result = action.result(self, target)
       if(result.status != :impossible)
-        self.change_ap(-cost)
+        self.change_vigor(-cost)
       end
       self.recent_history << result.message
     else
-      if(self.ap > 0)
+      if(self.vigor > 0)
         if(target)
-          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.get.type, :target_id => target.id, :stored_ap => self.ap).save!
+          CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.get.type, :target_id => target.id, :stored_vigor => self.vigor).save!
         else
-          CharacterAction.new(:character => self, :action_id => action.id, :stored_ap => self.ap).save!
+          CharacterAction.new(:character => self, :action_id => action.id, :stored_vigor => self.vigor).save!
         end
-        self.change_ap(-self.ap)
+        self.change_vigor(-self.vigor)
       else
         if(target)
           CharacterAction.new(:character => self, :action_id => action.id, :target_type => target.get.type, :target_id => target.id).save!
@@ -86,15 +86,15 @@ class Character < ActiveRecord::Base
     return Action.find(action_id).available?(self)
   end
 
-  def change_happy(value)
-    # Change the happy, up to max or down to zero
-    new_happy = self.happy+value
-    if(new_happy > self.max_happy)
-      new_happy = self.max_happy
+  def change_resolve(value)
+    # Change the resolve, up to max or down to zero
+    new_resolve = self.resolve+value
+    if(new_resolve > self.max_resolve)
+      new_resolve = self.max_resolve
     end
     
     # If our morale falls to or below zero, add nihilism and remove resilience
-    if(!self.has_condition?("nihilism") && new_happy <= 0)
+    if(!self.has_condition?("nihilism") && new_resolve <= 0)
       self.character_conditions.where(:condition_id => 'resilience').destroy_all
       self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'nihilism')
       if(self.has_condition?("pure_grit"))
@@ -103,29 +103,29 @@ class Character < ActiveRecord::Base
     end
 
     # If we were suffering from nihilism, but we've regained morale, remove it and restore resilience
-    if(self.has_condition?("nihilism") && new_happy > 0)
+    if(self.has_condition?("nihilism") && new_resolve > 0)
       self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
       self.character_conditions.where(:condition_id => 'nihilism').destroy_all
     end
 
-    # Only bother saving if the new happy is different
-    if(self.happy != new_happy)
-      self.happy = new_happy
+    # Only bother saving if the new resolve is different
+    if(self.resolve != new_resolve)
+      self.resolve = new_resolve
       self.save!
     end
   end
   
-  def change_ap(value)
-    # Change the ap, up to max or down to zero
-    new_ap = self.ap+value
-    if(new_ap > self.max_ap)
-      new_ap = self.max_ap
-    elsif(new_ap < 0)
-      new_ap = 0
+  def change_vigor(value)
+    # Change the vigor, up to max or down to zero
+    new_vigor = self.vigor+value
+    if(new_vigor > self.max_vigor)
+      new_vigor = self.max_vigor
+    elsif(new_vigor < 0)
+      new_vigor = 0
     end
-    # Only bother saving if the new ap is different
-    if(self.ap != new_ap)
-      self.ap = new_ap
+    # Only bother saving if the new vigor is different
+    if(self.vigor != new_vigor)
+      self.vigor = new_vigor
       self.save!
     end
   end
@@ -134,16 +134,16 @@ class Character < ActiveRecord::Base
     new_health = self.health
     if(self.has_condition?('pure_grit') && value <= 0)
       new_health = 0
-      change_happy(value)
+      change_resolve(value)
     else
-      # Change the ap, up to max or down to zero
+      # Change the vigor, up to max or down to zero
 
       new_health += value
       if(new_health > self.max_health)
         new_health = self.max_health
       elsif(new_health < 1)
         # Minimum health is zero, which triggers PURE GRIT. Further damage is dealt to morale instead.
-        self.change_happy(new_health*2)
+        self.change_resolve(new_health*2)
         new_health = 0
         self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
         if(self.has_condition?('nihilism'))
@@ -155,7 +155,7 @@ class Character < ActiveRecord::Base
         self.character_conditions.where(:condition_id => 'pure_grit').destroy_all
       end
     end
-    # Only bother saving if the new ap is different
+    # Only bother saving if the new vigor is different
     if(self.health != new_health)
       self.health = new_health
       self.save!
@@ -245,12 +245,12 @@ class Character < ActiveRecord::Base
     1.0 - self.health_fraction.to_f
   end
 
-  def happy_fraction
-    return self.happy.to_f / self.max_happy.to_f
+  def resolve_fraction
+    return self.resolve.to_f / self.max_resolve.to_f
   end
 
   def despair_fraction
-    1.0 - self.happy_fraction.to_f
+    1.0 - self.resolve_fraction.to_f
   end
  
   def possesses?(possession_id, quantity=1)
@@ -299,8 +299,8 @@ class Character < ActiveRecord::Base
     self.history << []
     new_history = self.recent_history
 
-    # Restore character's lost ap for their next turn, before conditions potentially reduce it again
-    self.ap = self.max_ap
+    # Restore character's lost vigor for their next turn, before conditions potentially reduce it again
+    self.vigor = self.max_vigor
 
     # Close out any unclosed proposals this character made this turn
     self.recent_proposals.each do |proposal|
@@ -327,24 +327,24 @@ class Character < ActiveRecord::Base
         # Stop processing if there are no more actions or the next action is too expensive
         if(next_up)
           cost_remaining = next_up.get.cost(self)
-          if(next_up.stored_ap)
-            cost_remaining -= next_up.stored_ap
+          if(next_up.stored_vigor)
+            cost_remaining -= next_up.stored_vigor
           end
           # If we have a negative cost somehow, treat it as a free action
           if(cost_remaining < 0)
             cost_remaining = 0
           end
-          if(cost_remaining <= self.ap)
+          if(cost_remaining <= self.vigor)
             action = next_up.get
             result = action.result(self, next_up.target)
             new_history << result.message
             if(result.status != :impossible)
-              self.change_ap(-cost_remaining)
+              self.change_vigor(-cost_remaining)
             end
             next_up.destroy!
           else
-            next_up.stored_ap = self.ap
-            self.change_ap(-self.ap)
+            next_up.stored_vigor = self.vigor
+            self.change_vigor(-self.vigor)
             next_up.save!
             continue_processing = false
           end
@@ -361,10 +361,10 @@ class Character < ActiveRecord::Base
   def godmode
     self.health=1000
     self.max_health=1000
-    self.ap=1000
-    self.max_ap=1000
-    self.happy=1000
-    self.max_happy=1000
+    self.vigor=1000
+    self.max_vigor=1000
+    self.resolve=1000
+    self.max_resolve=1000
     self.save!
   end
 end

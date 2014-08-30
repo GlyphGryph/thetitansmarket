@@ -14,12 +14,12 @@
             <div class="value"><%= @character.health %>/<%= @character.max_health -%></div>
           </div>
           <div class="data-element">
-            <div class="label">Happy</div>
-            <div class="value"><%= @character.happy %>/<%= @character.max_happy -%></div>
+            <div class="label">Resolve</div>
+            <div class="value"><%= @character.resolve %>/<%= @character.max_resolve -%></div>
           </div>
           <div class="data-element">
             <div class="label">Vigor</div>
-            <div class="value"><%= @character.ap %>/<%= @character.max_ap -%></div>
+            <div class="value"><%= @character.vigor %>/<%= @character.max_vigor -%></div>
           </div>
         </div>
       </div>
@@ -113,10 +113,10 @@
       </div>
     </div>
 
-    <div class="info-block  <%= (@queue_cost > @character.max_ap)?'over-cost':''%>" id="action-queue">
+    <div class="info-block  <%= (@queue_cost > @character.max_vigor)?'over-cost':''%>" id="action-queue">
       <div class="info-block-head">
         Actions Queue
-        <div class="queue-cost"><%= @queue_cost %>/<%= @character.max_ap %></div>
+        <div class="queue-cost"><%= @queue_cost %>/<%= @character.max_vigor %></div>
       </div>
       <div class="info-block-body">
         <div class="selections">
@@ -128,14 +128,14 @@
               <% action_cost = character_action.get.cost(@character) %>
               <% running_cost += action_cost %>
               <div class="selection-element ">
-                <span class="<%= (running_cost > @character.max_ap)?'over-cost':''%>">
+                <span class="<%= (running_cost > @character.max_vigor)?'over-cost':''%>">
                   <%= action_cost %> -
                   <%= character_action.get.name %> 
                   <% if character_action.get.requires_target? %>
                     (<%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." %>)
                   <% end %>
-                  <% if character_action.stored_ap %>
-                    (Partially completed: <%= character_action.stored_ap %>ap spent)
+                  <% if character_action.stored_vigor %>
+                    (Partially completed: <%= character_action.stored_vigor %>vigor spent)
                   <% end %>
                   <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>

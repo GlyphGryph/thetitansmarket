@@ -81,8 +81,8 @@ class CharactersController < ApplicationController
 
   def remove_action
     character_action = CharacterAction.find(params[:character_action_id])
-    if(character_action.stored_ap)
-      @character.change_ap(character_action.stored_ap)
+    if(character_action.stored_vigor)
+      @character.change_vigor(character_action.stored_vigor)
     end
     character_action.destroy
     respond_to do |format|

@@ -22,9 +22,9 @@ class Activity
   def result(character, target)
     # If one of the players can't play the cost, skip this and return false with an appropriate message
     # Otherwise execute the proposal assign an appropriate success message
-    if(@offer_cost <= character.ap && @accept_cost <= target.ap)
-      character.change_ap(-@offer_cost)
-      target.change_ap(-@accept_cost)
+    if(@offer_cost <= character.vigor && @accept_cost <= target.vigor)
+      character.change_vigor(-@offer_cost)
+      target.change_vigor(-@accept_cost)
       if(@result.call(character, target))
         character.recent_history  << @messages[:success].call([target.name])
         character.save!
@@ -34,11 +34,11 @@ class Activity
       end
     end
     message = "Attempted to #{self.name}."
-    if(@offer_cost > character.ap)
-      message += " #{character.name} did not have enough ap to complete the action."
+    if(@offer_cost > character.vigor)
+      message += " #{character.name} did not have enough vigor to complete the action."
     end
-    if(@accept_cost > target.ap)
-      message += " #{target.name} did not have enough ap to complete the action. "
+    if(@accept_cost > target.vigor)
+      message += " #{target.name} did not have enough vigor to complete the action. "
     end
     character.recent_history  << message
     character.save!
@@ -60,11 +60,11 @@ end
 
 Activity.new("play",
   { :name=>"Play", 
-    :description=>"Play around with another character, increasing your happiness a bit. Costs 2 ap, grants 1 happy.", 
+    :description=>"Play around with another character, increasing your happiness a bit. Costs 2 vigor, grants 1 resolve.", 
     :result => lambda { |character, target|
-      character.change_happy(1)
+      character.change_resolve(1)
       character.save!
-      target.change_happy(1)
+      target.change_resolve(1)
       target.save!
       return true
     },
