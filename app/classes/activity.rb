@@ -80,3 +80,27 @@ Activity.new("play",
     },
   }
 )
+
+
+Activity.new("teach",
+  { :name=>"Teach", 
+    :description=>"Teach another person a piece of knowledge you know, for six vigor.", 
+    :result => lambda { |character, target|
+      character.change_resolve(1)
+      character.save!
+      target.change_resolve(1)
+      target.save!
+      return true
+    },
+    :messages => {
+      :success => lambda { |args| "You play with #{args[0]} for a while, and the world doesn't seem to rest nearly so heavily on your shoulders for a while." },
+    },
+    :cost => {
+      :accept => 2,
+      :offer => 2,
+    },
+    :available => lambda { |character|
+      return character.knows?("play")
+    },
+  }
+)

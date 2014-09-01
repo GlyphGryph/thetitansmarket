@@ -1,5 +1,7 @@
 class CharacterKnowledge < ActiveRecord::Base
   belongs_to :character
+  has_many :trade_asked_character_knowledges
+  has_many :trade_offered_character_knowledges
   validates_presence_of :character_id
   validates_presence_of :knowledge_id
 

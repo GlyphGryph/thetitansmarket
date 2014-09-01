@@ -1,5 +1,7 @@
 class CharacterPossession < ActiveRecord::Base
   belongs_to :character
+  has_many :trade_asked_character_possessions
+  has_many :trade_offered_character_possessions
   validates_presence_of :character_id
   validates_presence_of :possession_id
   attr_accessor :type, :contains
