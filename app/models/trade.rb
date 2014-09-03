@@ -8,8 +8,6 @@ class Trade < ActiveRecord::Base
 
   has_many :trade_asked_character_knowledges, :dependent => :destroy
   has_many :trade_offered_character_knowledges, :dependent => :destroy
-  has_many :asked_character_knowledges, :through => :trade_asked_character_knowledges, :source => :character_knowledge
-  has_many :offered_character_knowledges, :through => :trade_offered_character_knowledges, :source => :character_knowledge
 
   has_one :sender, :through => :proposal, :class_name => "Character"
   has_one :receiver, :through => :proposal, :class_name => "Character"

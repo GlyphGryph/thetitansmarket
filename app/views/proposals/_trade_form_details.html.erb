@@ -5,8 +5,22 @@
   <% else %>
     <% @sender_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('offered_ids[]', possession.id) %>
+        <%= check_box_tag('offered_possession_ids[]', possession.id) %>
         <%= label_tag(possession.id, possession.get.name) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+<div>
+  <h4>My Knowledge</h4>
+  <% if @sender_knowledges.empty? %>
+    You have nothing to teach.
+  <% else %>
+    <% @sender_knowledges.each do |knowledge| %>
+      <div>
+        <%= check_box_tag('offered_knowledge_ids[]', knowledge.id) %>
+        <%= label_tag(knowledge.id, knowledge.get.name) %>
       </div>
     <% end %>
   <% end %>
@@ -19,7 +33,7 @@
   <% else %>
     <% @receiver_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('asked_ids[]', possession.id) %>
+        <%= check_box_tag('asked_possession_ids[]', possession.id) %>
         <%= label_tag(possession.id, possession.get.name) %>
       </div>
     <% end %>

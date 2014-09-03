@@ -46,7 +46,9 @@ class ProposalsController < ApplicationController
     @target = Character.find(params[:target_id])
     if(@proposal_type == 'Trade')
       @sender_possessions = @character.character_possessions
+      @sender_knowledges = @character.character_knowledges
       @receiver_possessions = @target.character_possessions
+      @receiver_knowledges = @target.character_knowledges
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
     elsif(@proposal_type == 'Message')
@@ -63,12 +65,20 @@ class ProposalsController < ApplicationController
     success = false
     if(proposal_type == 'Trade')
       error += " Was a Trade."
-      asked_ids = params[:asked_ids] || []
-      offered_ids = params[:offered_ids] || []
-      if(!asked_ids.empty? || !offered_ids.empty?)
+      asked_possession_ids = params[:asked_possession_ids] || []
+      offered_possession_ids = params[:offered_possession_ids] || []
+      asked_knowledge_ids = params[:asked_knowledge_ids] || []
+      offered_knowledge_ids = params[:offered_knowledge_ids] || []
+      if(!asked_possession_ids.empty? || !offered_possession_ids.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
         trade = Trade.new()
-        trade.asked_character_possessions = CharacterPossession.find(asked_ids)
-        trade.offered_character_possessions = CharacterPossession.find(offered_ids)
+        trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
+        trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
+        asked_knowledge_ids.each do |character_knowledge_id|
+          TradeAskedCharacterKnowledge.new(:trade => trade, :character_knowledge => CharacterKnowledge.find(character_knowledge_id), :duration => 1).save!
+        end
+        offered_knowledge_ids.each do |character_knowledge_id|
+          TradeOfferedCharacterKnowledge.new(:trade => trade, :character_knowledge => CharacterKnowledge.find(character_knowledge_id), :duration => 1).save!
+        end
         trade.save!
         proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)
         success = proposal.save
@@ -142,9 +152,13 @@ class ProposalsController < ApplicationController
         @proposal.mark_read_for(@character)
         @character_gets = @proposal.content.offered_character_possessions
         @character_loses = @proposal.content.asked_character_possessions
+        @character_learns = @proposal.content.trade_offered_character_knowledges
+        @character_teaches = @proposal.content.trade_asked_character_knowledges
       elsif(@proposal.sender  == @character)
         @character_loses = @proposal.content.offered_character_possessions
         @character_gets = @proposal.content.asked_character_possessions
+        @character_teaches = @proposal.content.trade_offered_character_knowledges
+        @character_learns = @proposal.content.trade_asked_character_knowledges
       else
         raise "This character is not involved with this proposal."
       end
