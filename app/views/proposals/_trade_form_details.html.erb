@@ -39,3 +39,19 @@
     <% end %>
   <% end %>
 </div>
+
+<div>
+  <h4><%= @target.name %>'s Knowledge</h4>
+  <% if @receiver_knowledges.empty? %>
+    You have nothing to teach.
+  <% else %>
+    <% @receiver_knowledges.each do |knowledge| %>
+      <div>
+        <%= check_box_tag('asked_knowledge_ids[]', knowledge.id) %>
+        <%= label_tag(knowledge.id, knowledge.get.name) %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+
+
