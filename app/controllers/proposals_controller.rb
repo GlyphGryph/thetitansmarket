@@ -46,9 +46,9 @@ class ProposalsController < ApplicationController
     @target = Character.find(params[:target_id])
     if(@proposal_type == 'Trade')
       @sender_possessions = @character.character_possessions
-      @sender_knowledges = @character.character_knowledges
+      @sender_knowledges = @character.character_knowledges.map(&:get)
       @receiver_possessions = @target.character_possessions
-      @receiver_knowledges = @target.character_knowledges
+      @receiver_knowledges = @target.character_knowledges.map(&:get)
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
     elsif(@proposal_type == 'Message')
@@ -73,11 +73,11 @@ class ProposalsController < ApplicationController
         trade = Trade.new()
         trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
         trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
-        asked_knowledge_ids.each do |character_knowledge_id|
-          TradeAskedCharacterKnowledge.new(:trade => trade, :character_knowledge => CharacterKnowledge.find(character_knowledge_id), :duration => 1).save!
+        asked_knowledge_ids.each do |knowledge_id|
+          TradeAskedCharacterKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
         end
-        offered_knowledge_ids.each do |character_knowledge_id|
-          TradeOfferedCharacterKnowledge.new(:trade => trade, :character_knowledge => CharacterKnowledge.find(character_knowledge_id), :duration => 1).save!
+        offered_knowledge_ids.each do |knowledge_id|
+          TradeOfferedCharacterKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
         end
         trade.save!
         proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)

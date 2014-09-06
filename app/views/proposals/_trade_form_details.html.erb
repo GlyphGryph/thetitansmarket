@@ -20,7 +20,7 @@
     <% @sender_knowledges.each do |knowledge| %>
       <div>
         <%= check_box_tag('offered_knowledge_ids[]', knowledge.id) %>
-        <%= label_tag(knowledge.id, knowledge.get.name) %>
+        <%= label_tag(knowledge.id, knowledge.name) %>
       </div>
     <% end %>
   <% end %>
@@ -48,7 +48,7 @@
     <% @receiver_knowledges.each do |knowledge| %>
       <div>
         <%= check_box_tag('asked_knowledge_ids[]', knowledge.id) %>
-        <%= label_tag(knowledge.id, knowledge.get.name) %>
+        <%= label_tag(knowledge.id, knowledge.name) %>
       </div>
     <% end %>
   <% end %>

@@ -19,7 +19,7 @@
   <div class="info-block-head">You teach:</div>
   <div class="info-block-body">
     <% @character_teaches.each do |trade_knowledge| %>
-      <div><%= trade_knowledge.character_knowledge.get.name %> x<%=trade_knowledge.duration%></div>
+      <div><%= trade_knowledge.get.name %> x<%=trade_knowledge.duration%></div>
     <% end %>
   </div>
 </div>
@@ -27,7 +27,7 @@
   <div class="info-block-head">You learn:</div>
   <div class="info-block-body">
     <% @character_learns.each do |trade_knowledge| %>
-      <div><%= trade_knowledge.character_knowledge.get.name %> x<%=trade_knowledge.duration%></div>
+      <div><%= trade_knowledge.get.name %> x<%=trade_knowledge.duration%></div>
     <% end %>
   </div>
 </div>
