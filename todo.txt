@@ -1,22 +1,37 @@
 Immediate goals:
-Add teaching/learning proposals in exchange for goods.
+Knowledge Expansion:
+  Only display valid knowledges to teach/learn.
+  Rename the TradeOffered and TradeAsked Character Knowledges tables/models to remove the word "Character"
+  Add a "progress" and "max_progress" attribute to character knowledges.
+  "considers" returns true only when progress is not nil, and "knows" returns true when progress equals max
+  The duration of teaching is the difference between progress and max progress for the learning character.
+  Display this amount.
+  Modify the cost of investigation to be the progress remaining to learn a skill. Reduce the "normal" cost of investigation to zero.
+  Display the cost on the investigation target select page.
+  Remove the cost display for 'free' tasks with no inherent cost (eating, investigation).
+  Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. 
+  Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.
 
-Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
-Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
-Add an "execution" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
-Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
-Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
-Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
+Items Expansion:
+  Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
+  Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
+  Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
 
-Allow creation of traits
-Allow players to add additional gestures/texts
-Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
-Might want to handle building a message out over several pages, thinking about it...
+Hunger Expansion:
+  Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
+  Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
+  Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
+
+Traits
+  Allow creation of traits
+
+Content Expansion: Communication
+  Allow players to add additional gestures/texts
+  Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
+  Allow building of message chains composed of multiple gestures and texts.
 
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
-Some action costs should be based on what their target is (example: Investigation)
-Improvements to the crafting system. Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. Make the investigations not guaranteed to succeed, add failure messages and handling of failure messages for failed investigations.
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
 Add teaching proposal!
 Investigate's cost is based on the idea to be investigated.
