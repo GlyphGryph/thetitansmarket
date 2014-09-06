@@ -21,7 +21,7 @@ class Trade < ActiveRecord::Base
     asked_possessions = self.asked_character_possessions
     offered_possessions = self.offered_character_possessions
     asked_knowledges = self.trade_asked_character_knowledges
-    offered_knowledgess = self.trade_offered_character_knowledges
+    offered_knowledges = self.trade_offered_character_knowledges
     sender_message = ["You traded with #{receiver.name}."]
     receiver_message = ["You traded with #{sender.name}."]
     success = true
@@ -30,7 +30,6 @@ class Trade < ActiveRecord::Base
       ActiveRecord::Base.transaction do
         sender = proposal.sender
         receiver = proposal.receiver
-
         asked_possessions.each do |character_possession|
           # Make sure this is still owned by the right person
           if(character_possession && character_possession.character == receiver)
@@ -46,7 +45,6 @@ class Trade < ActiveRecord::Base
           end
         end
         asked_knowledges.each do |trade_knowledge|
-          logger.error "\n\nKnowledge asked"
           # Make sure this is still owned by the right person
           if(trade_knowledge.character_knowledge.nil? || trade_knowledge.character_knowledge.character != receiver)
             sender_message << "You failed to trade with #{receiver.name}. #{receiver.name} does not have the knowledge you seek."
@@ -55,17 +53,22 @@ class Trade < ActiveRecord::Base
           end
 
           # Make sure both participants have enough vigor to spend teaching/learning the knowledg
-          if(receiver.vigor >= trade_knowledge.duration && sender.vigor >= trade_knowledge)
-            sender_message << "You failed to trade with #{receiver.name}. One of you did not have the required vigor to participate in the lessons."
-            receiver_message << "You failed to trade with #{sender.name}. One of you did not have the required vigor to participate in the lessons."
+          if(receiver.vigor < trade_knowledge.duration)
+            sender_message << "You failed to trade with #{receiver.name}. #{receiver.name} needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            receiver_message << "You failed to trade with #{sender.name}. You needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            raise "Character does not have vigor."
+          end
+          if(sender.vigor < trade_knowledge.duration)
+            sender_message << "You failed to trade with #{receiver.name}. You needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            receiver_message << "You failed to trade with #{sender.name}. #{sender.name} needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
             raise "Character does not have vigor."
           end
 
           knowledge_id = trade_knowledge.character_knowledge.knowledge_id
           # Make sure the target can learn the knowledge
-          if(!sender.knows?(knowledge_id))
-            sender_message << "You failed to trade with #{receiver.name}. You already know one of the requested knowledges."
-            receiver_message << "You failed to trade with #{sender.name}. #{sender.name} already knows one of the requested knowledges."
+          if(sender.knows?(knowledge_id))
+            sender_message << "You failed to trade with #{receiver.name}. You already know #{Knowledge.find(knowledge_id).name}."
+            receiver_message << "You failed to trade with #{sender.name}. #{sender.name} already knows #{Knowledge.find(knowledge_id).name}."
             raise "Character already knows."
           end
           sender.learn(knowledge_id)
@@ -87,7 +90,6 @@ class Trade < ActiveRecord::Base
           end
         end
         offered_knowledges.each do |trade_knowledge|
-          logger.error "\n\nKnowledge offered"
           # Make sure this is still owned by the right person
           if(trade_knowledge.character_knowledge.nil? || trade_knowledge.character_knowledge.character != sender)
             sender_message << "You failed to trade with #{receiver.name}. You do not know how to teach the lesson you offered."
@@ -96,17 +98,22 @@ class Trade < ActiveRecord::Base
           end
 
           # Make sure both participants have enough vigor to spend teaching/learning the knowledg
-          if(receiver.vigor >= trade_knowledge.duration && sender.vigor >= trade_knowledge)
-            sender_message << "You failed to trade with #{receiver.name}. One of you did not have the required vigor to participate in the lessons."
-            receiver_message << "You failed to trade with #{sender.name}. One of you did not have the required vigor to participate in the lessons."
+          if(receiver.vigor < trade_knowledge.duration)
+            sender_message << "You failed to trade with #{receiver.name}. #{receiver.name} needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            receiver_message << "You failed to trade with #{sender.name}. You needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            raise "Character does not have vigor."
+          end
+          if(sender.vigor < trade_knowledge.duration)
+            sender_message << "You failed to trade with #{receiver.name}. You needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
+            receiver_message << "You failed to trade with #{sender.name}. #{sender.name} needed #{trade_knowledge.duration} vigor to participate in one of the lessons, but only had #{receiver.vigor}."
             raise "Character does not have vigor."
           end
 
           knowledge_id = trade_knowledge.character_knowledge.knowledge_id
           # Make sure the target can learn the knowledge
-          if(!receiver.knows?(knowledge_id))
-            sender_message << "You failed to trade with #{receiver.name}.  #{receiver.name} already knows one of the offered knowledges."
-            receiver_message << "You failed to trade with #{sender.name}. You already know one of the offered knowledges."
+          if(receiver.knows?(knowledge_id))
+            sender_message << "You failed to trade with #{receiver.name}.  #{receiver.name} already knows #{Knowledge.find(knowledge_id).name}."
+            receiver_message << "You failed to trade with #{sender.name}. You already know #{Knowledge.find(knowledge_id).name}."
             raise "Character already knows."
           end
 
@@ -115,7 +122,7 @@ class Trade < ActiveRecord::Base
           receiver_message << "You taught #{trade_knowledge.character_knowledge.get.name}."
         end
       end
-    rescue
+    rescue => e      
       success = false
     end
     sender.recent_history << sender_message.join(" ")

@@ -6,7 +6,6 @@ class CharactersController < ApplicationController
   def overview
     @world = @character.world
     # If this character has no world, it is a ghost, and can't be shown the normal overview page
-    logger.error "\n\ng\n\n"+@world.inspect
     if(@world.nil?)
       redirect_to :action => :show
     else
