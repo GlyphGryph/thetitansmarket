@@ -29,7 +29,7 @@
 <div>
   <h4>Request</h4>
   <% if @receiver_possessions.empty? %>
-    He has nothing to request.
+    They have nothing to request.
   <% else %>
     <% @receiver_possessions.each do |possession| %>
       <div>
@@ -43,7 +43,7 @@
 <div>
   <h4>Learn</h4>
   <% if @receiver_teachables.empty? %>
-    You have nothing to teach.
+    You have nothing to learn.
   <% else %>
     <% @receiver_teachables.each do |knowledge| %>
       <div>
