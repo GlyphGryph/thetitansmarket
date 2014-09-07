@@ -1,5 +1,5 @@
 <div>
-  <h4>My Items</h4>
+  <h4>Offer</h4>
   <% if @sender_possessions.empty? %>
     You have nothing to offer.
   <% else %>
@@ -13,11 +13,11 @@
 </div>
 
 <div>
-  <h4>My Knowledge</h4>
-  <% if @sender_knowledges.empty? %>
+  <h4>Teach</h4>
+  <% if @sender_teachables.empty? %>
     You have nothing to teach.
   <% else %>
-    <% @sender_knowledges.each do |knowledge| %>
+    <% @sender_teachables.each do |knowledge| %>
       <div>
         <%= check_box_tag('offered_knowledge_ids[]', knowledge.id) %>
         <%= label_tag(knowledge.id, knowledge.name) %>
@@ -27,7 +27,7 @@
 </div>
 
 <div>
-  <h4><%= @target.name %>'s Items</h4>
+  <h4>Request</h4>
   <% if @receiver_possessions.empty? %>
     He has nothing to request.
   <% else %>
@@ -41,11 +41,11 @@
 </div>
 
 <div>
-  <h4><%= @target.name %>'s Knowledge</h4>
-  <% if @receiver_knowledges.empty? %>
+  <h4>Learn</h4>
+  <% if @receiver_teachables.empty? %>
     You have nothing to teach.
   <% else %>
-    <% @receiver_knowledges.each do |knowledge| %>
+    <% @receiver_teachables.each do |knowledge| %>
       <div>
         <%= check_box_tag('asked_knowledge_ids[]', knowledge.id) %>
         <%= label_tag(knowledge.id, knowledge.name) %>

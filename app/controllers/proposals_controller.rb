@@ -46,9 +46,13 @@ class ProposalsController < ApplicationController
     @target = Character.find(params[:target_id])
     if(@proposal_type == 'Trade')
       @sender_possessions = @character.character_possessions
-      @sender_knowledges = @character.character_knowledges.map(&:get)
       @receiver_possessions = @target.character_possessions
-      @receiver_knowledges = @target.character_knowledges.map(&:get)
+      
+      # Remove already known knowledge from the teachables lists
+      sender_knowledges = @character.character_knowledges.map(&:get)
+      receiver_knowledges = @target.character_knowledges.map(&:get)
+      @sender_teachables = sender_knowledges - receiver_knowledges
+      @receiver_teachables = receiver_knowledges - sender_knowledges
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
     elsif(@proposal_type == 'Message')
