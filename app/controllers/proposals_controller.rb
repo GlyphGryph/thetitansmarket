@@ -78,10 +78,10 @@ class ProposalsController < ApplicationController
         trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
         trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
         asked_knowledge_ids.each do |knowledge_id|
-          TradeAskedCharacterKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
+          TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
         end
         offered_knowledge_ids.each do |knowledge_id|
-          TradeOfferedCharacterKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
+          TradeOfferedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
         end
         trade.save!
         proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)
@@ -156,13 +156,13 @@ class ProposalsController < ApplicationController
         @proposal.mark_read_for(@character)
         @character_gets = @proposal.content.offered_character_possessions
         @character_loses = @proposal.content.asked_character_possessions
-        @character_learns = @proposal.content.trade_offered_character_knowledges
-        @character_teaches = @proposal.content.trade_asked_character_knowledges
+        @character_learns = @proposal.content.trade_offered_knowledges
+        @character_teaches = @proposal.content.trade_asked_knowledges
       elsif(@proposal.sender  == @character)
         @character_loses = @proposal.content.offered_character_possessions
         @character_gets = @proposal.content.asked_character_possessions
-        @character_teaches = @proposal.content.trade_offered_character_knowledges
-        @character_learns = @proposal.content.trade_asked_character_knowledges
+        @character_teaches = @proposal.content.trade_offered_knowledges
+        @character_learns = @proposal.content.trade_asked_knowledges
       else
         raise "This character is not involved with this proposal."
       end

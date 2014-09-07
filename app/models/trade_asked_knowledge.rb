@@ -1,4 +1,4 @@
-class TradeOfferedCharacterKnowledge < ActiveRecord::Base
+class TradeAskedKnowledge < ActiveRecord::Base
   belongs_to :trade
   validates_presence_of :duration
 

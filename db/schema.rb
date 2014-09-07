@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140906172649) do
+ActiveRecord::Schema.define(version: 20140907033223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,12 +91,6 @@ ActiveRecord::Schema.define(version: 20140906172649) do
     t.boolean  "viewed_by_sender"
   end
 
-  create_table "trade_asked_character_knowledges", force: true do |t|
-    t.integer "trade_id"
-    t.integer "duration"
-    t.string  "knowledge_id"
-  end
-
   create_table "trade_asked_character_possessions", force: true do |t|
     t.integer  "trade_id"
     t.integer  "character_possession_id"
@@ -104,7 +98,7 @@ ActiveRecord::Schema.define(version: 20140906172649) do
     t.datetime "updated_at"
   end
 
-  create_table "trade_offered_character_knowledges", force: true do |t|
+  create_table "trade_asked_knowledges", force: true do |t|
     t.integer "trade_id"
     t.integer "duration"
     t.string  "knowledge_id"
@@ -115,6 +109,12 @@ ActiveRecord::Schema.define(version: 20140906172649) do
     t.integer  "character_possession_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "trade_offered_knowledges", force: true do |t|
+    t.integer "trade_id"
+    t.integer "duration"
+    t.string  "knowledge_id"
   end
 
   create_table "trades", force: true do |t|

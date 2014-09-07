@@ -1,7 +1,5 @@
 Immediate goals:
 Knowledge Expansion:
-  Only display valid knowledges to teach/learn.
-  Rename the TradeOffered and TradeAsked Character Knowledges tables/models to remove the word "Character"
   Add a "progress" and "max_progress" attribute to character knowledges.
   "considers" returns true only when progress is not nil, and "knows" returns true when progress equals max
   The duration of teaching is the difference between progress and max progress for the learning character.

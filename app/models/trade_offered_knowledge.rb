@@ -1,4 +1,4 @@
-class TradeAskedCharacterKnowledge < ActiveRecord::Base
+class TradeOfferedKnowledge < ActiveRecord::Base
   belongs_to :trade
   validates_presence_of :duration
 
@@ -9,5 +9,4 @@ class TradeAskedCharacterKnowledge < ActiveRecord::Base
     end
     return element
   end
-
 end

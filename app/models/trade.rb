@@ -6,8 +6,8 @@ class Trade < ActiveRecord::Base
   has_many :asked_character_possessions, :through => :trade_asked_character_possessions, :source => :character_possession
   has_many :offered_character_possessions, :through => :trade_offered_character_possessions, :source => :character_possession
 
-  has_many :trade_asked_character_knowledges, :dependent => :destroy
-  has_many :trade_offered_character_knowledges, :dependent => :destroy
+  has_many :trade_asked_knowledges, :dependent => :destroy
+  has_many :trade_offered_knowledges, :dependent => :destroy
 
   has_one :sender, :through => :proposal, :class_name => "Character"
   has_one :receiver, :through => :proposal, :class_name => "Character"
@@ -20,8 +20,8 @@ class Trade < ActiveRecord::Base
     # The possessions offered are the ones we gain, the proffessions asked are the ones we lose
     asked_possessions = self.asked_character_possessions
     offered_possessions = self.offered_character_possessions
-    asked_knowledges = self.trade_asked_character_knowledges
-    offered_knowledges = self.trade_offered_character_knowledges
+    asked_knowledges = self.trade_asked_knowledges
+    offered_knowledges = self.trade_offered_knowledges
     sender_message = ["You traded with #{receiver.name}."]
     receiver_message = ["You traded with #{sender.name}."]
     errors = []
