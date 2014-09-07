@@ -410,10 +410,10 @@ Action.new("investigate",
       :target => {:idea=>['all']},
     },
     :target_prompt => "What would you like to investigate?",
-    :base_cost => lambda { |character, target=nil| return 8 },
+    :base_cost => lambda { |character, target=nil| return 1 },
     :cost_modifiers => {
-      :damage => 4,
-      :despair => 4,
+      :damage => 1,
+      :despair => 1,
     },
   }
 )

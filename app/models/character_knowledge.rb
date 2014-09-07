@@ -11,9 +11,17 @@ class CharacterKnowledge < ActiveRecord::Base
     return element
   end
 
-  def learn
-    self.known = true
-    self.get.learn_result(self.character, self)
+  def learn(amount=1)
+    unless(known?)
+      self.progress+=amount
+      if(known?)
+        self.get.learn_result(self.character, self)
+      end
+    end
     self.save!
+  end
+
+  def known?
+    return self.progress >= self.get.components
   end
 end

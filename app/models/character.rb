@@ -43,9 +43,9 @@ class Character < ActiveRecord::Base
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
     self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'weariness')
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :known => true)
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :known => true)
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :known => true)
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :progress => Knowledge.find('cognition').components)
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :progress => Knowledge.find('play').components)
+    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :progress => Knowledge.find('gestures').components)
   end
   
   # Checks whether or not this character can add this action
@@ -164,7 +164,7 @@ class Character < ActiveRecord::Base
 
   def consider(knowledge_id)
     unless(considers?(knowledge_id) || knows?(knowledge_id))
-      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :known => false)
+      self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :progress => 0)
     end
   end
 
@@ -216,7 +216,8 @@ class Character < ActiveRecord::Base
   end
 
   def ideas
-    character_knowledges.where(:known=>false)
+    ids = character_knowledges.select{|knowledge| !knowledge.known?}.map(&:id)
+    CharacterKnowledge.where(:id => ids)
   end
 
   def knows?(knowledge_id)
@@ -224,7 +225,8 @@ class Character < ActiveRecord::Base
   end
 
   def knowledges
-    character_knowledges.where(:known=>true)
+    ids = character_knowledges.select{|knowledge| knowledge.known?}.map(&:id)
+    CharacterKnowledge.where(:id => ids)
   end
 
   def learn(knowledge_id)

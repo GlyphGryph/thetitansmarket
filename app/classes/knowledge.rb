@@ -1,12 +1,13 @@
 class Knowledge
   extend CollectionTracker
-  attr_reader :id, :name, :description
+  attr_reader :id, :name, :description, :components
 
   def initialize(id, params={})
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
     @learn_result = params[:learn_result] || lambda {|character, character_action| return true}
+    @components = params[:components] || 1
     self.class.add(@id, self)
   end
 
@@ -40,6 +41,7 @@ Knowledge.new("gestures",
 Knowledge.new("language", 
   { :name=>"Language", 
     :description=>"You can engage in basic communication with others.", 
+    :components => 5,
   }
 )
 Knowledge.new("basic_farming", 
