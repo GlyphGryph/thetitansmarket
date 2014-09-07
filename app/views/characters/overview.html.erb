@@ -60,7 +60,7 @@
         <% else %>
           <% @knowledges.each do |knowledge| %>
             <div class="knowledge-element element">
-              <div class="label"><%= knowledge.name %></div>
+              <div class="label"><%= knowledge.get.name %></div>
             </div>
           <% end %>
         <% end %>
@@ -75,7 +75,8 @@
         <% else %>
           <% @ideas.each do |idea| %>
             <div class="idea-element element">
-              <div class="label"><%= idea.name %></div>
+              <span class="label"><%= idea.get.name %></span>
+              <span class="progress">(Progress: <%= idea.progress %>/<%= idea.max_progress %>)</span>
             </div>
           <% end %>
         <% end %>

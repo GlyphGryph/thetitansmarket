@@ -22,6 +22,10 @@ class CharacterKnowledge < ActiveRecord::Base
   end
 
   def known?
-    return self.progress >= self.get.components
+    return self.progress >= self.max_progress
+  end
+
+  def max_progress
+    self.get.components
   end
 end

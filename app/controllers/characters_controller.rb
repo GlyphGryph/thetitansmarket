@@ -20,8 +20,8 @@ class CharactersController < ApplicationController
         end
         result
       end
-      @knowledges = @character.knowledges.map(&:get)
-      @ideas = @character.ideas.map(&:get)
+      @knowledges = @character.knowledges
+      @ideas = @character.ideas
       @conditions = @character.character_conditions.map(&:get)
       @history = @character.recent_history
       @queue_cost = @character.cost_of_all_actions

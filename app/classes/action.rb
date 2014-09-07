@@ -391,8 +391,12 @@ Action.new("investigate",
         if(character.knows?(target.id))
           return ActionOutcome.new(:already_investigated, target.name)
         else
-          character.learn(target.id)
-          thought_research = Thought.find(target.id).research
+          character.learn(target.id, 1)
+          if(character.knows?(target.id))
+            thought_research = Thought.find(target.id).research
+          else
+            thought_research = "There is still more to discover, however!"
+          end
           return ActionOutcome.new(:success, target.name, thought_research)
         end
       else

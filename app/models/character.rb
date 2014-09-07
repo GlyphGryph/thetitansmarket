@@ -229,13 +229,13 @@ class Character < ActiveRecord::Base
     CharacterKnowledge.where(:id => ids)
   end
 
-  def learn(knowledge_id)
+  def learn(knowledge_id, amount=1)
     if(considers?(knowledge_id))
-      self.ideas.where(:knowledge_id => knowledge_id).first.learn
+      self.ideas.where(:knowledge_id => knowledge_id).first.learn(amount)
     elsif(!knows?(knowledge_id))
-      new_knowledge = CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id)
+      new_knowledge = CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :progress => 0)
       self.character_knowledges << new_knowledge
-      new_knowledge.learn
+      new_knowledge.learn(amount)
     end
   end
 
