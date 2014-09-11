@@ -1,7 +1,5 @@
 Immediate goals:
 Knowledge Expansion:
-  Add a "progress" and "max_progress" attribute to character knowledges.
-  "considers" returns true only when progress is not nil, and "knows" returns true when progress equals max
   The duration of teaching is the difference between progress and max progress for the learning character.
   Display this amount.
   Modify the cost of investigation to be the progress remaining to learn a skill. Reduce the "normal" cost of investigation to zero.
