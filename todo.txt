@@ -34,14 +34,25 @@ Add teaching proposal!
 Investigate's cost is based on the idea to be investigated.
 Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
 Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
+Change the queue to only spend at *end* of turn until down to zero, instead of at beginning.
+
+PVE/Gamification
+Introduce the "events" system. Events are things that can happen each day. Some events are good - perfect weather might result in a bountiful harvest, for example. Others are bad, like disease or if the group has attracted a pack of wild predators, and may required coordinated effort to overcome.
+
+-Introduce the "predator pack".
+Every cycle change, implement a chance for a "A group of predators has arrived" event to occur, otherwise "Nothing of note happens." When the event occurs, log it.
+This event creates a "world condition", that can be viewed in the world status box, and persists indefinitely. The predators arriving event cannot occur while this condition is active.
+This condition unlocks a new action "fight off predators".
+While active, this condition randomly damages a player for 2 to 6 damage each round.
+This condition also tracks and displays the packs current target, a random player. It has an 80% chance to deal it's damage to the targeted player instead of any other player. If the player is killed, a new target is immediately randomly selected.
+The predator condition is given a duration attribute "predator health", that is reduced when players choose the fight off predators action and by a slight amount each turn, and by a large amount if they successfully kill a player.
+When this attribute reaches zero or lower, the condition ends and the log receives a message that the predators have departed.
 
 --REFACTOR BREAK--
 Actions stuff:
  Improve the "impossible" results and item requirement checking logic, track the actual items that are missing for the building of more effective lack of requirement messages.
  Implement a general lack of requirements message instead of having each action define it's own, though the action should still probably contribute a unique component. This is so we can have a complex "list all items and other things missing and the amounts that were required" sort of thing without complex message logic in the action definition.
 --/REFACTOR BREAK--
-
-
 
 --CONTENT BREAK--
 ???Forage requires wildlands to forage in, target_allowed stuff would need to work first though
