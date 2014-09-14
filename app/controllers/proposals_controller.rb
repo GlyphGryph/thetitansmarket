@@ -49,8 +49,8 @@ class ProposalsController < ApplicationController
       @receiver_possessions = @target.character_possessions
       
       # Remove already known knowledge from the teachables lists
-      sender_knowledges = @character.character_knowledges.map(&:get)
-      receiver_knowledges = @target.character_knowledges.map(&:get)
+      sender_knowledges = @character.knowledges.map(&:get)
+      receiver_knowledges = @target.knowledges.map(&:get)
       @sender_teachables = sender_knowledges - receiver_knowledges
       @receiver_teachables = receiver_knowledges - sender_knowledges
     elsif(@proposal_type == 'Interaction')

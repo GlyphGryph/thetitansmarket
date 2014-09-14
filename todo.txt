@@ -1,6 +1,4 @@
 Immediate goals:
-FIX THE DATA LOADING BUG!
-
 Knowledge Expansion:
   Only teach things a character fully KNOWS, not things they know partially!
   Display this amount.
