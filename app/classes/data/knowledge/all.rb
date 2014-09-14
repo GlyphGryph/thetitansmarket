@@ -77,7 +77,7 @@ Knowledge.new("craft_shaper",
 )
 Knowledge.new("craft_toy",
   { :name =>"Craft Simple Toy",
-    :description=>"Craft a simple toy to stave of weariness."
+    :description=>"Craft a simple toy to stave of weariness.",
     :components => 3,
   }
 )
