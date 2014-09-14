@@ -172,6 +172,15 @@ class Character < ActiveRecord::Base
     return !(self.ideas.where(:knowledge_id => knowledge_id).empty?)
   end
 
+  def knowledge_progress(knowledge_id)
+    found = self.character_knowledges.where(:knowledge_id => knowledge_id)
+    if(found.empty?)
+      return 0
+    else
+      return found.progress
+    end
+  end
+
   # Returns the total cost of all actions in this character's action queue
   def cost_of_all_actions
     cost = 0

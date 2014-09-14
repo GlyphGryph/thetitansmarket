@@ -19,8 +19,9 @@
   <% else %>
     <% @sender_teachables.each do |knowledge| %>
       <div>
-        <%= number_field_tag("asked_knowledge_ids[#{knowledge.id}]duration", nil, :step => 1, :min => 0, :max => 10) %>
-        <%= label_tag(knowledge.id, knowledge.name) %>
+        <%= number_field_tag("asked_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
+        <%= label_tag(knowledge[:id], knowledge[:name]) %>
+        (<%= knowledge[:remaining_progress] %> lessons remain)
       </div>
     <% end %>
   <% end %>
@@ -47,8 +48,9 @@
   <% else %>
     <% @receiver_teachables.each do |knowledge| %>
       <div>
-        <%= number_field_tag("asked_knowledge_ids[#{knowledge.id}]duration", :min => 0, :max => 10) %>
-        <%= label_tag(knowledge.id, knowledge.name) %>
+        <%= number_field_tag("asked_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
+        <%= label_tag(knowledge[:id], knowledge[:name]) %>
+        (<%= knowledge[:remaining_progress] %> lessons remain)
       </div>
     <% end %>
   <% end %>

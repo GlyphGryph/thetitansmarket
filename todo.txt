@@ -1,9 +1,6 @@
 Immediate goals:
 Knowledge Expansion:
-  Only teach things a character fully KNOWS, not things they know partially!
-  Display this amount.
-  Display the cost on the investigation target select page.
-  Add the ability to specify an amount of learning to be done in both cases.
+  Fix trading knowledge not appearing to reduce vigor for the teacher
   Remove the cost display for 'free' tasks with no inherent cost (eating, investigation).
   Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. 
   Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.

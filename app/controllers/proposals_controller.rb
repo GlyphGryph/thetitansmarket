@@ -53,6 +53,19 @@ class ProposalsController < ApplicationController
       receiver_knowledges = @target.knowledges.map(&:get)
       @sender_teachables = sender_knowledges - receiver_knowledges
       @receiver_teachables = receiver_knowledges - sender_knowledges
+      # Add information on remaining lessons required
+      @sender_teachables.map! do |knowledge|
+        attributes = {:id => knowledge.id, :name => knowledge.name}
+        attributes[:progress] = @target.knowledge_progress(knowledge.id)
+        attributes[:remaining_progress] = knowledge.components - attributes[:progress]
+        attributes
+      end
+      @receiver_teachables.map! do |knowledge|
+        attributes = {:id => knowledge.id, :name => knowledge.name}
+        attributes[:progress] = @character.knowledge_progress(knowledge.id)
+        attributes[:remaining_progress] = knowledge.components - attributes[:progress]
+        attributes
+      end
     elsif(@proposal_type == 'Interaction')
       @activities = Activity.all
     elsif(@proposal_type == 'Message')
