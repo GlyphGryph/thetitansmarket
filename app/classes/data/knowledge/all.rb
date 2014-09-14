@@ -25,21 +25,25 @@ Knowledge.new("language",
 Knowledge.new("basic_farming", 
   { :name=>"Farming", 
     :description=>"You know how to clear, sow, and harvest the fields.", 
+    :components => 6,
   }
 )
 Knowledge.new("basic_dolait", 
   { :name=>"Dolait Harvesting", 
     :description=>"You know how to harvest dolait chunks.", 
+    :components => 2,
   }
 )
 Knowledge.new("basic_tomatunk", 
   { :name=>"Tomatunk Gathering", 
     :description=>"You know how to find tomatunk blocks.", 
+    :components => 2,
   }
 )
 Knowledge.new("basic_wampoon", 
   { :name=>"Wampoon Gathering", 
     :description=>"You know how to find wampoon shards", 
+    :components => 2,
   }
 )
 Knowledge.new("basic_crafting", 
@@ -50,25 +54,30 @@ Knowledge.new("basic_crafting",
       character.consider('craft_cutter')
       character.consider('craft_shaper')
     end,
+    :components => 3,
   }
 )
 Knowledge.new("craft_basket", 
   { :name=>"Craft Basket", 
     :description=>"Craft a basket from dolait.", 
+    :components => 3,
   }
 )
 Knowledge.new("craft_cutter", 
   { :name=>"Craft Simple Cutter", 
     :description=>"Craft a simple cutting tool from tomatunk.", 
+    :components => 3,
   }
 )
 Knowledge.new("craft_shaper", 
   { :name=>"Craft Simple Shaper", 
-    :description=>"Craft a simple shaping tool from dolait and tomatunk.", 
+    :description=>"Craft a simple shaping tool from dolait and tomatunk. You know how to make several varieties.", 
+    :components => 5,
   }
 )
 Knowledge.new("craft_toy",
   { :name =>"Craft Simple Toy",
     :description=>"Craft a simple toy to stave of weariness."
+    :components => 3,
   }
 )

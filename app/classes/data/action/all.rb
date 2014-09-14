@@ -132,7 +132,7 @@ Action.new("ponder",
 Action.new("investigate",
   { :name => "Investigate",
     :description => "Pursue a promising idea.",
-    :base_success_chance => 100,
+    :base_success_chance => 50,
     :result => lambda { |character, target|
       target = target.get
       if(target.type == 'knowledge' && Thought.find(target.id) && Knowledge.find(target.id))
@@ -154,7 +154,7 @@ Action.new("investigate",
     :messages => {
       :success => lambda { |args| "You dig deeper into the possibilities of #{args[0]}. #{args[1]}" },
       :already_investigated => lambda { |args| "You consider your ideas for #{args[0]} more fully, but don't think further investigation will accomplish anything here." },
-      :failure => lambda { |args| "You fail to learn anything about #{args[0]}." },
+      :failure => lambda { |args| "Your guesses about #{args[0]} might work didn't pan out, and you haven't made any progress this time around." },
       :impossible => lambda { |args| "Don't be absurd! You can't investigate #{args[0]}, you can only investigate ideas!" },
     },
     :requires => {
@@ -162,7 +162,7 @@ Action.new("investigate",
       :target => {:idea=>['all']},
     },
     :target_prompt => "What would you like to investigate?",
-    :base_cost => lambda { |character, target=nil| return 1 },
+    :base_cost => lambda { |character, target=nil| return 2 },
     :cost_modifiers => {
       :damage => 1,
       :despair => 1,
