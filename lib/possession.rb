@@ -15,6 +15,6 @@ class Possession
 end
 
 # Load data
-require 'data/possession/resources.rb'
-require 'data/possession/land.rb'
-require 'data/possession/artifacts.rb'
+require_dependency "data/possession/resources"
+require_dependency "data/possession/land"
+require_dependency "data/possession/artifacts"

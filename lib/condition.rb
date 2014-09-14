@@ -20,4 +20,4 @@ class Condition
 end 
 
 # Load data
-require 'data/condition/all.rb'
+require_dependency "data/condition/all"

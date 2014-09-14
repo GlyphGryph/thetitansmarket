@@ -26,4 +26,4 @@ class Gesture
 end
 
 # Load data
-require 'data/gesture/all.rb'
+require_dependency "data/gesture/all"

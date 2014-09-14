@@ -16,4 +16,4 @@ class Thought
 end
 
 # Load data
-require 'data/thought/all.rb'
+require_dependency "data/thought/all"

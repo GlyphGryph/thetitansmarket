@@ -16,4 +16,4 @@ class Plant
 end
 
 # Load data
-require 'data/plant/all.rb'
+require_dependency "data/plant/all"

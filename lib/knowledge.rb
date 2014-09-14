@@ -21,4 +21,4 @@ class Knowledge
 end
 
 # Load data
-require 'data/knowledge/all.rb'
+require_dependency 'data/knowledge/all'

@@ -53,4 +53,5 @@ class Activity
 end
 
 # Load data
-require 'data/activity/all.rb'
+require_dependency "data/activity/all"
+

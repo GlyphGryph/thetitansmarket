@@ -251,5 +251,4 @@ class ActionTarget
 end
 
 # Load data
-require 'data/action/all.rb'
-
+require_dependency "data/action/all"

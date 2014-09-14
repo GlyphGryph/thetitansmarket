@@ -19,4 +19,4 @@ class Exploration
 end
 
 # Load data
-require 'data/exploration/all.rb'
+require_dependency "data/exploration/all"
