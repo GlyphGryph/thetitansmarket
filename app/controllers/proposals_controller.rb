@@ -65,96 +65,107 @@ class ProposalsController < ApplicationController
   def create
     target = Character.find(params[:target_id])
     proposal_type = params[:proposal_type]
-    error = "Could not make this proposal."
+    errors = []
     success = false
-    if(proposal_type == 'Trade')
-      error += " Was a Trade."
-      asked_possession_ids = params[:asked_possession_ids] || []
-      offered_possession_ids = params[:offered_possession_ids] || []
-      asked_knowledge_ids = params[:asked_knowledge_ids] || []
-      offered_knowledge_ids = params[:offered_knowledge_ids] || []
-      if(!asked_possession_ids.empty? || !offered_possession_ids.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
-        trade = Trade.new()
-        trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
-        trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
-        asked_knowledge_ids.each do |knowledge_id, attributes|
-          if(@character.knows?(knowledge_id) || !target.knows?(knowledge_id))
-            error += "You can't learn #{knowledge_id}"
-          end
-          if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
-            TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
-          end
-        end
-        offered_knowledge_ids.each do |knowledge_id, duration|
-          if(!@character.knows?(knowledge_id) || target.knows?(knowledge_id))
-            error += "You can't teach #{knowledge_id}"
-          end
-          if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
-            TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
-          end
-        end
-        trade.save!
-        proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)
-        success = proposal.save
-      else
-        error += " No asked or offered items."
-      end
-    elsif(proposal_type == 'Interaction')
-      error += " Was an Interaction."
-      activity = Activity.find(params[:activity])
-      if(activity)
-        interaction = Interaction.new(:activity_id => activity.id)
-        interaction.save!
-        proposal = Proposal.new(:sender => @character, :receiver => target, :content => interaction)
-        success = proposal.save
-      else
-        error += " Could not find an activity with the given id."
-      end
-    elsif(proposal_type == 'Message')
-      error += " Was a Message."
-      components = params[:message_components]
-      if(components && !components.empty?)
-        all_components_good = true
-        message = Message.new()
-        components.transform_keys!{ |key| key.to_i }
-        keys = components.keys.sort
-        keys.each do |key|
-          component = components[key]
-          if(component['type']=="gesture")
-            gesture = Gesture.find(component['value'])
-            if(gesture)
-              message.add_gesture(gesture, target)
-            else
-              all_components_good = false
-              error += " Bad component #{component['value']}."
+    proposal = nil
+    begin
+      ActiveRecord::Base.transaction do
+        if(proposal_type == 'Trade')
+          asked_possession_ids = params[:asked_possession_ids] || []
+          offered_possession_ids = params[:offered_possession_ids] || []
+          asked_knowledge_ids = params[:asked_knowledge_ids] || []
+          offered_knowledge_ids = params[:offered_knowledge_ids] || []
+          if(!asked_possession_ids.empty? || !offered_possession_ids.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
+            trade = Trade.new()
+            trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
+            trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
+            asked_knowledge_ids.each do |knowledge_id, attributes|
+              if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+                if(@character.knows?(knowledge_id) || !target.knows?(knowledge_id))
+                  errors << "You can't learn #{knowledge_id}"
+                end
+                TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
+              end
             end
-          elsif(component['type']=="text")
-            message.add_text(component['value'])
+            offered_knowledge_ids.each do |knowledge_id, duration|
+              if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+                if(!@character.knows?(knowledge_id) || target.knows?(knowledge_id))
+                  errors << "You can't teach #{knowledge_id}"
+                end
+                TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
+              end
+            end
+            trade.save!
+            proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)
+            success = proposal.save!
           else
-            all_components_good = false
-            error += "Could not recognize the type of Message requested."
+            errors << " No asked or offered items."
           end
-        end
+        elsif(proposal_type == 'Interaction')
+          activity = Activity.find(params[:activity])
+          if(activity)
+            interaction = Interaction.new(:activity_id => activity.id)
+            interaction.save!
+            proposal = Proposal.new(:sender => @character, :receiver => target, :content => interaction)
+            success = proposal.save!
+          else
+            errors << " Could not find an activity with the given id."
+          end
+        elsif(proposal_type == 'Message')
+          components = params[:message_components]
+          if(components && !components.empty?)
+            all_components_good = true
+            message = Message.new()
+            components.transform_keys!{ |key| key.to_i }
+            keys = components.keys.sort
+            keys.each do |key|
+              component = components[key]
+              if(component['type']=="gesture")
+                gesture = Gesture.find(component['value'])
+                if(gesture)
+                  message.add_gesture(gesture, target)
+                else
+                  all_components_good = false
+                  errors << " Bad component #{component['value']}."
+                end
+              elsif(component['type']=="text")
+                message.add_text(component['value'])
+              else
+                all_components_good = false
+                errors << "Could not recognize the type of Message requested."
+              end
+            end
 
-        if(all_components_good)
-          message.save!
-          proposal = Proposal.new(:sender => @character, :receiver => target, :content => message)
-          proposal.save!
-          success=true
+            if(all_components_good)
+              message.save!
+              proposal = Proposal.new(:sender => @character, :receiver => target, :content => message)
+              proposal.save!
+              success=true
+            else
+              errors << " Bad components."
+            end
+          else
+            errors << " No message components provided."
+          end
         else
-          error += " Bad components."
+          errors << " Invalid proposal type."
         end
-      else
-        error += " No message components provided."
+        if(!errors.empty?)
+          raise "Proposal failed."
+        end
       end
-    else
-      error += " Invalid proposal type."
+    rescue => e      
+      errors = ["Could not make this proposal."].concat(errors)
+      if(proposal && !proposal.errors.empty?)
+        errors = errors.concat(proposal.errors)
+      end
+      success = false
     end
     respond_to do |format|
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
       else
-        format.html { redirect_to new_proposal_details_path, :alert => (proposal ? proposal.errors.full_messages.to_sentence : error)}
+        format.html { redirect_to new_proposal_details_path, :alert => errors.join(" ")}
       end
     end
   end

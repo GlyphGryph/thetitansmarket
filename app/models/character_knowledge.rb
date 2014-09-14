@@ -6,7 +6,7 @@ class CharacterKnowledge < ActiveRecord::Base
   def get
     element = Knowledge.find(self.knowledge_id)
     unless(element)
-      raise "Could not find knowledge for CharacterKnowledge with id #{knowledge_id}"
+      raise "Could not find knowledge '#{knowledge_id}' for CharacterKnowledge with id '#{self.id}'"
     end
     return element
   end
