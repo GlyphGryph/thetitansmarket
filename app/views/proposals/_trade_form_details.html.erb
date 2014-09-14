@@ -19,7 +19,7 @@
   <% else %>
     <% @sender_teachables.each do |knowledge| %>
       <div>
-        <%= check_box_tag('offered_knowledge_ids[]', knowledge.id) %>
+        <%= number_field_tag("asked_knowledge_ids[#{knowledge.id}]duration", nil, :step => 1, :min => 0, :max => 10) %>
         <%= label_tag(knowledge.id, knowledge.name) %>
       </div>
     <% end %>
@@ -47,7 +47,7 @@
   <% else %>
     <% @receiver_teachables.each do |knowledge| %>
       <div>
-        <%= check_box_tag('asked_knowledge_ids[]', knowledge.id) %>
+        <%= number_field_tag("asked_knowledge_ids[#{knowledge.id}]duration", :min => 0, :max => 10) %>
         <%= label_tag(knowledge.id, knowledge.name) %>
       </div>
     <% end %>

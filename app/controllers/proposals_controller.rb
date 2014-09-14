@@ -77,11 +77,21 @@ class ProposalsController < ApplicationController
         trade = Trade.new()
         trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
         trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
-        asked_knowledge_ids.each do |knowledge_id|
-          TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
+        asked_knowledge_ids.each do |knowledge_id, attributes|
+          if(@character.knows?(knowledge_id) || !target.knows?(knowledge_id))
+            error += "You can't learn #{knowledge_id}"
+          end
+          if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+            TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
+          end
         end
-        offered_knowledge_ids.each do |knowledge_id|
-          TradeOfferedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => 1).save!
+        offered_knowledge_ids.each do |knowledge_id, duration|
+          if(!@character.knows?(knowledge_id) || target.knows?(knowledge_id))
+            error += "You can't teach #{knowledge_id}"
+          end
+          if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+            TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
+          end
         end
         trade.save!
         proposal = Proposal.new(:sender => @character, :receiver => target, :content => trade)

@@ -250,7 +250,6 @@ class ActionTarget
   end
 end
 
-
 # Load data
 require 'data/action/all.rb'
 
