@@ -1,8 +1,7 @@
 Immediate goals:
 Knowledge Expansion:
-  The duration of teaching is the difference between progress and max progress for the learning character.
+  Allow for multiple lessons in a single trade offer.
   Display this amount.
-  Modify the cost of investigation to be the progress remaining to learn a skill. Reduce the "normal" cost of investigation to zero.
   Display the cost on the investigation target select page.
   Add the ability to specify an amount of learning to be done in both cases.
   Remove the cost display for 'free' tasks with no inherent cost (eating, investigation).
@@ -10,6 +9,7 @@ Knowledge Expansion:
   Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.
 
 Items Expansion:
+  For trade items, have trade offers go by item type and variant rather than item id. Allow for trading multiple items of the same type in a go. Only display unique pairings in trade screen.
   Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
   Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
   Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
