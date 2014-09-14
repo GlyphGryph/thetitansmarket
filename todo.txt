@@ -1,6 +1,7 @@
 Immediate goals:
+FIX THE DATA LOADING BUG!
+
 Knowledge Expansion:
-  Allow for multiple lessons in a single trade offer.
   Only teach things a character fully KNOWS, not things they know partially!
   Display this amount.
   Display the cost on the investigation target select page.
