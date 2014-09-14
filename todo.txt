@@ -1,8 +1,6 @@
 Immediate goals:
 Knowledge Expansion:
   Fix trading knowledge not appearing to reduce vigor for the teacher
-  Remove the cost display for 'free' tasks with no inherent cost (eating, investigation).
-  Have "craft basket" and "craft cutting tool" investigations consume resources and result in a product. 
   Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.
 
 Items Expansion:
@@ -57,7 +55,7 @@ Actions stuff:
 --CONTENT BREAK--
 
 --FAR FUTURE--
-More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality.
+More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
 Allow creation of broadcasts

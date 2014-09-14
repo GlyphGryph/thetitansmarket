@@ -108,6 +108,7 @@ class Trade < ActiveRecord::Base
             knowledge_id = trade_knowledge.knowledge_id
             sender.learn(knowledge_id)
             sender.change_vigor(-trade_knowledge.duration)
+            receiver.change_vigor(-trade_knowledge.duration)
             sender_message << "You learned #{trade_knowledge.get.name}."
             receiver_message << "You taught #{trade_knowledge.get.name}."
           end
@@ -115,6 +116,7 @@ class Trade < ActiveRecord::Base
           offered_knowledges.each do |trade_knowledge|
             knowledge_id = trade_knowledge.knowledge_id
             receiver.learn(knowledge_id)
+            sender.change_vigor(-trade_knowledge.duration)
             receiver.change_vigor(-trade_knowledge.duration)
             sender_message << "You taught #{trade_knowledge.get.name}."
             receiver_message << "You learned #{trade_knowledge.get.name}."
