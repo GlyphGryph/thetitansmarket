@@ -91,13 +91,13 @@ Action.new("ponder",
       found = false
       succeeded = false
       text = ["You ponder the #{target.name}."]
-      Thought.all.each do |thought|
-        if(thought.sources[target.type] && thought.sources[target.type].include?(target.id))
+      Knowledge.all.each do |knowledge|
+        if(knowledge.sources[target.type] && knowledge.sources[target.type].include?(target.id))
           found = true
-          if(!character.knows?(thought.id) && !character.considers?(thought.id))
-            character.consider(thought.id)
+          if(!character.knows?(knowledge.id) && !character.considers?(knowledge.id))
+            character.consider(knowledge.id)
             succeeded = true
-            text << thought.consider
+            text << knowledge.consider
           end
         end
       end
@@ -135,17 +135,17 @@ Action.new("investigate",
     :base_success_chance => 50,
     :result => lambda { |character, target|
       target = target.get
-      if(target.type == 'knowledge' && Thought.find(target.id) && Knowledge.find(target.id))
+      if(target.type == 'knowledge' && Knowledge.find(target.id))
         if(character.knows?(target.id))
           return ActionOutcome.new(:already_investigated, target.name)
         else
           character.learn(target.id, 1)
           if(character.knows?(target.id))
-            thought_research = Thought.find(target.id).research
+            knowledge_research = Knowledge.find(target.id).research
           else
-            thought_research = "There is still more to discover, however!"
+            knowledge_research = "There is still more to discover, however!"
           end
-          return ActionOutcome.new(:success, target.name, thought_research)
+          return ActionOutcome.new(:success, target.name, knowledge_research)
         end
       else
         return ActionOutcome.new(:impossible, target.name)

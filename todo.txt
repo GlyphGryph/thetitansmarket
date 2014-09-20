@@ -1,6 +1,5 @@
 Immediate goals:
 Knowledge Expansion:
-  Fix trading knowledge not appearing to reduce vigor for the teacher
   Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.
 
 Items Expansion:
