@@ -1,7 +1,4 @@
 Immediate goals:
-Knowledge Expansion:
-  Make investigations not guaranteed to succeed based on a difficulty attached to the idea, add failure messages and handling of failure messages for failed investigations.
-
 Items Expansion:
   For trade items, have trade offers go by item type and variant rather than item id. Allow for trading multiple items of the same type in a go. Only display unique pairings in trade screen.
   Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 

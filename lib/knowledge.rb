@@ -1,6 +1,6 @@
 class Knowledge
   extend CollectionTracker
-  attr_reader :id, :name, :description, :components, :sources, :consider, :research
+  attr_reader :id, :name, :description, :components, :sources, :consider, :research, :difficulty
 
   def initialize(id, params={})
     @id = id
@@ -11,6 +11,7 @@ class Knowledge
     @sources = params[:sources] || {}
     @consider = params[:consider] || "No consideration text provided."
     @research = params[:research] || "No research text provided."
+    @difficulty = params[:difficulty] || 0
     self.class.add(@id, self)
   end
 

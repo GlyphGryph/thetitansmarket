@@ -132,7 +132,12 @@ Action.new("ponder",
 Action.new("investigate",
   { :name => "Investigate",
     :description => "Pursue a promising idea.",
-    :base_success_chance => 50,
+    :base_success_chance => 100,
+    :success_modifiers => {
+      :target => lambda { |character, target| 
+        return -target.get.difficulty; 
+      },
+    },
     :result => lambda { |character, target|
       target = target.get
       if(target.type == 'knowledge' && Knowledge.find(target.id))

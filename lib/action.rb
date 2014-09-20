@@ -8,7 +8,7 @@ class Action
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
 
-    @base_success_chance = params[:base_success_chance] || 100
+    @base_success_chance = params[:base_success_chance] || lambda { |character, target| return 100 }
     @success_modifiers = params[:success_modifiers] || {}
 
     @consumes = params[:consumes] || []
@@ -155,7 +155,7 @@ class Action
   end
 
   def result(character, target=nil)
-    success_chance = self.success_chance(character)
+    success_chance = self.success_chance(character, target)
     if(!self.executable?(character, target))
       if(target)
         outcome = ActionOutcome.new(:impossible, target.get.name)
@@ -196,13 +196,18 @@ class Action
     return !!@requires[:target]
   end
 
-  def success_chance(character)
+  def success_chance(character, target)
     chance = @base_success_chance
     if(@success_modifiers[:possession])
       @success_modifiers[:possession].each do |possession|
         if character.possesses?(possession[:id])
           chance += possession[:modifier]
         end
+      end
+    end
+    if(@success_modifiers[:target])
+      if(target)
+        chance += @success_modifiers[:target].call(character, target)
       end
     end
     return chance

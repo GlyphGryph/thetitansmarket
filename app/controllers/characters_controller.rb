@@ -60,21 +60,21 @@ class CharactersController < ApplicationController
 
   def find_action_target
     @action = Action.find(params[:action_id])
-    @targets = {}
-    @action.targets(@character).each do |key, value|
-      label = "Unknown Type"
+    @targets_by_category = {}
+    @action.targets(@character).each do |key, targets|
+      name = "Unknown Type"
       if(key == :possession)
-        label = "Possessions"
+        name = "Possessions"
       elsif(key == :condition)
-        label = "Conditions"
+        name = "Conditions"
       elsif(key == :character)
-        label = "Characters"
+        name = "Characters"
       elsif(key == :knowledge)
-        label = "Knowledge"
+        name = "Knowledge"
       elsif(key == :idea)
-        label = "Ideas"
+        name = "Ideas"
       end
-      @targets[key] = OpenStruct.new(:label => label, :values => value)
+      @targets_by_category[key] = OpenStruct.new(:name => name, :targets => targets)
     end
   end
 

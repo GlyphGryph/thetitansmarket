@@ -7,13 +7,14 @@
   <%= @action.target_prompt %>
 </div>
 <div id="choose-target-options">
-  <% @targets.each do |key, data| %>
+  <% @targets_by_category.each do |key, category| %>
     <div class="info-block">
-      <div class="info-block-head"><%= data.label %></div>
+      <div class="info-block-head"><%= category.name %></div>
       <div class="info-block-body">
-        <% data.values.each do |target| %>
+        <% category.targets.each do |target| %>
           <div class="choosable-element element">
             <%= link_to target.get.name, add_action_with_target_path(:id => @character.id, :target_type => key, :target_id => target.id) %>
+            (Chance of Success: <%= @action.success_chance(@character, target) %>)
           </div>
         <% end %>
       </div>
