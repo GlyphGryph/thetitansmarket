@@ -11,6 +11,10 @@ class TradePossession < ActiveRecord::Base
     where(:offered => true)
   end
 
+  def offered?
+    self.offered
+  end
+
   def get
     element = Possession.find(self.possession_id)
     unless(element)
