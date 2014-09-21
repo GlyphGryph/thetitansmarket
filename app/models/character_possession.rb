@@ -10,7 +10,7 @@ class CharacterPossession < ActiveRecord::Base
   before_create :default_attributes
 
   def default_attributes
-    self.possession_variant ||= PossessionVariant.find_or_do(key, self.possession_id, singular_name, plural_name)
+    self.possession_variant ||= PossessionVariant.find_or_do("standard", self.possession_id, self.get.name)
   end
 
   def get
