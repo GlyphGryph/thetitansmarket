@@ -5,8 +5,8 @@
   <% else %>
     <% @sender_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('offered_possession_ids[]', possession.id) %>
-        <%= label_tag(possession.id, possession.get.name) %>
+        <%= check_box_tag('offered_possessions[]', possession.id) %>
+        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.count.to_s) %>
       </div>
     <% end %>
   <% end %>
@@ -34,8 +34,8 @@
   <% else %>
     <% @receiver_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('asked_possession_ids[]', possession.id) %>
-        <%= label_tag(possession.id, possession.get.name) %>
+        <%= check_box_tag('asked_possessions[]', possession.id) %>
+        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.count.to_s) %>
       </div>
     <% end %>
   <% end %>

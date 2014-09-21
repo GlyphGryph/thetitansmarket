@@ -177,7 +177,7 @@ class Character < ActiveRecord::Base
     if(found.empty?)
       return 0
     else
-      return found.progress
+      return found.first.progress
     end
   end
 
@@ -266,6 +266,21 @@ class Character < ActiveRecord::Base
  
   def possesses?(possession_id, quantity=1)
     return (self.character_possessions.where(:possession_id => possession_id).size >= quantity)
+  end
+
+  def possessions_list
+    generics = {}
+    self.character_possessions.each do |character_possession|
+      tag = character_possession.possession_id+"/"+character_possession.variant.to_s
+      generics[tag] ||= OpenStruct.new(
+        :id => character_possession.possession_id,
+        :name => character_possession.get.name,
+        :variant => character_possession.variant, 
+        :count => 0
+      )
+      generics[tag].count += 1
+    end
+    return generics.values
   end
 
   def potential_actions

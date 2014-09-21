@@ -1,10 +1,7 @@
 class Trade < ActiveRecord::Base
   has_one :proposal, :as => :content
 
-  has_many :trade_asked_character_possessions, :dependent => :destroy
-  has_many :trade_offered_character_possessions, :dependent => :destroy
-  has_many :asked_character_possessions, :through => :trade_asked_character_possessions, :source => :character_possession
-  has_many :offered_character_possessions, :through => :trade_offered_character_possessions, :source => :character_possession
+  has_many :trade_possessions
 
   has_many :trade_asked_knowledges, :dependent => :destroy
   has_many :trade_offered_knowledges, :dependent => :destroy
@@ -18,8 +15,8 @@ class Trade < ActiveRecord::Base
 
   def accept
     # The possessions offered are the ones we gain, the proffessions asked are the ones we lose
-    asked_possessions = self.asked_character_possessions
-    offered_possessions = self.offered_character_possessions
+    asked_possessions = self.trade_possessions.asked
+    offered_possessions = self.trade_possessions.offered
     asked_knowledges = self.trade_asked_knowledges
     offered_knowledges = self.trade_offered_knowledges
     sender_message = ["You traded with #{receiver.name}."]
@@ -32,17 +29,17 @@ class Trade < ActiveRecord::Base
         sender = proposal.sender
         receiver = proposal.receiver
         # Insure all items are valid tradeables
-        asked_possessions.each do |character_possession|
-          if(character_possession.character != receiver)
-            errors << "#{sender.name} asked for #{character_possession.get.name} ##{character_possession.id}, but #{receiver.name} does not possess that item."
-            success=false
-          end
+        asked_possessions.each do |possession_id|
+         # if(character_possession.character != receiver)
+         #   errors << "#{sender.name} asked for #{character_possession.get.name} ##{character_possession.id}, but #{receiver.name} does not possess that item."
+         #   success=false
+         # end
         end
         offered_possessions.each do |character_possession|
-          if(character_possession.character != sender)
-            errors << "#{sender.name} asked for #{character_possession.get.name} ##{character_possession.id}, but #{receiver.name} does not possess that item."
-            success=false
-          end
+         # if(character_possession.character != sender)
+         #   errors << "#{sender.name} asked for #{character_possession.get.name} ##{character_possession.id}, but #{receiver.name} does not possess that item."
+         #   success=false
+         # end
         end
         
         # Insure all knowledges can be taught
@@ -89,18 +86,18 @@ class Trade < ActiveRecord::Base
         # Conduct Trade
         if(success)
           asked_possessions.each do |character_possession|
-            character_possession.character = sender
-            possession_name = character_possession.get.name
-            sender_message << "You gained a #{possession_name}."
-            receiver_message << "You lost your #{possession_name}."
-            character_possession.save!
+           # character_possession.character = sender
+           # possession_name = character_possession.get.name
+           # sender_message << "You gained a #{possession_name}."
+           # receiver_message << "You lost your #{possession_name}."
+           # character_possession.save!
           end
           offered_possessions.each do |character_possession|
-            character_possession.character = receiver
-            possession_name = character_possession.get.name
-            sender_message << "You lost your #{possession_name}."
-            receiver_message << "You gained a #{possession_name}."
-            character_possession.save!
+           # character_possession.character = receiver
+           # possession_name = character_possession.get.name
+           # sender_message << "You lost your #{possession_name}."
+           # receiver_message << "You gained a #{possession_name}."
+           # character_possession.save!
           end
 
           # Conduct Knowledges
@@ -147,26 +144,10 @@ class Trade < ActiveRecord::Base
   end
 
   def name_for_sender
-    if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
-      return "Nihilist Exchange with "+self.receiver.name
-    elsif(self.trade_asked_character_possessions.empty?)
-      return "Tribute Offer to "+self.receiver.name
-    elsif(self.trade_offered_character_possessions.empty?)
-      return "Tribute Request to "+self.receiver.name
-    else
-      return "Trade Offer to "+self.receiver.name
-    end
+    return "Trade Offer to "+self.receiver.name
   end
 
   def name_for_receiver
-    if(self.trade_asked_character_possessions.empty? && self.trade_offered_character_possessions.empty?)
-      return "Nihilist Exchange with "+self.sender.name
-    elsif(self.trade_asked_character_possessions.empty?)
-      return "Tribute Offer from "+self.sender.name
-    elsif(self.trade_offered_character_possessions.empty?)
-      return "Tribute Request from "+self.sender.name
-    else
-      return "Trade Offer from "+self.sender.name
-    end
+    return "Trade Offer from "+self.sender.name
   end
 end

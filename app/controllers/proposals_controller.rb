@@ -45,8 +45,8 @@ class ProposalsController < ApplicationController
     @proposal_type = params[:proposal_type]
     @target = Character.find(params[:target_id])
     if(@proposal_type == 'Trade')
-      @sender_possessions = @character.character_possessions
-      @receiver_possessions = @target.character_possessions
+      @sender_possessions = @character.possessions_list
+      @receiver_possessions = @target.possessions_list
       
       # Remove already known knowledge from the teachables lists
       sender_knowledges = @character.knowledges.map(&:get)
@@ -84,13 +84,12 @@ class ProposalsController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         if(proposal_type == 'Trade')
-          asked_possession_ids = params[:asked_possession_ids] || []
-          offered_possession_ids = params[:offered_possession_ids] || []
+          possessions = params[:possessions] || []
           asked_knowledge_ids = params[:asked_knowledge_ids] || []
           offered_knowledge_ids = params[:offered_knowledge_ids] || []
-          if(!asked_possession_ids.empty? || !offered_possession_ids.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
+          if(!possessions.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
             trade = Trade.new()
-            trade.asked_character_possessions = CharacterPossession.find(asked_possession_ids)
+            trade.asked_possessions = CharacterPossession.find(asked_possession_ids)
             trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
             asked_knowledge_ids.each do |knowledge_id, attributes|
               if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)

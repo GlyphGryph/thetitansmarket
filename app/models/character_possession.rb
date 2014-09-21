@@ -9,7 +9,7 @@ class CharacterPossession < ActiveRecord::Base
   def get
     element = Possession.find(self.possession_id)
     unless(element)
-      raise "Could not find action for CharacterPossession #{self.id} with item type '#{self.possession_id}' for character #{self.character_id}"
+      raise "Could not find possession for CharacterPossession #{self.id} with item type '#{self.possession_id}' for character #{self.character_id}"
     end
     return element
   end
