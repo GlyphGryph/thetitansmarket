@@ -1,9 +1,7 @@
 Immediate goals:
 Items Expansion:
   For trade items, have trade offers go by item type and variant rather than item id. Allow for trading multiple items of the same type in a go. Only display unique pairings in trade screen.
-  - Remove trade_asked and trade_offered by character_possessions
-  - Add a single trade_possessions table with columns: trade_id, offered (true/false, false means it's asked), quantity, possession_id, possession_variant
-  - Enforce uniqueness of entry by all columns combined
+  - Create a new system to better handle variants, including a singular/plural display name system.
   - Update the trade model to use the new system properly
   - Move the creation of new trades logic OUT of the proposal controller and into the model
   Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
