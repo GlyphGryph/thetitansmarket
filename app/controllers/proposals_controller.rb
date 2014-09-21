@@ -85,12 +85,28 @@ class ProposalsController < ApplicationController
       ActiveRecord::Base.transaction do
         if(proposal_type == 'Trade')
           possessions = params[:possessions] || []
+          logger.error possessions.inspect
           asked_knowledge_ids = params[:asked_knowledge_ids] || []
           offered_knowledge_ids = params[:offered_knowledge_ids] || []
+
           if(!possessions.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
             trade = Trade.new()
-            trade.asked_possessions = CharacterPossession.find(asked_possession_ids)
-            trade.offered_character_possessions = CharacterPossession.find(offered_possession_ids)
+            # Make trade possession entries
+            possessions.each do |offer_type, possession_details|
+              offered = (offer_type == "offered")
+              possession_details.each do |possession_id, variant_details|
+                variant_details.each do |variant_id, count|
+                  TradePossession.new(
+                    :trade => trade,
+                    :offered => offered,
+                    :possession_id => possession_id,
+                    :possession_variant_id => variant_id,
+                    :quantity => count
+                  ).save!
+                end
+              end
+            end
+
             asked_knowledge_ids.each do |knowledge_id, attributes|
               if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
                 if(@character.knows?(knowledge_id) || !target.knows?(knowledge_id))
@@ -166,8 +182,8 @@ class ProposalsController < ApplicationController
           raise "Proposal failed."
         end
       end
-    rescue => e      
-      errors = ["Could not make this proposal."].concat(errors)
+    rescue => e
+      errors = [e.inspect, "Could not make this proposal."].concat(errors)
       if(proposal && !proposal.errors.empty?)
         errors = errors.concat(proposal.errors)
       end

@@ -5,7 +5,7 @@
   <% else %>
     <% @sender_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('offered_possessions[]', possession.id) %>
+        <%= check_box_tag("possessions[offered][#{possession.id}][#{possession.variant.id}]", 1) %>
         <%= label_tag(possession.id, possession.variant.singular_name.to_s+" x"+possession.count.to_s) %>
       </div>
     <% end %>
@@ -34,7 +34,7 @@
   <% else %>
     <% @receiver_possessions.each do |possession| %>
       <div>
-        <%= check_box_tag('asked_possessions[]', possession.id) %>
+        <%= check_box_tag("possessions[asked][#{possession.id}][#{possession.variant.id}]", 1) %>
         <%= label_tag(possession.id, possession.variant.singular_name.to_s+" x"+possession.count.to_s) %>
       </div>
     <% end %>
