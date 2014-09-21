@@ -33,15 +33,24 @@ Action.new("forage",
     :base_success_chance => 50,
     :result => lambda { |character, target|
       found = Plant.all.sample
+      possession_id = "food"
       if(character.possesses?("basket"))
         amount_found = Random.new.rand(3)+1
         amount_found.times do
-          CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+          CharacterPossession.new(
+            :character_id => character.id, 
+            :possession_id => possession_id,
+            :possession_variant => PossessionVariant.find_or_do(found.id, possession_id, found.food_name)
+          ).save!
         end
         amount_found_string = (amount_found > 1) ? "#{amount_found} meals" : "#{amount_found} meal"
         return ActionOutcome.new(:basket_success, found.plant_name, found.food_name, amount_found_string)
       else
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant=>found.id).save!
+        CharacterPossession.new(
+          :character_id => character.id, 
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(found.id, possession_id, found.food_name)
+        ).save!
         return ActionOutcome.new(:success, found.plant_name, found.food_name)
       end
     },
@@ -192,7 +201,12 @@ Action.new("clear_land",
       elsif(target.id == 'wildlands')
         Random.new.rand(1..4).times do
           found = Plant.all.sample
-          CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => found.id).save!
+          possession_id = "food"
+          CharacterPossession.new(
+            :character_id => character.id, 
+            :possession_id => possession_id,
+            :possession_variant => PossessionVariant.find_or_do(found.id, possession_id, found.food_name)
+          ).save!
         end
       end
       return ActionOutcome.new(:success, target.name)
@@ -225,9 +239,15 @@ Action.new("plant",
     :description => "You plant your seeds.",
     :base_success => 100,
     :result => lambda { |character, target|
-      CharacterPossession.new(:character_id => character.id, :possession_id => "farm", :variant => target.variant).save!
-      seed_name = Plant.find(target.variant).seed_name
-      return ActionOutcome.new(:success, seed_name)
+      variant_key = target.possession_variant.key
+      variant_name = Plant.find(variant_key).seed_name
+      possession_id = "farm"
+      CharacterPossession.new(
+        :character_id => character.id, 
+        :possession_id => possession_id,
+        :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, variant_name)
+      ).save!
+      return ActionOutcome.new(:success, variant_name)
     },
     :messages => {
       :success => lambda { |args| "You plow a field and plant your #{args[0]}." },
@@ -257,7 +277,14 @@ Action.new("harvest_fields",
     :result => lambda { |character, target|
       amount = 5
       amount.times do
-        CharacterPossession.new(:character_id => character.id, :possession_id => "food", :variant => target.variant).save!
+        variant_key = target.possession_variant.key
+        variant_name = Plant.find(variant_key).food_name
+        possession_id = "food"
+        CharacterPossession.new(
+          :character_id => character.id, 
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, variant_name)
+        ).save!
       end
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
       food_name = Plant.find(target.variant).food_name

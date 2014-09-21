@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140920235324) do
+ActiveRecord::Schema.define(version: 20140921032722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20140920235324) do
     t.string   "possession_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "variant"
+    t.integer  "possession_variant_id"
   end
 
   create_table "characters", force: true do |t|
@@ -76,6 +76,13 @@ ActiveRecord::Schema.define(version: 20140920235324) do
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "possession_variants", force: true do |t|
+    t.string "key"
+    t.string "possession_id"
+    t.string "singular_name"
+    t.string "plural_name"
   end
 
   create_table "proposals", force: true do |t|
@@ -108,7 +115,7 @@ ActiveRecord::Schema.define(version: 20140920235324) do
     t.boolean "offered"
     t.integer "quantity"
     t.string  "possession_id"
-    t.string  "possession_variant"
+    t.integer "possession_variant_id"
   end
 
   create_table "trades", force: true do |t|

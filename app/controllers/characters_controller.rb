@@ -11,15 +11,7 @@ class CharactersController < ApplicationController
     else
       @character_actions = @character.character_actions
       @actions = @character.potential_actions
-      @inventory = @character.character_possessions.inject({}) do |result, value|
-        possession = value.get
-        if(result[possession.id]) 
-          result[possession.id][:count]+=1
-        else
-          result[possession.id]=OpenStruct.new(:value=>possession, :count=>1)
-        end
-        result
-      end
+      @inventory = @character.possessions_list
       @knowledges = @character.knowledges
       @ideas = @character.ideas
       @conditions = @character.character_conditions.map(&:get)

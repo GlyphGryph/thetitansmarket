@@ -40,11 +40,11 @@
         <% if @inventory.empty? %>
           You have nothing.
         <% else %>
-          <% @inventory.each_value do |item| %>
+          <% @inventory.each do |item| %>
             <div class="inventory-element element">
-              <div class="label"><%= item.value.name %></div>
+              <div class="label"><%= item.variant.singular_name %></div>
               <div class="count"><%= item.count %></div> 
-              <div class="description"><%= item.value.description %></div>
+              <div class="description"><%= item.description %></div>
             </div>
           <% end %>
         <% end %>
