@@ -1,7 +1,8 @@
 class TradePossession < ActiveRecord::Base
   belongs_to :trade
   belongs_to :possession_variant
-  validates_presence_of :trade, :offered, :quantity, :possession_id, :possession_variant_id
+  validates_presence_of :trade, :quantity, :possession_id, :possession_variant_id
+  validates :offered, :inclusion => {:in => [true, false]}
 
   def self.asked
     where(:offered => false)
