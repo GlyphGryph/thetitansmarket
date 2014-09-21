@@ -1,9 +1,9 @@
 Immediate goals:
 Items Expansion:
   For trade items, have trade offers go by item type and variant rather than item id. Allow for trading multiple items of the same type in a go. Only display unique pairings in trade screen.
-  - Create a new system to better handle variants, including a singular/plural display name system.
-  - Update the trade model to use the new system properly
-  - Move the creation of new trades logic OUT of the proposal controller and into the model
+  - Update the trade interfacte
+    - Require players to select how much they want of a given item
+    - Have trades properly created based on the new variant system
   Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
   Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
   Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
