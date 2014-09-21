@@ -276,9 +276,9 @@ class Character < ActiveRecord::Base
         :id => character_possession.possession_id,
         :variant => character_possession.possession_variant, 
         :description => character_possession.get.description,
-        :count => 0
+        :quantity => 0
       )
-      generics[tag].count += 1
+      generics[tag].quantity += 1
     end
     return generics.values
   end

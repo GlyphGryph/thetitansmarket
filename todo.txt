@@ -68,6 +68,7 @@ Add a settting to allow players to turn off auto-eating and force-starve themsel
 Investigation knowledge model. Each "knowledge" is made up of several "pieces of the puzzle". Investigation offers several random selections from the pieces of the puzzle list and grants them to the player. When the player has all the pieces of the puzzle, they gain the knowledge. Players can share their pieces of the puzzle with other players. Earlier, basic knowledges may only have one piece to their puzzles.
 Add random events each turn.
 Add constructions - fences and houses. Both reduce chance of items getting stolen.
+Allow players to destroy items they own
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)

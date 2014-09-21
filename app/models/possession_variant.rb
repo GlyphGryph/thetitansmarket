@@ -1,6 +1,7 @@
 class PossessionVariant < ActiveRecord::Base
   validates_presence_of :key, :possession_id, :singular_name, :plural_name
   has_many :character_possessions
+  has_many :trade_possessions
 
   def self.find_or_do(key, possession_id, singular_name, plural_name=nil)
     variant = PossessionVariant.find_by(:key => key, :possession_id => possession_id)

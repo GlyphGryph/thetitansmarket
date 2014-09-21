@@ -95,13 +95,13 @@ class ProposalsController < ApplicationController
             possessions.each do |offer_type, possession_details|
               offered = (offer_type == "offered")
               possession_details.each do |possession_id, variant_details|
-                variant_details.each do |variant_id, count|
+                variant_details.each do |variant_id, quantity|
                   TradePossession.new(
                     :trade => trade,
                     :offered => offered,
                     :possession_id => possession_id,
                     :possession_variant_id => variant_id,
-                    :quantity => count
+                    :quantity => quantity
                   ).save!
                 end
               end
@@ -203,13 +203,13 @@ class ProposalsController < ApplicationController
     if(@proposal.content_type == "Trade")
       if(@proposal.receiver  == @character)
         @proposal.mark_read_for(@character)
-        @character_gets = @proposal.content.offered_character_possessions
-        @character_loses = @proposal.content.asked_character_possessions
+        @character_gets = @proposal.content.trade_possessions.offered
+        @character_loses = @proposal.content.trade_possessions.asked
         @character_learns = @proposal.content.trade_offered_knowledges
         @character_teaches = @proposal.content.trade_asked_knowledges
       elsif(@proposal.sender  == @character)
-        @character_loses = @proposal.content.offered_character_possessions
-        @character_gets = @proposal.content.asked_character_possessions
+        @character_loses = @proposal.content.trade_possessions.offered
+        @character_gets = @proposal.content.trade_possessions.asked
         @character_teaches = @proposal.content.trade_offered_knowledges
         @character_learns = @proposal.content.trade_asked_knowledges
       else

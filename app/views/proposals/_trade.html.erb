@@ -2,16 +2,16 @@
 <div class="info-block">
   <div class="info-block-head">You get:</div>
   <div class="info-block-body">
-    <% @character_gets.each do |character_possession| %>
-      <div><%= character_possession.get.name %></div>
+    <% @character_gets.each do |trade_possession| %>
+      <div><%= trade_possession.quantity %>x <%= trade_possession.possession_variant.singular_name %></div>
     <% end %>
   </div>
 </div>
 <div class="info-block">
   <div class="info-block-head">You lose:</div>
   <div class="info-block-body">
-    <% @character_loses.each do |character_possession| %>
-      <div><%= character_possession.get.name %></div>
+    <% @character_loses.each do |trade_possession| %>
+      <div><%= trade_possession.quantity %>x <%= trade_possession.possession_variant.singular_name %></div>
     <% end %>
   </div>
 </div>

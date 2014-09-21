@@ -43,7 +43,7 @@
           <% @inventory.each do |item| %>
             <div class="inventory-element element">
               <div class="label"><%= item.variant.singular_name %></div>
-              <div class="count"><%= item.count %></div> 
+              <div class="count"><%= item.quantity %></div> 
               <div class="description"><%= item.description %></div>
             </div>
           <% end %>
