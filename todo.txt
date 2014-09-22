@@ -20,8 +20,6 @@ Content Expansion: Communication
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
 Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
-Add teaching proposal!
-Investigate's cost is based on the idea to be investigated.
 Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
 Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
 Change the queue to only spend at *end* of turn until down to zero, instead of at beginning.
@@ -48,6 +46,12 @@ Actions stuff:
 ???Forage requires wildlands to forage in, target_allowed stuff would need to work first though
 ??Add explore result that results in a concussion and the loss of a knowledge - Should wait until things can be taught!
 --CONTENT BREAK--
+
+-Trade Expansion
+  Add the requirement for both parties to "accept" an offer.
+  Add the ability for players to edit an existing trade offer. This should reset acceptance status for both players.
+  Make sure to add a check to prevent a player's accept from succeeding against an offer that has been updated since they last viewed it. Display a message saying the offer could not be accepted as it has changed.
+  Add the ability to fill an offer automatically from items of the right type, or to choose [i]specifically[/i] which item is offered, and the ability to see it's details (condition, uses remaining, etc.). You can not fill in specific items for the other party, only for yourself.
 
 --FAR FUTURE--
 More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.
