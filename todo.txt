@@ -67,8 +67,14 @@ Considering another player gives several ideas depending. If they have possessio
 Add a settting to allow players to turn off auto-eating and force-starve themselves.
 Investigation knowledge model. Each "knowledge" is made up of several "pieces of the puzzle". Investigation offers several random selections from the pieces of the puzzle list and grants them to the player. When the player has all the pieces of the puzzle, they gain the knowledge. Players can share their pieces of the puzzle with other players. Earlier, basic knowledges may only have one piece to their puzzles.
 Add random events each turn.
+Allow players to destroy items they own.
+Allow players to share "ideas" in the trade/teaching screen for free. Knowledges with zero components are also free when traded.
+Major rewrite of property management. Properties are no longer items - they exist from the beginning of the game, and there exists a type of knowledge coupled with them. Any players that possesses this knowledge can use this property for whatever they want. Players may obviously make claims to the property in various ways - signs, choosing to physically patrol the property to prevent people from using, traps and fences, guard animals (or hiring other players as guards) or even simply verbally in chat, but ultimately "possessing" a property comes down to your ability to prevent others from using it. However, this means that you can *allow* others to use it, for example to farm and harvest 'your' land, in exchange for a portion of their crops. Exploration may give you "discoveries", realling a random unknown property to you, but that property may have already been discovered by another player - and if they are using it sparingly, you may not even realize you're discovery means you are trespassing on someone elses land!
 Add constructions - fences and houses. Both reduce chance of items getting stolen.
-Allow players to destroy items they own
+Every player starts with knowledge of a few starting properties - The Machine, and The Commons, which starts as a wilderness area.
+Properties should have physical locations. Exploring involves exploring specific unexplored (or already explored) sections of a map, and if you're the first to explore that area there might be additional surprises there for you (diseases, artifacts, etc.). Players have a physical presence at locations, and travel times to move from one location to another. Trades and communication and other player interactions (and actions that depend on specific properties) are only possible at locations the player is at. Exploring costs the vigor to move from your location to the one to be explored, as well as a point of vigor to actually conduct the exploration.
+Every location can have one or several properties. Dolait groves for gathering dolait, scrublands for hunting and foraging in, fields for planting in, and marshland or badlands for prospecting for tomatunk and blasted lands for prospecting for wampoon - although who knows how much of each might actually be in those places. Dolait groves and scrublands will increase over time, reclamining fields. Clearing the land will turn parts of it back to field. Farmlands thus have different sizes, depending on the location and conditions.
+
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)
@@ -76,5 +82,4 @@ Max Happiness (max_happy)
 Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organized multitasker, big heart]
 
 BUGLIST AND SECURITY CONCERNS:
-Need to enforce that offered and asked items are properly limited to items from their respective owners.
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
