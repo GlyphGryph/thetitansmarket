@@ -282,7 +282,7 @@ class Character < ActiveRecord::Base
       )
       generics[tag].quantity += 1
     end
-    return generics.values
+    return generics.values.sort_by{|item| item.variant.singular_name}
   end
 
   def potential_actions
