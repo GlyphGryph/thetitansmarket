@@ -42,8 +42,13 @@
         <% else %>
           <% @inventory.each do |item| %>
             <div class="inventory-element element">
-              <div class="label"><%= item.variant.singular_name %></div>
-              <div class="count"><%= item.quantity %></div> 
+              <div class="label">
+                <span class="name"><%= item.variant.singular_name %></span>
+                <% if item.get.max_charges > 0 %>
+                  <span class="charges">(<%= item.charges %>)</span>
+                <% end %>
+                <span class="quantity">x<%= item.quantity %></span> 
+              </div>
               <div class="description"><%= item.description %></div>
             </div>
           <% end %>

@@ -16,6 +16,7 @@ Possession.new("farm",
 Possession.new("dolait_source", 
   { :name=>"Dolait Grove", 
     :description=>"A thick grove of dolait.", 
+    :max_charges=>25,
   }
 )
 Possession.new("tomatunk_source", 

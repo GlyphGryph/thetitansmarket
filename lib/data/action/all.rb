@@ -195,7 +195,7 @@ Action.new("clear_land",
       target = target.get
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
       if(target.id == 'dolait')
-        15.times do
+        target.charges.times do
           CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
         end
       elsif(target.id == 'wildlands')
@@ -372,11 +372,19 @@ Action.new("harvest_dolait",
       ],
     },
     :result => lambda { |character, target|
-      CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
-      if(character.possesses?("cutter"))
-        return ActionOutcome.new(:success_cutter)
+      if(target.deplete(1))
+        CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
+        if(target.charges <= 0)
+          target.destroy!
+          CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+        end
+        if(character.possesses?("cutter"))
+          return ActionOutcome.new(:success_cutter)
+        else
+          return ActionOutcome.new(:success)
+        end
       else
-        return ActionOutcome.new(:success)
+        return ActionOutcome.new(:impossible) 
       end
     },
     :messages => {
@@ -386,7 +394,9 @@ Action.new("harvest_dolait",
       :impossible => lambda { |args| "You couldn't gather dolait." },
     },
     :requires => {
-      :possession => [{:id => 'dolait_source', :quantity => 1},],
+      :target => {
+        :possession => ['dolait_source'],
+      },
       :knowledge => ['basic_dolait'],
     },
     :base_cost => lambda { |character, target=nil| return 5 },

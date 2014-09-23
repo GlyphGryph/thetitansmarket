@@ -31,5 +31,6 @@ Possession.new("shaper_c",
 Possession.new("simple_toy", 
   { :name=>"Toy", 
     :description=>"Spend some time playing with this by yourself and you might feel better.", 
+    :max_charges=>10,
   }
 )

@@ -271,11 +271,13 @@ class Character < ActiveRecord::Base
   def possessions_list
     generics = {}
     self.character_possessions.each do |character_possession|
-      tag = [character_possession.possession_id,character_possession.possession_variant.key]
+      tag = [character_possession.possession_id,character_possession.possession_variant.key,character_possession.charges]
       generics[tag] ||= OpenStruct.new(
         :id => character_possession.possession_id,
+        :get => character_possession.get,
         :variant => character_possession.possession_variant, 
         :description => character_possession.get.description,
+        :charges => character_possession.charges,
         :quantity => 0
       )
       generics[tag].quantity += 1
