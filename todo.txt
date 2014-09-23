@@ -1,6 +1,5 @@
 Immediate goals:
 Items Expansion:
-  Add a "uses" attribute to "character_possessions", pulled from a "max uses" value in the possession definition. 
   Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
   Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
 
