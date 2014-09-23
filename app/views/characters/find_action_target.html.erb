@@ -14,6 +14,9 @@
         <% category.targets.each do |target| %>
           <div class="choosable-element element">
             <%= link_to target.get.name, add_action_with_target_path(:id => @character.id, :target_type => key, :target_id => target.id) %>
+            <% if(target.methods.include?(:charges)) %>
+              (Charges Remaining: <%= target.charges %>) 
+            <% end %>
             (Chance of Success: <%= @action.success_chance(@character, target) %>)
           </div>
         <% end %>

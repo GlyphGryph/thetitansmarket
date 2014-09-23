@@ -245,7 +245,8 @@ Action.new("plant",
       CharacterPossession.new(
         :character_id => character.id, 
         :possession_id => possession_id,
-        :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, variant_name)
+        :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, variant_name),
+        :charges => Possession.find(possession_id).max_charges,
       ).save!
       return ActionOutcome.new(:success, variant_name)
     },
@@ -275,19 +276,26 @@ Action.new("harvest_fields",
     :description => "You harvest the crops.",
     :base_success => 100,
     :result => lambda { |character, target|
+      variant_key = target.possession_variant.key
+      food_name = Plant.find(variant_key).food_name
       amount = 5
+      if(!target.deplete(amount))
+        amount = target.charges
+        target.deplete(target.charges)
+      end
+      if(target.charges <= 0)
+        target.destroy!
+        CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
+      end
       amount.times do
-        variant_key = target.possession_variant.key
-        variant_name = Plant.find(variant_key).food_name
         possession_id = "food"
         CharacterPossession.new(
           :character_id => character.id, 
           :possession_id => possession_id,
-          :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, variant_name)
+          :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, food_name)
         ).save!
       end
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-      food_name = Plant.find(target.variant).food_name
       return ActionOutcome.new(:success, food_name, amount)
     },
     :messages => {
@@ -295,15 +303,12 @@ Action.new("harvest_fields",
       :failure => lambda { |args| "The harvest failed." },
       :impossible => lambda { |args| "You could not harvest." },
     },
-    :consumes => [
-      :target,
-    ],
     :requires => {
       :knowledge => ['basic_farming'],
       :target => {:possession=>['farm']},
     },
     :target_prompt => "What would you like to harvest?",
-    :base_cost => lambda { |character, target=nil| return 5 },
+    :base_cost => lambda { |character, target=nil| return 2 },
     :cost_modifiers => {
       :possession => [
         {:id => 'cutter', :modifier => -1},
@@ -384,14 +389,14 @@ Action.new("harvest_dolait",
           return ActionOutcome.new(:success)
         end
       else
-        return ActionOutcome.new(:impossible) 
+        return ActionOutcome.new(:impossible, "There was no dolait remaining.") 
       end
     },
     :messages => {
       :success_cutter => lambda { |args| "You use your cutter to harvest some fresh dolait." },
       :success => lambda { |args| "You break off some fresh dolait branches." },
       :failure => lambda { |args| "The dolait you find proves too tough to gather." },
-      :impossible => lambda { |args| "You couldn't gather dolait." },
+      :impossible => lambda { |args| "You couldn't gather dolait.#{ (args && !args.empty?) ? " "+args[0] : ""}" },
     },
     :requires => {
       :target => {
@@ -399,7 +404,7 @@ Action.new("harvest_dolait",
       },
       :knowledge => ['basic_dolait'],
     },
-    :base_cost => lambda { |character, target=nil| return 5 },
+    :base_cost => lambda { |character, target=nil| return 2 },
     :cost_modifiers => {
       :possession => [
         {:id => 'cutter', :modifier => -1},
@@ -414,19 +419,32 @@ Action.new("gather_tomatunk",
     :description => "Go looking for chunks of tomatunk in the marsh.",
     :base_success_chance => 34,
     :result => lambda { |character, target|
-      if(character.possesses?("basket"))
-        amount_found = Random.new.rand(3)+1
-        amount_found.times do
-          CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-        end
-        if(amount_found > 1)
-          return ActionOutcome.new(:basket_success, "#{amount_found.to_s} blocks")
+      if(target.charges > 0)
+        if(character.possesses?("basket"))
+          amount_found = Random.new.rand(3)+1
+          if(target.deplete(amount_found))
+            amount_found.times do
+              CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+            end
+          else
+            amount_found = target.charges
+            target.deplete(amount_found)
+            amount_found.times do
+              CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+            end
+          end
+          if(amount_found > 1)
+            return ActionOutcome.new(:basket_success, "#{amount_found.to_s} blocks")
+          else
+            return ActionOutcome.new(:basket_success, "1 block")
+          end
         else
-          return ActionOutcome.new(:basket_success, "1 block")
+          target.deplete(1)
+          CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
+          return ActionOutcome.new(:success)
         end
       else
-        CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-        return ActionOutcome.new(:success)
+        return ActionOutcome.new(:failure) 
       end
     },
     :messages => {
@@ -436,13 +454,15 @@ Action.new("gather_tomatunk",
       :impossible => lambda { |args| "You couldn't gather tomatunk." },
     },
     :requires => {
-      :possession => [{:id => 'tomatunk_source', :quantity => 1},],
+      :target => {
+        :possession => ['tomatunk_source'],
+      },
       :knowledge => [:basic_tomatunk],
     },
-    :base_cost => lambda { |character, target=nil| return 3 },
+    :base_cost => lambda { |character, target=nil| return 2 },
     :cost_modifiers => {
-      :damage => 3,
-      :despair => 3,
+      :damage => 2,
+      :despair => 2,
     },
   }
 )
@@ -451,8 +471,12 @@ Action.new("gather_wampoon",
     :description => "Go looking for wampoon in the barrens.",
     :base_success_chance => 25,
     :result => lambda { |character, target|
-      CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
-      return ActionOutcome.new(:success)
+      if(target.deplete(1))
+        CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
+        return ActionOutcome.new(:success)
+      else
+        return ActionOutcome.new(:failure)
+      end
     },
     :messages => {
       :success => lambda { |args| "After hours of searching, you find some scraps of wampoon under a rock." },
@@ -460,13 +484,15 @@ Action.new("gather_wampoon",
       :impossible => lambda { |args| "You couldn't gather wampoon." },
     },
     :requires => {
-      :possession => [{:id => "wampoon_source", :quantity=>1},],
+      :target => {
+        :possession => ['wampoon_source'],
+      },
       :knowledge => [:basic_wampoon],
     },
-    :base_cost => lambda { |character, target=nil| return 3 },
+    :base_cost => lambda { |character, target=nil| return 1 },
     :cost_modifiers => {
-      :damage => 3,
-      :despair => 3,
+      :damage => 2,
+      :despair => 2,
     },
   }
 )

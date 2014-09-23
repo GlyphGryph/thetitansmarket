@@ -11,6 +11,7 @@ Possession.new("field",
 Possession.new("farm", 
   { :name=>"Farm Plot", 
     :description=>"A field full of food plants.", 
+    :max_charges=>10,
   }
 )
 Possession.new("dolait_source", 
@@ -22,11 +23,13 @@ Possession.new("dolait_source",
 Possession.new("tomatunk_source", 
   { :name=>"Tomatunk Deposit", 
     :description=>"A marshy area with signs of tomatunk.", 
+    :max_charges=>40,
   }
 )
 Possession.new("wampoon_source", 
   { :name=>"Wampoon Deposit", 
     :description=>"A barren, rocky area with evidence of wampoon.", 
+    :max_charges=>10,
   }
 )
 

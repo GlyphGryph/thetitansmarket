@@ -3,6 +3,8 @@ Items Expansion:
   Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
   Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
 
+Bugfix: Finishing a research sends the message "There is more to discover!", which is wrong. There is not more to discover.
+
 Hunger Expansion:
   Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
   Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
