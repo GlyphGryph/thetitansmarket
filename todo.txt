@@ -1,7 +1,6 @@
 Immediate goals:
 Items Expansion:
-  Make Farms, Dolait groves and Wampoon deposits pull from this, and revert to an empty field if there are none left.
-  Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field.
+  Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field, and any uneaten food should lose a charge and if it runs out of charges it should spoil and turn into a unit of rotted food and seeds.
 
 Bugfix: Finishing a research sends the message "There is more to discover!", which is wrong. There is not more to discover.
 
@@ -75,6 +74,8 @@ Add constructions - fences and houses. Both reduce chance of items getting stole
 Every player starts with knowledge of a few starting properties - The Machine, and The Commons, which starts as a wilderness area.
 Properties should have physical locations. Exploring involves exploring specific unexplored (or already explored) sections of a map, and if you're the first to explore that area there might be additional surprises there for you (diseases, artifacts, etc.). Players have a physical presence at locations, and travel times to move from one location to another. Trades and communication and other player interactions (and actions that depend on specific properties) are only possible at locations the player is at. Exploring costs the vigor to move from your location to the one to be explored, as well as a point of vigor to actually conduct the exploration.
 Every location can have one or several properties. Dolait groves for gathering dolait, scrublands for hunting and foraging in, fields for planting in, and marshland or badlands for prospecting for tomatunk and blasted lands for prospecting for wampoon - although who knows how much of each might actually be in those places. Dolait groves and scrublands will increase over time, reclamining fields. Clearing the land will turn parts of it back to field. Farmlands thus have different sizes, depending on the location and conditions.
+Attach use actions to items.
+Meat plants - have some "meat seeds" form harvestable fields, but instead of spoiling if unharvested it matures into monsters/wildlife.
 
 
 Characters have the following stats yet to be implemented:

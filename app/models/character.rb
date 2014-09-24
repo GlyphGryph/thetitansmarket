@@ -324,8 +324,7 @@ class Character < ActiveRecord::Base
   def execute
     self.unready
     
-    self.history << []
-    new_history = self.recent_history
+    new_history = []
 
     # Restore character's lost vigor for their next turn, before conditions potentially reduce it again
     self.vigor = self.max_vigor
@@ -343,6 +342,15 @@ class Character < ActiveRecord::Base
       effect = condition.result(self)
       if(effect && !effect.empty?)
         new_history << effect
+      end
+    end
+
+    # Age all this character's items
+    self.character_possessions.each do |character_possession|
+      possession = character_possession.get
+      result = possession.age(character_possession)
+      if(result.status == :loud)
+        new_history << result.message
       end
     end
     
@@ -381,6 +389,8 @@ class Character < ActiveRecord::Base
         end
       end
     end
+
+    self.history << new_history
 
     self.save!
   end
