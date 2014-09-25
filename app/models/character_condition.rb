@@ -10,4 +10,8 @@ class CharacterCondition < ActiveRecord::Base
     end
     return element
   end
+
+  def get_name(type=nil)
+    self.get.name
+  end
 end

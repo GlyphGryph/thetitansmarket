@@ -13,7 +13,7 @@
       <div class="info-block-body">
         <% category.targets.each do |target| %>
           <div class="choosable-element element">
-            <%= link_to target.get.name, add_action_with_target_path(:id => @character.id, :target_type => key, :target_id => target.id) %>
+            <%= link_to target.get_name(:singular), add_action_with_target_path(:id => @character.id, :target_type => key, :target_id => target.id) %>
             <% if(target.methods.include?(:charges)) %>
               (Charges Remaining: <%= target.charges %>) 
             <% end %>

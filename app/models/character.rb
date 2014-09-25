@@ -253,6 +253,10 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def get_name(type=nil)
+    return self.name
+  end
+
   def health_fraction
     return self.health.to_f / self.max_health.to_f
   end

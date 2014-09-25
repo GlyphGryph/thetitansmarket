@@ -27,6 +27,28 @@
 #################
 # Basic Actions #
 #################
+Action.new("eat",
+  { :name => "Eat",
+    :description => "Eat a food.",
+    :base_success_chance => 100,
+    :result => lambda { |character, target|
+        return ActionOutcome.new(:success, "whatchamacallit")
+    },
+    :messages => {
+      :success => lambda { |args| "You eat the #{args[0]}." },
+      :failure => lambda { |args| "You fail to eat the #{args[0]}." },
+      :impossible => lambda { |args| "You could not eat." },
+    },
+    :base_cost => lambda { |character, target=nil| return 0 },
+    :requires => {
+      :target => {:possession=>['food']},
+    },
+    :cost_modifiers => {
+      :damage => 0,
+      :despair => 0,
+    },
+  }
+)
 Action.new("forage",
   { :name => "Forage", 
     :description => "You rummage through the underbrush.", 

@@ -36,11 +36,11 @@ class CharacterPossession < ActiveRecord::Base
     return element
   end
 
-  def singular_name
-    return self.possession_variant.singular_name
-  end
-
-  def plural_name
-    return self.possession_variant.plural_name
+  def get_name(type=:singular)
+    if(type==:plural)
+      return self.possession_variant.plural_name
+    else
+      return self.possession_variant.singular_name
+    end
   end
 end

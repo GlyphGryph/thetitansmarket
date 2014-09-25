@@ -28,4 +28,8 @@ class CharacterKnowledge < ActiveRecord::Base
   def max_progress
     self.get.components
   end
+
+  def get_name(type=nil)
+    self.get.name
+  end
 end
