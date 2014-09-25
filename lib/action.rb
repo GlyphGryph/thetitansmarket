@@ -163,7 +163,7 @@ class Action
         outcome = ActionOutcome.new(:impossible)
       end
     else
-      if(Random.new.rand(1..100) > success_chance)
+      if(rand(1..100) > success_chance)
         if(target)
           outcome = ActionOutcome.new(:failure, target.get.name)
         else
@@ -197,7 +197,7 @@ class Action
   end
 
   def success_chance(character, target)
-    chance = @base_success_chance
+    chance = @base_success_chance.call(character, target)
     if(@success_modifiers[:possession])
       @success_modifiers[:possession].each do |possession|
         if character.possesses?(possession[:id])

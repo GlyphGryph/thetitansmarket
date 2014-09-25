@@ -201,11 +201,16 @@ class Character < ActiveRecord::Base
 
   def eat(amount=1)
     if(self.possesses?('food'))
-      food = self.character_possessions.where(:possession_id => 'food').first
+      character_possession = self.character_possessions.where(:possession_id => 'food').first
       if(self.knows?("basic_farming"))
-        CharacterPossession.new(:character => self, :possession_id => 'seed', :variant=>food.variant).save!
+        variant_key = character_possession.possession_variant.key
+        CharacterPossession.new(
+          :character => self,
+          :possession_id => 'seed',
+          :possession_variant => PossessionVariant.find_or_do(variant_key, 'seed', Possession.find("seed").variant_name(variant_key)),
+        ).save!
       end
-      food.destroy!
+      character_possession.destroy!
       return true
     else
       return false

@@ -1,5 +1,6 @@
 Possession.new("food", 
   { :name => "Food", 
+    :variant_name => lambda { |key| return Plant.find(key).food_name },
     :description => "This thing is, more or less, edible.", 
     :max_charges  =>  2,
     :age => lambda { |character_possession|
@@ -11,7 +12,12 @@ Possession.new("food",
         CharacterPossession.new(:character => character, :possession_id => "rot").save!
         # If this has seeds and the character knows to save them, create them as well
         if(character.knows?("basic_farming"))
-          CharacterPossession.new(:character => character, :possession_id => 'seed', :variant=>food.variant).save!
+          variant_key = character_possession.possession_variant.key
+          CharacterPossession.new(
+            :character => character,
+            :possession_id => 'seed',
+            :possession_variant => PossessionVariant.find_or_do(variant_key, 'seed', Possession.find("seed").variant_name(variant_key)),
+          ).save!
         end
         character_possession.destroy!
         return AgeResult.new(:loud, message)
@@ -20,7 +26,8 @@ Possession.new("food",
   }
 )
 Possession.new("seed", 
-  { :name => "Seeds", 
+  { :name => "Seeds",
+    :variant_name => lambda { |key| return Plant.find(key).seed_name },
     :description => "These seeds can be planted.", 
   }
 )

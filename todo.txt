@@ -2,6 +2,8 @@ Immediate goals:
 Items Expansion:
   Add an "age" method to possessions. Run this for each item each time the world turns. Dolait groves should increase the amount of Dolait uses by 10% (up to max) each turn. At the end of turn, any unharvested farm should lose all remaining uses and revert to an empty field, and any uneaten food should lose a charge and if it runs out of charges it should spoil and turn into a unit of rotted food and seeds.
 
+  Replace all Random.news with rand()
+
 Bugfix: Finishing a research sends the message "There is more to discover!", which is wrong. There is not more to discover.
 
 Hunger Expansion:

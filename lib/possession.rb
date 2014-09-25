@@ -5,6 +5,7 @@ class Possession
   def initialize(id, params={})
     @id = id
     @name = params[:name] || "Name Error"
+    @variant_name = params[:variant_name] || lambda { |key| return @name }
     @description = params[:description] || "Description Error"
     @max_charges = params[:max_charges] || 0
     @age = params[:age] || lambda{|character_possession| return AgeResult.new(:silent) }
@@ -17,6 +18,10 @@ class Possession
 
   def age(character_possession)
     return @age.call(character_possession)
+  end
+
+  def variant_name(key)
+    @variant_name.call(key)
   end
 end
 
