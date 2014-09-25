@@ -8,7 +8,7 @@ class Action
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
 
-    @base_success_chance = params[:base_success_chance] || lambda { |character, target| return 100 }
+    @base_success_chance = params[:base_success_chance] || 100
     @success_modifiers = params[:success_modifiers] || {}
 
     @consumes = params[:consumes] || []
@@ -197,7 +197,7 @@ class Action
   end
 
   def success_chance(character, target)
-    chance = @base_success_chance.call(character, target)
+    chance = @base_success_chance
     if(@success_modifiers[:possession])
       @success_modifiers[:possession].each do |possession|
         if character.possesses?(possession[:id])
