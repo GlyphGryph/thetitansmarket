@@ -1,8 +1,10 @@
 Immediate goals:
 Hunger Expansion:
-  Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
+  Turn "Eat" action temporarily remove the "hunger" condition.
   Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
   Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
+
+Make the various targetable classes share a module with default definitions of things like "get_name"
 
 Traits
   Allow creation of traits
