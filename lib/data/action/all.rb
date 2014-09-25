@@ -35,7 +35,7 @@ Action.new("forage",
       found = Plant.all.sample
       possession_id = "food"
       if(character.possesses?("basket"))
-        amount_found = Random.new.rand(3)+1
+        amount_found = rand(3)+1
         amount_found.times do
           CharacterPossession.new(
             :character_id => character.id, 
@@ -199,7 +199,7 @@ Action.new("clear_land",
           CharacterPossession.new(:character_id => character.id, :possession_id => "dolait").save!
         end
       elsif(target.id == 'wildlands')
-        Random.new.rand(1..4).times do
+        rand(1..4).times do
           found = Plant.all.sample
           possession_id = "food"
           CharacterPossession.new(
@@ -327,17 +327,17 @@ Action.new("play_with_toy",
     :description => "Spend some time playing with one of your toys.",
     :result => lambda { |character, target|
       # Success
-      if(Random.new.rand(1..100) < 75)
+      if(rand(1..100) < 75)
         character.change_resolve(1)
         toy = character.character_possessions.where(:possession_id => "simple_toy").first
-        if(Random.new.rand(1..100) < 25)
+        if(rand(1..100) < 25)
           toy.destroy!
           return ActionOutcome.new(:success_broken)
         else
           return ActionOutcome.new(:success)
         end
       else
-        if(Random.new.rand(1..100) < 25)
+        if(rand(1..100) < 25)
           toy = character.character_possessions.where(:possession_id => "simple_toy").first
           toy.destroy!
           return ActionOutcome.new(:failure_broken)
@@ -421,7 +421,7 @@ Action.new("gather_tomatunk",
     :result => lambda { |character, target|
       if(target.charges > 0)
         if(character.possesses?("basket"))
-          amount_found = Random.new.rand(3)+1
+          amount_found = rand(3)+1
           if(target.deplete(amount_found))
             amount_found.times do
               CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
