@@ -154,6 +154,7 @@ Action.new("investigate",
           return ActionOutcome.new(:already_investigated, target.name)
         else
           character.learn(target.id, 1)
+          character.reload
           if(character.knows?(target.id))
             knowledge_research = Knowledge.find(target.id).research
           else

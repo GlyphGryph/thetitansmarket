@@ -1,9 +1,4 @@
 Immediate goals:
-Items Expansion:
-  Replace all Random.news with rand()
-
-Bugfix: Finishing a research sends the message "There is more to discover!", which is wrong. There is not more to discover.
-
 Hunger Expansion:
   Turn "Eat" into an explicit (free) action that lets you target some food quality item you possess and removes the "hunger" condition. If characters haven't eaten enough, they will eat anything available randomly to stave off hunger.
   Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
