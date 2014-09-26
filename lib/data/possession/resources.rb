@@ -8,7 +8,7 @@ Possession.new("food",
         return AgeResult.new(:silent)
       else
         character = character_possession.character
-        message = "Your #{character_possession.possession_variant.singular_name} has rotted away."
+        message = "Your #{character_possession.get_name} has rotted away."
         CharacterPossession.new(:character => character, :possession_id => "rot").save!
         # If this has seeds and the character knows to save them, create them as well
         if(character.knows?("basic_farming"))

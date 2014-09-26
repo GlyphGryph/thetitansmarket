@@ -23,5 +23,13 @@ class TradePossession < ActiveRecord::Base
     end
     return element
   end
+
+  def get_name(type=:singular)
+    if(type==:plural)
+      return self.possession_variant.plural_name
+    else
+      return self.possession_variant.singular_name
+    end
+  end
 end
 

@@ -43,7 +43,7 @@
           <% @inventory.each do |item| %>
             <div class="inventory-element element">
               <div class="label">
-                <span class="name"><%= item.variant.singular_name %></span>
+                <span class="name"><%= item.get_name(:singular) %></span>
                 <% if item.get.max_charges > 0 %>
                   <span class="charges">(<%= item.charges %>)</span>
                 <% end %>

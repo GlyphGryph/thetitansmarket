@@ -6,7 +6,7 @@
     <% @sender_possessions.each do |possession| %>
       <div>
         <%= number_field_tag("possessions[offered][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.variant.singular_name.to_s+" x"+possession.quantity.to_s) %>
+        <%= label_tag(possession.id, possession.get_name.to_s+" x"+possession.quantity.to_s) %>
       </div>
     <% end %>
   <% end %>
@@ -35,7 +35,7 @@
     <% @receiver_possessions.each do |possession| %>
       <div>
         <%= number_field_tag("possessions[asked][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.variant.singular_name.to_s+" x"+possession.quantity.to_s) %>
+        <%= label_tag(possession.id, possession.get_name.to_s+" x"+possession.quantity.to_s) %>
       </div>
     <% end %>
   <% end %>

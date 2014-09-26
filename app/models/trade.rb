@@ -38,9 +38,9 @@ class Trade < ActiveRecord::Base
           end
           found_item = found_item.first
           if(!found_item)
-            errors << "#{sender.name} offered #{trade_possession.possession_variant.singular_name}, but does not possess any of that item."
+            errors << "#{sender.name} offered #{trade_possession.get_name}, but does not possess any of that item."
           elsif(found_item.quantity < trade_possession.quantity)
-            errors << "#{sender.name} offered #{trade_possession.quantity}x #{trade_possession.possession_variant.singular_name}, but only possess #{found_item.quantity}x #{found_item.variant.singular_name}."
+            errors << "#{sender.name} offered #{trade_possession.quantity}x #{trade_possession.get_name}, but only possess #{found_item.quantity}x #{found_item.get_name}."
           end
         end
 
@@ -51,9 +51,9 @@ class Trade < ActiveRecord::Base
           end
           found_item = found_item.first
           if(!found_item)
-            errors << "#{sender.name} asked for #{trade_possession.possession_variant.singular_name}, but #{receiver.name} does not possess any of that item."
+            errors << "#{sender.name} asked for #{trade_possession.get_name}, but #{receiver.name} does not possess any of that item."
           elsif(found_item.quantity < trade_possession.quantity)
-            errors << "#{sender.name} asked for #{trade_possession.quantity}x #{trade_possession.possession_variant.singular_name}, but #{receiver.name} only possess #{found_item.quantity}x #{found_item.variant.singular_name}."
+            errors << "#{sender.name} asked for #{trade_possession.quantity}x #{trade_possession.get_name}, but #{receiver.name} only possess #{found_item.quantity}x #{found_item.get_name}."
           end
         end
      

@@ -271,7 +271,7 @@ Action.new("plant",
         :charges => Possession.find(possession_id).max_charges,
       )
       new_character_possession.save!
-      return ActionOutcome.new(:success, new_character_possession.singular_name)
+      return ActionOutcome.new(:success, new_character_possession.get_name)
     },
     :messages => {
       :success => lambda { |args| "You plow a field and plant your #{args[0]}." },

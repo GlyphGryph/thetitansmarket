@@ -3,7 +3,7 @@
   <div class="info-block-head">You get:</div>
   <div class="info-block-body">
     <% @character_gets.each do |trade_possession| %>
-      <div><%= trade_possession.quantity %>x <%= trade_possession.possession_variant.singular_name %></div>
+      <div><%= trade_possession.quantity %>x <%= trade_possession.get_name %></div>
     <% end %>
   </div>
 </div>
@@ -11,7 +11,7 @@
   <div class="info-block-head">You lose:</div>
   <div class="info-block-body">
     <% @character_loses.each do |trade_possession| %>
-      <div><%= trade_possession.quantity %>x <%= trade_possession.possession_variant.singular_name %></div>
+      <div><%= trade_possession.quantity %>x <%= trade_possession.get_name %></div>
     <% end %>
   </div>
 </div>
