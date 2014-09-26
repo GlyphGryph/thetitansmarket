@@ -29,7 +29,9 @@
       <div class="info-block-head">Conditions</div>
       <div class="info-block-body">
         <% @conditions.each do |condition| %>
-          <div class="conditions-element element"><%= condition.name %>: <%= condition.description %></div>
+          <% if condition.active? %>
+            <div class="conditions-element element"><%= condition.get_name %>: <%= condition.get.description %></div>
+          <% end %>
         <% end %>
       </div>
     </div>

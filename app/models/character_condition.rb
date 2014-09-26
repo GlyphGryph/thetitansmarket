@@ -14,4 +14,12 @@ class CharacterCondition < ActiveRecord::Base
   def get_name(type=nil)
     self.get.name
   end
+
+  def active?
+    self.get.active?(self)
+  end
+
+  def result
+    self.get.result(self)
+  end
 end

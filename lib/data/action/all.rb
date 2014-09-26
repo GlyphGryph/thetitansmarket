@@ -32,10 +32,12 @@ Action.new("eat",
     :description => "Eat a food.",
     :base_success_chance => 100,
     :result => lambda { |character, target|
-        return ActionOutcome.new(:success, "whatchamacallit")
+      character.nutrition+=1
+      character.save!
+      return ActionOutcome.new(:success, "whatchamacallit")
     },
     :messages => {
-      :success => lambda { |args| "You eat the #{args[0]}." },
+      :success => lambda { |args| "You eat the #{args[0]} and are no longer hungry." },
       :failure => lambda { |args| "You fail to eat the #{args[0]}." },
       :impossible => lambda { |args| "You could not eat." },
     },
@@ -43,6 +45,7 @@ Action.new("eat",
     :requires => {
       :target => {:possession=>['food']},
     },
+    :consumes => [:target],
     :cost_modifiers => {
       :damage => 0,
       :despair => 0,

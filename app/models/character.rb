@@ -37,6 +37,7 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.history ||= [["You were born from the machine, and thrust into the world."]]
+    self.nutrition ||= 0
   end
 
   def default_relationships
@@ -347,8 +348,7 @@ class Character < ActiveRecord::Base
 
     # Process this character's active conditions
     self.character_conditions.each do |character_condition|
-      condition = character_condition.get
-      effect = condition.result(self)
+      effect = character_condition.result
       if(effect && !effect.empty?)
         new_history << effect
       end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140922013221) do
+ActiveRecord::Schema.define(version: 20140926033358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20140922013221) do
     t.integer  "max_vigor"
     t.boolean  "readied"
     t.text     "history"
+    t.integer  "nutrition"
   end
 
   create_table "interactions", force: true do |t|

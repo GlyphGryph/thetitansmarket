@@ -14,7 +14,7 @@ class CharactersController < ApplicationController
       @inventory = @character.possessions_list
       @knowledges = @character.knowledges
       @ideas = @character.ideas
-      @conditions = @character.character_conditions.map(&:get)
+      @conditions = @character.character_conditions
       @history = @character.recent_history
       @queue_cost = @character.cost_of_all_actions
       @other_characters = @world.characters.reject{|c| c==@character}

@@ -4,22 +4,29 @@
 Condition.new("hunger",
   { :name=>"Hunger", 
     :description=>"You're in the mood for food.", 
-    :result => lambda { |character| 
-      if(character.eat)
-        return "You gobble up a unit of food."
-      else 
+    :result => lambda { |character_condition| 
+      character = character_condition.character
+      if(character_condition.active?)
         character.change_health(-3)
         character.change_resolve(-1)
         return "You suffer from starvation."
+      else
+        character.nutrition = 0
+        character.save!
+        return "You feel hungry again."
       end
     },
+    :active => lambda { |character_condition|
+      return character_condition.character.nutrition <= 0
+    }
   }
 )
 
 Condition.new("weariness",
   { :name=>"Weariness", 
     :description=>"Life keeps on keeping on.", 
-    :result => lambda { |character| 
+    :result => lambda { |character_condition| 
+      character = character_condition.character
       character.change_resolve(-1)
       return "As time passes, your feel a weight settle on your soul."
     },
@@ -28,7 +35,8 @@ Condition.new("weariness",
 Condition.new("resilience",
   { :name=>"Resilience", 
     :description=>"Pull yourself together, kid.", 
-    :result => lambda { |character| 
+    :result => lambda { |character_condition| 
+      character = character_condition.character
       character.change_health(1)
       return "You feel your body recovering from the damage it's sustained."
     },
@@ -37,7 +45,7 @@ Condition.new("resilience",
 Condition.new("pure_grit",
   { :name=>"Pure Grit", 
     :description=>"You're holding yourself together with nothing but willpower and determination at this point, but it can't last much longer...", 
-    :result => lambda { |character| 
+    :result => lambda { |character_condition| 
       return "This is a result."
     },
   }
@@ -45,7 +53,8 @@ Condition.new("pure_grit",
 Condition.new("nihilism",
   { :name=>"Nihilism", 
     :description=>"Is it even worth going on, if this is all life is?", 
-    :result => lambda { |character| 
+    :result => lambda { |character_condition| 
+      character = character_condition.character
       character.change_health(-2)
       return "You feel your body falling apart, but can't bring yourself to care."
     },
