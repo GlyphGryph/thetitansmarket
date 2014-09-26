@@ -77,6 +77,8 @@ Mines might have a "stability" that is decreased every time they are used, but c
 Switch over to a more dynamic component based system - each world should get its own, unique list of associated items. These should be built, dynamically, with a component-style system. It should be *random* though... this will take a lot of design planning before its possible.
 Consider the onboarding process - perhaps allow new players to join developed worlds, and allow them to communicate right off the bat? This will both maximize their opportunities to learn from other players, minimize some of the fundamental difficulties (as they'll start off with several useful techs)  and diminish their relative power (making them less likely to grief successfully). It might also be a good idea to have one very long lived 'training' world of some sort that guides them through the process of getting started...
 
+Spread rumours of a "hidden" stat called "divine favour". A "low divine favour" can cause the character to be struck by meteors or lightning, or be more likely to be attacked by animals and such. In reality, this events will be manually controlled by moderators. 
+
 Characters have the following stats yet to be implemented:
 Happiness (happy)
 Max Happiness (max_happy)
