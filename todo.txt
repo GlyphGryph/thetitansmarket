@@ -1,6 +1,5 @@
 Immediate goals:
 Hunger Expansion:
-  Turn "Eat" action temporarily remove the "hunger" condition.
   Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
   Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
 
@@ -73,7 +72,10 @@ Properties should have physical locations. Exploring involves exploring specific
 Every location can have one or several properties. Dolait groves for gathering dolait, scrublands for hunting and foraging in, fields for planting in, and marshland or badlands for prospecting for tomatunk and blasted lands for prospecting for wampoon - although who knows how much of each might actually be in those places. Dolait groves and scrublands will increase over time, reclamining fields. Clearing the land will turn parts of it back to field. Farmlands thus have different sizes, depending on the location and conditions.
 Attach use actions to items.
 Meat plants - have some "meat seeds" form harvestable fields, but instead of spoiling if unharvested it matures into monsters/wildlife.
-
+Secondary and Ternary resource layers - once surface wampoon and tomatunk is depleted, players should have the option of digging down to extract more, at the expense of indefinitely ruining the terrain for other purposes. 
+Mines might have a "stability" that is decreased every time they are used, but can be shored up by dolait supports, though this might end up as drudgery and not add anything.
+Switch over to a more dynamic component based system - each world should get its own, unique list of associated items. These should be built, dynamically, with a component-style system. It should be *random* though... this will take a lot of design planning before its possible.
+Consider the onboarding process - perhaps allow new players to join developed worlds, and allow them to communicate right off the bat? This will both maximize their opportunities to learn from other players, minimize some of the fundamental difficulties (as they'll start off with several useful techs)  and diminish their relative power (making them less likely to grief successfully). It might also be a good idea to have one very long lived 'training' world of some sort that guides them through the process of getting started...
 
 Characters have the following stats yet to be implemented:
 Happiness (happy)
