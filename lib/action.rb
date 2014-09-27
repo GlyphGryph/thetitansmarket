@@ -149,6 +149,14 @@ class Action
         end
       end
     end
+    if(@cost_modifiers[:trait])
+      @cost_modifiers[:trait].each do |trait|
+        if character.has_trait?(trait[:id])
+          modifier += trait[:modifier]
+        end
+      end
+    end
+
     modifier = modifier.round
 
     cost += modifier
@@ -208,6 +216,13 @@ class Action
     if(@success_modifiers[:target])
       if(target)
         chance += @success_modifiers[:target].call(character, target)
+      end
+    end
+    if(@success_modifiers[:trait])
+      @success_modifiers[:trait].each do |trait|
+        if character.has_trait?(trait[:id])
+          chance += trait[:modifier]
+        end
       end
     end
     return chance

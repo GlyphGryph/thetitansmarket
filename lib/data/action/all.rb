@@ -46,16 +46,17 @@ Action.new("eat",
       :target => {:possession=>['food']},
     },
     :consumes => [:target],
-    :cost_modifiers => {
-      :damage => 0,
-      :despair => 0,
-    },
   }
 )
 Action.new("forage",
   { :name => "Forage", 
     :description => "You rummage through the underbrush.", 
     :base_success_chance => 50,
+    :success_modifiers => {
+      :trait => [
+        {:id => 'keen_eyes', :modifier => 25},
+      ],
+    },
     :result => lambda { |character, target|
       found = Plant.all.sample
       possession_id = "food"
@@ -108,10 +109,13 @@ Action.new("explore",
       :success => lambda { |args| args[0] },
       :impossible => lambda { |args| "You could not explore." },
     },
-    :base_cost => lambda { |character, target=nil| return 5 },
+    :base_cost => lambda { |character, target=nil| return 6 },
     :cost_modifiers => {
       :damage => 5,
       :despair => 5,
+      :trait => [
+        {:id => 'keen_eyes', :modifier => -3},
+      ],
     },
   }
 )
@@ -160,6 +164,9 @@ Action.new("ponder",
     :base_cost => lambda { |character, target=nil| return 3 },
     :cost_modifiers => {
       :despair => 5,
+      :trait => [
+        {:id => 'sharp_mind', :modifier => -2},
+      ],
     },
   }
 )
@@ -168,6 +175,9 @@ Action.new("investigate",
     :description => "Pursue a promising idea.",
     :base_success_chance => 100,
     :success_modifiers => {
+      :trait => [
+        {:id => 'sharp_mind', :modifier => 25},
+      ],
       :target => lambda { |character, target| 
         return -target.get.difficulty; 
       },
@@ -254,6 +264,9 @@ Action.new("clear_land",
       :possession => [
         {:id => 'cutter', :modifier => -4},
       ],
+      :trait => [
+        {:id => 'hard_worker', :modifier => -3},
+      ],
       :damage => 10,
       :despair => 2,
     },
@@ -292,6 +305,9 @@ Action.new("plant",
     :target_prompt => "What would you like to plant?",
     :base_cost => lambda { |character, target=nil| return 5 },
     :cost_modifiers => {
+      :trait => [
+        {:id => 'hard_worker', :modifier => -1},
+      ],
       :damage => 3,
       :despair => 1,
     },
@@ -401,6 +417,9 @@ Action.new("harvest_dolait",
       :possession => [
         {:id => 'cutter', :modifier => 25},
       ],
+      :trait => [
+        {:id => 'hard_worker', :modifier => 25},
+      ],
     },
     :result => lambda { |character, target|
       if(target.deplete(1))
@@ -430,10 +449,13 @@ Action.new("harvest_dolait",
       },
       :knowledge => ['basic_dolait'],
     },
-    :base_cost => lambda { |character, target=nil| return 2 },
+    :base_cost => lambda { |character, target=nil| return 3 },
     :cost_modifiers => {
       :possession => [
         {:id => 'cutter', :modifier => -1},
+      ],
+      :trait => [
+        {:id => 'hard_worker', :modifier => -1},
       ],
       :damage => 4,
       :despair => 1,
@@ -444,6 +466,12 @@ Action.new("gather_tomatunk",
   { :name => "Gather Tomatunk",
     :description => "Go looking for chunks of tomatunk in the marsh.",
     :base_success_chance => 34,
+    :success_modifiers => {
+      :trait => [
+        {:id => 'hard_worker', :modifier => 16},
+        {:id => 'keen_eye', :modifier => 26},
+      ],
+    },
     :result => lambda { |character, target|
       if(target.charges > 0)
         if(character.possesses?("basket"))
@@ -485,8 +513,11 @@ Action.new("gather_tomatunk",
       },
       :knowledge => [:basic_tomatunk],
     },
-    :base_cost => lambda { |character, target=nil| return 2 },
+    :base_cost => lambda { |character, target=nil| return 3 },
     :cost_modifiers => {
+      :trait => [
+        {:id => 'hard_worker', :modifier => -1},
+      ],
       :damage => 2,
       :despair => 2,
     },
@@ -495,7 +526,12 @@ Action.new("gather_tomatunk",
 Action.new("gather_wampoon",
   { :name => "Gather Wampoon",
     :description => "Go looking for wampoon in the barrens.",
-    :base_success_chance => 25,
+    :base_success_chance => 15,
+    :success_modifiers => {
+      :trait => [
+        {:id => 'keen_eye', :modifier => 15},
+      ],
+    },
     :result => lambda { |character, target|
       if(target.deplete(1))
         CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
@@ -536,6 +572,9 @@ Action.new("craft_basket",
         {:id => 'shaper_b', :modifier => 15},
         {:id => 'shaper_c', :modifier => 15},
       ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 30},
+      ],
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
@@ -568,9 +607,12 @@ Action.new("craft_cutter",
     :base_success_chance => 50,
     :success_modifiers => {
       :possession => [
-        {:id => 'shaper_a', :modifier => 15},
-        {:id => 'shaper_b', :modifier => 15},
-        {:id => 'shaper_c', :modifier => 15},
+        {:id => 'shaper_a', :modifier => 10},
+        {:id => 'shaper_b', :modifier => 10},
+        {:id => 'shaper_c', :modifier => 10},
+      ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 20},
       ],
     },
     :result => lambda { |character, target|
@@ -605,9 +647,12 @@ Action.new("craft_shaper_a",
     :base_success_chance => 50, 
     :success_modifiers => {
       :possession => [
-        {:id => 'shaper_a', :modifier => 15},
-        {:id => 'shaper_b', :modifier => 15},
-        {:id => 'shaper_c', :modifier => 15},
+        {:id => 'shaper_a', :modifier => 10},
+        {:id => 'shaper_b', :modifier => 10},
+        {:id => 'shaper_c', :modifier => 10},
+      ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 20},
       ],
     },
     :result => lambda { |character, target|
@@ -641,9 +686,12 @@ Action.new("craft_shaper_b",
     :base_success_chance => 50, 
     :success_modifiers => {
       :possession => [
-        {:id => 'shaper_a', :modifier => 15},
-        {:id => 'shaper_b', :modifier => 15},
-        {:id => 'shaper_c', :modifier => 15},
+        {:id => 'shaper_a', :modifier => 10},
+        {:id => 'shaper_b', :modifier => 10},
+        {:id => 'shaper_c', :modifier => 10},
+      ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 20},
       ],
     },
     :result => lambda { |character, target|
@@ -677,9 +725,12 @@ Action.new("craft_shaper_c",
     :base_success_chance => 50, 
     :success_modifiers => {
       :possession => [
-        {:id => 'shaper_a', :modifier => 15},
-        {:id => 'shaper_b', :modifier => 15},
-        {:id => 'shaper_c', :modifier => 15},
+        {:id => 'shaper_a', :modifier => 10},
+        {:id => 'shaper_b', :modifier => 10},
+        {:id => 'shaper_c', :modifier => 10},
+      ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 20},
       ],
     },
     :result => lambda { |character, target|
@@ -713,9 +764,12 @@ Action.new("craft_toy",
     :base_success_chance => 75, 
     :success_modifiers => {
       :possession => [
-        {:id => 'shaper_a', :modifier => 25},
-        {:id => 'shaper_b', :modifier => 25},
-        {:id => 'shaper_c', :modifier => 25},
+        {:id => 'shaper_a', :modifier => 20},
+        {:id => 'shaper_b', :modifier => 20},
+        {:id => 'shaper_c', :modifier => 20},
+      ],
+      :trait => [
+        {:id => 'nimble_fingers', :modifier => 25},
       ],
     },
     :result => lambda { |character, target|

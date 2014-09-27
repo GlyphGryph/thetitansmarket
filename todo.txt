@@ -1,6 +1,12 @@
 Immediate goals:
 Traits
   Allow creation of traits
+  Hard Worker: Hard physical labour, like heavy resource extraction and farming, are more likely to succeed or cost less to perform.
+  Nimble Fingers: Crafting items is easier for you. Crafting actions have an increased chance of success.
+  Keen Eye: You are a much better at noticing things than others. Explorations cost significantly less, while foraging and searching are more likely to succeed.
+  Sharp Mind: You are significantly more likely to succeed in your investigations, and pondering is cheaper.
+  Pretty Face: When others play with you, socialize with you, or you perform for them, the amount of happiness they gain is increased.
+  Organized Planner: Your careful planning simply allows you to get more done. Your maximum vigor is increased by 10%.
 
 Content Expansion: Communication
   Allow players to add additional gestures/texts
@@ -45,6 +51,8 @@ Actions stuff:
 
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
 Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
+Replace the "play with toy" action with a "use item" action, that can generically target any item with a "use" action defined.
+Multiply all vigor costs and values by 10, to allow for finer calculation in cost bonuses. Especially for cheaper items, it's getting hard to balance...
 
 --FAR FUTURE--
 More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.

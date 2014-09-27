@@ -230,6 +230,10 @@ class Character < ActiveRecord::Base
     return !(self.character_conditions.where(:condition_id => condition_id).empty?)
   end
 
+  def has_trait?(trait_id)
+    return true
+  end
+
   def ideas
     ids = character_knowledges.select{|knowledge| !knowledge.known?}.map(&:id)
     CharacterKnowledge.where(:id => ids)
