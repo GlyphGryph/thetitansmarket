@@ -1,7 +1,7 @@
 class Trade < ActiveRecord::Base
   has_one :proposal, :as => :content
 
-  has_many :trade_possessions
+  has_many :trade_possessions, :dependent => :destroy
 
   has_many :trade_asked_knowledges, :dependent => :destroy
   has_many :trade_offered_knowledges, :dependent => :destroy

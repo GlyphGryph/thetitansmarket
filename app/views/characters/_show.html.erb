@@ -18,6 +18,12 @@
         <div class="label">Vigor</div>
         <div class="value"><%= shown_character.vigor %>/<%= shown_character.max_vigor -%></div>
       </div>
+      <div class="data-element">
+        <div class="label">Traits</div>
+        <div class="value">
+          <%= shown_character.character_traits.map{|trait| trait.get.name}.join(",") -%>
+        </div>
+      </div>
     </div>
   </div>
 </div>

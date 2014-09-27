@@ -16,6 +16,7 @@ class Character < ActiveRecord::Base
   has_many :character_actions, :dependent => :destroy
   has_many :character_possessions, :dependent => :destroy
   has_many :character_conditions, :dependent => :destroy
+  has_many :character_traits, :dependent => :destroy
   has_many :character_knowledges, :dependent => :destroy
   has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
@@ -231,7 +232,7 @@ class Character < ActiveRecord::Base
   end
 
   def has_trait?(trait_id)
-    return true
+    return !(self.character_traits.where(:trait_id => trait_id).empty?)
   end
 
   def ideas
