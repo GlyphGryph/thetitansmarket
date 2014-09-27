@@ -1,10 +1,4 @@
 Immediate goals:
-Hunger Expansion:
-  Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
-  Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
-
-Make the various targetable classes share a module with default definitions of things like "get_name"
-
 Traits
   Allow creation of traits
 
@@ -48,6 +42,9 @@ Actions stuff:
   Add the ability for players to edit an existing trade offer. This should reset acceptance status for both players.
   Make sure to add a check to prevent a player's accept from succeeding against an offer that has been updated since they last viewed it. Display a message saying the offer could not be accepted as it has changed.
   Add the ability to fill an offer automatically from items of the right type, or to choose [i]specifically[/i] which item is offered, and the ability to see it's details (condition, uses remaining, etc.). You can not fill in specific items for the other party, only for yourself.
+
+Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
+Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
 
 --FAR FUTURE--
 More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.
