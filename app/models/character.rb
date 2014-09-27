@@ -32,6 +32,9 @@ class Character < ActiveRecord::Base
     self.max_health ||= 10
     self.health ||= self.max_health
     self.max_vigor ||= 10
+    if(self.has_trait?("organized_planner")
+      self.max_vigor = (self.max_vigor * 1.1).ceil
+    end
     self.vigor ||= self.max_vigor
     self.max_resolve ||= 10
     self.resolve ||= self.max_resolve
