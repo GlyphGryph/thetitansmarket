@@ -1,6 +1,5 @@
 Immediate goals:
 Traits
-  Add the ability for a player to select a trait when joining a new world.
   Implement function of traits:
   Pretty Face: When others play with you, socialize with you, or you perform for them, the amount of happiness they gain is increased.
 
@@ -87,3 +86,21 @@ Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organi
 
 BUGLIST AND SECURITY CONCERNS:
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
+
+    ...====''''''''''''''''''====...
+........................................
+=== Ultimate Plan - Playing the game ===
+''''''''''''''''''''''''''''''''''''''''
+A number of players are introduced to a new game. Their characters have lifespans - limited time in the world. The goals are not straightforward, but living as long as possible, advancing as much as possible, and building a thriving situation while holding off the forces that threaten to bring everything down are all common goals. Ultimately, instead of dying, a sufficiently advanced civilization can allow its citizens to "Transcend" - acquiring Transcendence tokens is one of the keys to success in the meta-game. Any account may only enter a world once, and only 5 characters from any world may ever Transcend. Once they have done so, no new souls will be able to enter that world.
+
+Players can also be responsible for siring children, which is important if you want to acquire world lifespan bonuses. Additionally, any of your children that transcend also give you Transcendence tokens. However, you must raise them well enough to succeed, and if they aren't Adopted by another real player, they will come down with a condition called "failure to thrive" and wither away until they die.
+
+One of the other goals players can choose to follow is awakening the machine. The machine is a mysterious object from which the first players were born, and once it is awakened it will sometimes speak to players in their dreams, giving them goals to strive for. The people can never truly understand what the machine is or why it exists, but those who earn its favour seem more likely to thrive in this hostile world. The players can also choose to research the machine, although this is risky - valuable secrets may be uncovered, but it may earn the machine's hostility, making the world a more dangerous place. The machine seeks to preserve itself, and it will not hesitate to wipe out a people that prove to be a threat to it - but it may the only way to unlock the machines deepest secrets, and these secrets may be carried forward by those who Transcend or those who Embark.
+
+An alternative to Transcending is Embarking. This is an exit from the current world, with a chance of joining a new one at random, and will involve an ardous and dangerous journery through the in-between-lands. There are secrets to be discovered here as well, of course, and rare resources to acquire, But even a well prepared character has even odds of perishing during the trip, and it's one way - you can never go home. For a people that have Transcended its heroes or has dug too deeply into their machine, however, it is often the only choice aside from a slow death since all new children will fail to thrive. Multiple characters may embark together, in an event called a Migration, which will allow them to arrive at a new location together, along with their knowledge and any equipment that survived the journey.
+
+Players who Transcend lose their body and equipment, with the ascending character effectively dying, but they can use their Transcendence tokens to strenthen their... soul, if you will. These benefits will carry over to all characters the player controls in the present and future. The benefits of Transendence tokens vary wildly, and the options available depend on the character and circumstances of the ascenscion.
+
+Adoption allows a player to enter a world where the machine is no longer creating new bodies, by examining the children of appropriate age that are available and claiming one as their new body. Making a child attractive to adoption often involves caring for its health, teaching it well, and insuring it has good traits and equipment.
+
+The average lifespan of a character is about 30 days real time, with a maximum of 60 with all Transcendance and technology boosts.
