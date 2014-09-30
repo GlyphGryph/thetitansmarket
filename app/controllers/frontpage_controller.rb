@@ -1,7 +1,7 @@
 class FrontpageController < ApplicationController
   def index
     @resource_name = "user"
-    @worlds = World.all
+    @worlds = World.all.sort_by(&:id)
     @user_worlds = []
     if user_signed_in?
       @characters = current_user.characters
