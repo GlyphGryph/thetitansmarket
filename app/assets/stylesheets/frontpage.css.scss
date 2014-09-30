@@ -14,3 +14,32 @@
     }
   }
 }
+
+.world-list{
+  .entry{
+    border-top: 1px dotted black;
+    padding-bottom:5px;
+    padding-top:5px;
+
+    &.joined{
+      background-color:#DDD;
+    }
+
+    .world-title{
+      margin-bottom:2px;
+      font-weight:bold;
+    }
+
+    .join-world{
+      margin-left:15px;
+
+      .option-button a{
+        display:inline-block;
+        text-decoration:none;
+        padding-left:2px;
+        padding-right:2px;
+        border:1px solid black;
+      }
+    }
+  }
+}

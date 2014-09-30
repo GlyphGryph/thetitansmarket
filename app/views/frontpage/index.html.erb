@@ -1,10 +1,17 @@
 <% if user_signed_in? %>
   <div class="world-list list">
     <% @worlds.each do |world| %>
-      <div class="entry">
-        <%= world.id %>: <%= world.name%> (<%= world.characters.count %>)
-        <% unless (@user_worlds.include? world) %>
-          <%= link_to "Join World", join_world_path(:id => world.id) %>  
+      <div class="entry <%= @user_worlds.include?(world) ? "joined" : "open" %>">
+        <div class="world-title"><%= world.id %>: <%= world.name%> (<%= world.characters.count %>)</div>
+        <% if (@user_worlds.include? world) %>
+          Move character control here.
+        <% else %>
+          <div class ="join-world">Join World with:
+            <span class="option-button"><%= link_to "Random Trait", join_world_path(:id => world.id) %></span>
+            <% @traits.each do |trait| %>
+              <span class="option-button"><%= link_to trait.name, join_world_path(:id => world.id, :trait_id => trait.id) %></span>
+            <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>

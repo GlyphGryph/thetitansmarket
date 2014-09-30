@@ -8,6 +8,7 @@ class FrontpageController < ApplicationController
       @characters.each do |character|
         @user_worlds << character.world
       end
+      @traits = Trait.all
     end
   end
 end
