@@ -30,3 +30,8 @@ Trait.new("organized_planner",
     :description=>"Your careful planning simply allows you to get more done in a day. Your maximum vigor is increased by 10%.", 
   }
 )
+Trait.new("pretty_face",
+  { :name=>"Pretty Face", 
+    :description=>"The benefit to the morale of others for playing with, socializing with, or being entertained by you is significantly improved.", 
+  }
+)

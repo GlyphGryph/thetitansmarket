@@ -12,6 +12,8 @@ class Activity
     @accept_cost = @cost[:accept] || 0
     @offer_cost = @cost[:offer] || 0
     @messages = params[:messages] || {}
+    @character_addendum = params[:character_addendum] || lambda { |character| return false }
+    @target_addendum = params[:target_addendum] || lambda { |character, target| return false }
     self.class.add(@id, self)
   end
 
@@ -49,6 +51,14 @@ class Activity
 
   def type
     return "activity"
+  end
+
+  def character_addendum(character, target)
+    return @character_addendum.call(character, target)
+  end
+
+  def target_addendum(character, target)
+    return @target_addendum.call(character, target)
   end
 end
 

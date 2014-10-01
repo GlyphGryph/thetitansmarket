@@ -1,7 +1,22 @@
 <div>
   <h4>Possible Activities</h4>
+  <ul>
   <% @activities.each do |activity| %>
-    <%= radio_button_tag('activity', activity.id, :required => 'required') %>
-    <%= label_tag('activity_'+activity.id, "#{activity.name}: #{activity.description}") %>
+    <li>
+      <div class="activity-title-row">
+        <%= radio_button_tag('activity', activity.id, :required => 'required') %>
+        <%= label_tag('activity_'+activity.id, "#{activity.name}: #{activity.description}") %>
+      </div>
+      <% if(activity.character_addendum(@character, @target)) %>
+        <div class="activity-addendum-row">
+          <%= activity.character_addendum(@character, @target) %>
+        </div>
+      <% end %>
+      <% if(activity.target_addendum(@character, @target)) %>
+        <div class="activity-addendum-row">
+          <%= activity.target_addendum(@character, @target) %>
+        </div>
+      <% end %>
   <% end %>
+  </ul>
 </div>

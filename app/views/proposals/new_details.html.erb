@@ -4,7 +4,7 @@
   <%= link_to "Back to Proposals", proposals_path(:id=>@character.id) %>
 </div>
 
-<%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :method => 'post') do %>
+<%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
   <div class="info-block">
     <div class="info-block-head">
       <% if @proposal_type == 'Trade' %>
