@@ -1,65 +1,68 @@
 <% if user_signed_in? %>
-  <div class="world-list list">
-    <% @worlds_and_characters.each do |world_and_character| %>
-      <% world = world_and_character.world %>
-      <% character = world_and_character.character %>
-      <div class="entry <%= character ? "joined" : "open" %>">
-        <div class="world-title"><%= world.id %>: <%= world.name%> (<%= world.characters.count %>)</div>
-        <% if (character) %>
-          <div class="world-details">
-            <%= character.name %>
-            <% if !character.ready? %>
-              <b>!Awaiting Actions!</b>
-            <% end %>
-            <% if character.unread_proposals.count > 0 %>
-              <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
-            <% end %>
-            <%= link_to "Take Control", character_overview_path(:id => character) -%>
-          </div>
-        <% else %>
-          <div class ="join-world">Join World with:
-            <span class="option-button"><%= link_to "Random Trait", join_world_path(:id => world.id) %></span>
-            <% @traits.each do |trait| %>
-              <span class="option-button"><%= link_to trait.name, join_world_path(:id => world.id, :trait_id => trait.id) %></span>
-            <% end %>
-          </div>
+  <div id="player-frontpage">
+    <%= link_to "Create World", new_world_path, :class => "create-world-button button" %>
+    <div class="world-list list">
+      <% @worlds_and_characters.each do |world_and_character| %>
+        <% world = world_and_character.world %>
+        <% character = world_and_character.character %>
+        <div class="entry <%= character ? "joined" : "open" %>">
+          <div class="world-title"><%= world.id %>: <%= world.name%> (Population: <%= world.characters.count %>)</div>
+          <% if (character) %>
+            <div class="world-details">
+              <%= character.name %>
+              <% if !character.ready? %>
+                <b>!Awaiting Actions!</b>
+              <% end %>
+              <% if character.unread_proposals.count > 0 %>
+                <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
+              <% end %>
+              <%= link_to "Take Control", character_overview_path(:id => character) -%>
+            </div>
+          <% else %>
+            <div class ="join-world">Join World with:
+              <%= link_to "Random Trait", join_world_path(:id => world.id), :class => "button option-button" %>
+              <% @traits.each do |trait| %>
+                <%= link_to trait.name, join_world_path(:id => world.id, :trait_id => trait.id), :class => "button option-button" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <hr />
+    <% if(!@deceased_characters.empty?) %>
+      <div class="character-list list">
+        <% @deceased_characters.each do |character| %>
+          <div class="entry deceased">
+            <%= character.name %> [DECEASED] <%= link_to "View", show_character_path(:id => character) -%>
+          </div> 
         <% end %>
       </div>
+      <hr />
     <% end %>
-  </div>
-  <div class="world-new">
-    <%= link_to "Create World", new_world_path %>
-  </div>
-  <hr />
-  <div class="character-list list">
-    <% @deceased_characters.each do |character| %>
-      <div class="entry deceased">
-        <%= character.name %> [DECEASED] <%= link_to "View", show_character_path(:id => character) -%>
-      </div> 
-    <% end %>
-  </div>
+    <div class="debug">
+      <p><b>Since the game is currently in active development and only available to tests, it can be convenient to be able to skip ahead or otherwise ignore certain sections of the game. As such, there are a few 'cheats' available to testers, listed below. To enable this, enter the commands into the url bar at the end of the address while viewing a character overview screen.</b></p>
+      <p>
+        <b>/godmode</b>    ::This gives your character 1000health, 1000happiness, and 1000vigor.<br />
+        <b>/wish/possession/a/b</b>    ::This allows you to gain an item of your choice. 'a' should be replaced with the item id, and 'b' is optional but can be replaced with the desired quantitity of that item<br />
+        <b>/wish/knowledge/a</b>   ::This gives you a specific knowledge. Replace 'a' with the desired knowledge id.<br />
+      </p>
 
-  <hr />
-  <div class="debug">
-    <p><b>Since the game is currently in active development and only available to tests, it can be convenient to be able to skip ahead or otherwise ignore certain sections of the game. As such, there are a few 'cheats' available to testers, listed below. To enable this, enter the commands into the url bar at the end of the address while viewing a character overview screen.</b></p>
-    <p>
-      <b>/godmode</b>    ::This gives your character 1000health, 1000happiness, and 1000vigor.<br />
-      <b>/wish/possession/a/b</b>    ::This allows you to gain an item of your choice. 'a' should be replaced with the item id, and 'b' is optional but can be replaced with the desired quantitity of that item<br />
-      <b>/wish/knowledge/a</b>   ::This gives you a specific knowledge. Replace 'a' with the desired knowledge id.<br />
-    </p>
-
-    <div>
-      <b>Item ids:</b> <span style="color:red">(WARNING: Do not attempt to wish for seeds, farms, or food! The wish command does not work with these items.)</span><br />
-      <% Possession.all.each do |item| %>
-        <%= item.id %>,
-      <% end %>
-    </div>
-    <div>
-      <b>Knowledge ids:</b><br />
-      <% Knowledge.all.each do |item| %>
-        <%= item.id %>,
-      <% end %>
+      <div>
+        <b>Item ids:</b> <span style="color:red">(WARNING: Do not attempt to wish for seeds, farms, or food! The wish command does not work with these items.)</span><br />
+        <% Possession.all.each do |item| %>
+          <%= item.id %>,
+        <% end %>
+      </div>
+      <div>
+        <b>Knowledge ids:</b><br />
+        <% Knowledge.all.each do |item| %>
+          <%= item.id %>,
+        <% end %>
+      </div>
     </div>
 <% else %>
-  Welcome! Please log in or register!
+  <div id="anonymous-frontpage">
+    Welcome! Please log in or register!
+  </div>
 <% end %>
