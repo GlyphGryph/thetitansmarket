@@ -1,10 +1,12 @@
 Immediate goals:
+--STYLE BREAK--
+  Finish the interactions pages
+
 Content Expansion: Communication
   Allow players to add additional gestures/texts
   Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
   Allow building of message chains composed of multiple gestures and texts.
 
-Finish the interactions pages
 
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)

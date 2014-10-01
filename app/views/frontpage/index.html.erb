@@ -1,10 +1,21 @@
 <% if user_signed_in? %>
   <div class="world-list list">
-    <% @worlds.each do |world| %>
-      <div class="entry <%= @user_worlds.include?(world) ? "joined" : "open" %>">
+    <% @worlds_and_characters.each do |world_and_character| %>
+      <% world = world_and_character.world %>
+      <% character = world_and_character.character %>
+      <div class="entry <%= character ? "joined" : "open" %>">
         <div class="world-title"><%= world.id %>: <%= world.name%> (<%= world.characters.count %>)</div>
-        <% if (@user_worlds.include? world) %>
-          Move character control here.
+        <% if (character) %>
+          <div class="world-details">
+            <%= character.name %>
+            <% if !character.ready? %>
+              <b>!Awaiting Actions!</b>
+            <% end %>
+            <% if character.unread_proposals.count > 0 %>
+              <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
+            <% end %>
+            <%= link_to "Take Control", character_overview_path(:id => character) -%>
+          </div>
         <% else %>
           <div class ="join-world">Join World with:
             <span class="option-button"><%= link_to "Random Trait", join_world_path(:id => world.id) %></span>
@@ -15,29 +26,16 @@
         <% end %>
       </div>
     <% end %>
-    <div class="world-new">
-      <%= link_to "Create World", new_world_path %>
-    </div>
+  </div>
+  <div class="world-new">
+    <%= link_to "Create World", new_world_path %>
   </div>
   <hr />
   <div class="character-list list">
-    <% @characters.each do |character| %>
-      <% if character.world %>
-        <div class="entry">
-          <%= character.name %> (World <%= character.world.id %>, <%= character.world.name %>) 
-          <% if !character.ready? %>
-            <b>!Awaiting Actions!</b>
-          <% end %>
-          <% if character.unread_proposals.count > 0 %>
-            <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
-          <% end %>
-          <%= link_to "Take Control", character_overview_path(:id => character) -%>
-        </div> 
-      <% else %>
-        <div class="entry deceased">
-          <%= character.name %> [DECEASED] <%= link_to "View", show_character_path(:id => character) -%>
-        </div> 
-      <% end %>
+    <% @deceased_characters.each do |character| %>
+      <div class="entry deceased">
+        <%= character.name %> [DECEASED] <%= link_to "View", show_character_path(:id => character) -%>
+      </div> 
     <% end %>
   </div>
 
