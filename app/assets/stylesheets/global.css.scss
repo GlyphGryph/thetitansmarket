@@ -108,6 +108,25 @@ div {
   }
 }
 
+.quantity{
+  font-size:80%;
+  display:inline;
+
+  &:before{
+    content:'x';
+    margin-right:1px;
+  }
+}
+
+.charges{
+  font-size:80%;
+  background-color:#EEE;
+  border:1px solid black;
+  padding-left:2px;
+  padding-right:2px;
+  border-radius:4px;
+}
+
 a.basic-button{
   display:inline-block;
   text-decoration:none;

@@ -11,24 +11,7 @@
     .stat{
       display:inline-block;
     }
-
-    .inventory-element{
-      .label{
-        display:inline;
-        font-weight:bold;
-      }
-      .count{
-        font-size:80%;
-        display:inline;
-
-        &:before{
-          content:'x';
-          margin-right:1px;
-        }
-      }
-      .description{
-      }
-    }
+      
   }
 
   #controls{

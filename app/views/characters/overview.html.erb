@@ -34,65 +34,81 @@
     <div class="info-block" id="conditions">
       <div class="info-block-head">Conditions</div>
       <div class="info-block-body">
-        <% @conditions.each do |condition| %>
-          <% if condition.active? %>
-            <div class="conditions-element element"><%= condition.get_name %>: <%= condition.get.description %></div>
+        <div class="data-block">
+          <% @conditions.each do |condition| %>
+            <% if condition.active? %>
+              <div class="data-element">
+                <div class="value detailed" data-description="<%= condition.get.description %>"><%= condition.get.name %></div>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
 
     <div class="info-block" id="inventory">
       <div class="info-block-head">Inventory</div>
       <div class="info-block-body">
-        <% if @inventory.empty? %>
-          You have nothing.
-        <% else %>
-          <% @inventory.each do |item| %>
-            <div class="inventory-element element">
-              <div class="label">
-                <span class="name"><%= item.variant.singular_name %></span>
-                <% if item.get.max_charges > 0 %>
-                  <span class="charges">(<%= item.charges %>)</span>
-                <% end %>
-                <span class="quantity">x<%= item.quantity %></span> 
-              </div>
-              <div class="description"><%= item.description %></div>
+        <div class="data-block">
+          <% if @inventory.empty? %>
+            <div class="data-element">
+              <div class="value">You have nothing.</div>
             </div>
+          <% else %>
+            <% @inventory.each do |item| %>
+              <div class="data-element">
+                <div class="value">
+                  <span class="name detailed" data-description="<%= item.get.description %>"><%= item.variant.singular_name %></span>
+                  <% if item.get.max_charges > 0 %>
+                    <span class="charges"><%= item.charges %></span>
+                  <% end %>
+                  <span class="quantity"><%= item.quantity %></span> 
+                </div>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
-
 
     <div class="info-block" id="knowledges">
       <div class="info-block-head">Knowledge</div>
       <div class="info-block-body">
-        <% if @knowledges.empty? %>
-          You might as well be called John Snow.
-        <% else %>
-          <% @knowledges.each do |knowledge| %>
-            <div class="knowledge-element element">
-              <div class="label"><%= knowledge.get.name %></div>
+        <div class="data-block">
+          <% if @knowledges.empty? %>
+            <div class="data-element">
+              <div class="value">You might as well be called John Snow.</div>
             </div>
+          <% else %>
+            <% @knowledges.each do |knowledge| %>
+              <div class="data-element">
+                <div class="value detailed" data-description="<%= knowledge.get.description %>"><%= knowledge.get.name %></div>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
 
     <div class="info-block" id="knowledges">
       <div class="info-block-head">Ideas</div>
       <div class="info-block-body">
-        <% if @ideas.empty? %>
-          You've got no idea.
-        <% else %>
-          <% @ideas.each do |idea| %>
-            <div class="idea-element element">
-              <span class="label"><%= idea.get.name %></span>
-              <span class="progress">(Progress: <%= idea.progress %>/<%= idea.max_progress %>)</span>
+        <div class="data-block">
+          <% if @ideas.empty? %>
+            <div class="data-element">
+              <div class="value">You've got no idea.</div>
             </div>
+          <% else %>
+            <% @ideas.each do |idea| %>
+              <div class="data-element">
+                <div class="value">
+                  <span class="name detailed" data-description="<%= idea.get.consider %>"><%= idea.get.name %></span>
+                  <span class="charges"><%= idea.progress %>/<%= idea.max_progress %></span>
+                </div>
+              </div>
+            <% end %>
           <% end %>
-        <% end %>
+        </div>
       </div>
     </div>
   </div>
