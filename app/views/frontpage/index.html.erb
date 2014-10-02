@@ -7,25 +7,28 @@
         <% character = world_and_character.character %>
         <div class="entry <%= character ? "joined" : "open" %>">
           <div class="world-title"><%= world.id %>: <%= world.name%> (Population: <%= world.characters.count %>)</div>
-          <% if (character) %>
-            <div class="world-details">
+          <div class="world-details">
+            <% if (character) %>
+              <%= link_to "Take Control", character_overview_path(:id => character), :class => "button option-button" -%>
               <%= character.name %>
-              <% if !character.ready? %>
-                <b>!Awaiting Actions!</b>
+              <% if character.vigor > 0 %>
+                <span class="unspent-vigor">
+                  Unspent Vigor: <%= character.vigor %>
+                </span>
               <% end %>
               <% if character.unread_proposals.count > 0 %>
-                <b>(Unread proposals: <%= character.unread_proposals.count %>)</b>
+                <span class="unread-proposals">
+                  Unread proposals: <%= character.unread_proposals.count %>
+                </span>
               <% end %>
-              <%= link_to "Take Control", character_overview_path(:id => character) -%>
-            </div>
-          <% else %>
-            <div class ="join-world">Join World with:
+            <% else %>
+              Join World with:
               <%= link_to "Random Trait", join_world_path(:id => world.id), :class => "button option-button" %>
               <% @traits.each do |trait| %>
                 <%= link_to trait.name, join_world_path(:id => world.id, :trait_id => trait.id), :class => "button option-button" %>
               <% end %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>
