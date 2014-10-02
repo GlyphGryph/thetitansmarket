@@ -193,10 +193,6 @@ class Action
     success = (outcome.status != :failure)
     message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
     message = message.call(outcome.arguments)
-    if(outcome.status != :impossible && success_chance < 100)
-      message += " (#{ success ? "Success" : "Failure"}: #{success_chance}% chance of success)"
-    end
-    message += " (Required: #{@requires.inspect} / Consumed: #{@consumes.inspect})"
     return ActionResult.new(self.id, success, message, outcome.status)
   end
   
