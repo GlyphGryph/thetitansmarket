@@ -179,15 +179,19 @@
     <div class="info-block" id="action-queue">
       <div class="info-block-head">Possible Actions</div>
       <div class="info-block-body">
-        <div class="options">
-          <% @actions.each do |action|%>
-            <div class="options-element">
-              <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>: 
-              <%= action.description %> 
-              (Cost: <%= action.cost(@character) %>)
-            </div>
-          <% end %>
-        </div>
+        <div class="data-block">
+          <div class="data-element">
+            <% @actions.each do |action|%>
+              <div class="options-element">
+                <div class="value">
+                  <span class="charges"><%= action.cost(@character) %></span>
+                  <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>
+                </div>
+                <div class="sub-value">
+                  <%= action.description %> 
+                </div>
+              </div>
+            <% end %>
       </div>
     </div>
 

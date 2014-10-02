@@ -50,7 +50,7 @@ Action.new("eat",
 )
 Action.new("forage",
   { :name => "Forage", 
-    :description => "You rummage through the underbrush.", 
+    :description => "Rummage through the underbrush.", 
     :base_success_chance => 50,
     :success_modifiers => {
       :trait => [
@@ -100,7 +100,7 @@ Action.new("forage",
 ##########################
 Action.new("explore", 
   { :name => "Explore", 
-    :description => "You explore the wilds.", 
+    :description => "Explore the wilds.", 
     :base_success_chance => 100,
     :result => lambda { |character, target| 
       return ActionOutcome.new(:success, character.world.explore_with(character))
@@ -122,7 +122,7 @@ Action.new("explore",
 
 Action.new("ponder",
   { :name => "Ponder",
-    :description => "You think for a while.",
+    :description => "Think about a thing.",
     :base_success_chance => 100,
     :result => lambda { |character, target|
       target = target.get
@@ -225,7 +225,7 @@ Action.new("investigate",
 ###########
 Action.new("clear_land",
   { :name => "Clear Land",
-    :description => "Turn a plot of wilderness or a grove into a plot of farmable field.",
+    :description => "Turn overgrown terrain into a plot of farmable field.",
     :base_success => 100,
     :result => lambda { |character, target|
       target = target.get
@@ -275,7 +275,7 @@ Action.new("clear_land",
 
 Action.new("plant",
   { :name => "Sow Fields",
-    :description => "You plant your seeds.",
+    :description => "Plant some seeds.",
     :base_success => 100,
     :result => lambda { |character, target|
       variant_key = target.possession_variant.key
@@ -315,7 +315,7 @@ Action.new("plant",
 )
 Action.new("harvest_fields",
   { :name => "Harvest Fields",
-    :description => "You harvest the crops.",
+    :description => "Harvest a crop.",
     :base_success => 100,
     :result => lambda { |character, target|
       variant_key = target.possession_variant.key
@@ -366,7 +366,7 @@ Action.new("harvest_fields",
 ##########
 Action.new("play_with_toy",
   { :name => "Play With Toy",
-    :description => "Spend some time playing with one of your toys.",
+    :description => "Playing with a toy.",
     :result => lambda { |character, target|
       # Success
       if(rand(1..100) < 75)
@@ -411,7 +411,7 @@ Action.new("play_with_toy",
 ##############
 Action.new("harvest_dolait",
   { :name => "Harvest Dolait",
-    :description => "You harvest some dolait from the grove.",
+    :description => "Harvest some dolait from a grove.",
     :base_success_chance => 75,
     :success_modifiers => {
       :possession => [
@@ -464,7 +464,7 @@ Action.new("harvest_dolait",
 )
 Action.new("gather_tomatunk",
   { :name => "Gather Tomatunk",
-    :description => "Go looking for chunks of tomatunk in the marsh.",
+    :description => "Look for chunks of tomatunk in a marsh.",
     :base_success_chance => 34,
     :success_modifiers => {
       :trait => [
@@ -525,7 +525,7 @@ Action.new("gather_tomatunk",
 )
 Action.new("gather_wampoon",
   { :name => "Gather Wampoon",
-    :description => "Go looking for wampoon in the barrens.",
+    :description => "Looking for wampoon in some barrens.",
     :base_success_chance => 15,
     :success_modifiers => {
       :trait => [
