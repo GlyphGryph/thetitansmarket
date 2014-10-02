@@ -143,31 +143,36 @@
       </div>
     </div>
 
-    <div class="info-block  <%= (@queue_cost > @character.max_vigor)?'over-cost':''%>" id="action-queue">
-      <div class="info-block-head">
-        Actions Queue
-        <div class="queue-cost"><%= @queue_cost %>/<%= @character.max_vigor %></div>
-      </div>
+    <div class="info-block" id="action-queue">
+      <div class="info-block-head">Actions Queue</div>
       <div class="info-block-body">
-        <div class="selections">
+        <div class="data-block">
           <% if @character_actions.empty? %>
-            No actions selected.
+            <div class="data-element">
+              No actions selected.
+            </div>
           <% else %>
             <% running_cost = 0 %>
             <% @character_actions.each do |character_action| %>
               <% action_cost = character_action.get.cost(@character) %>
               <% running_cost += action_cost %>
-              <div class="selection-element ">
-                <span class="<%= (running_cost > @character.max_vigor)?'over-cost':''%>">
-                  <%= action_cost %> -
+              <div class="data-element ">
+                <span class >
+                  <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
+                </span>
+                <span class="charges <%= (running_cost > @character.vigor) ? 'over':''%>">
+                  <% if character_action.stored_vigor -%>
+                    <%= character_action.stored_vigor -%>
+                  <% else -%>
+                    0 
+                  <% end -%>
+                  /<%= action_cost -%>
+                </span>
+                <span class="value detailed" data-description="<%= character_action.get.description %>">
                   <%= character_action.get.name %> 
                   <% if character_action.get.requires_target? %>
                     (<%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." %>)
                   <% end %>
-                  <% if character_action.stored_vigor %>
-                    (Partially completed: <%= character_action.stored_vigor %>vigor spent)
-                  <% end %>
-                  <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>
               </div>
             <% end %>
@@ -180,9 +185,13 @@
       <div class="info-block-head">Possible Actions</div>
       <div class="info-block-body">
         <div class="data-block">
-          <div class="data-element">
+          <% if @actions.empty? %>
+            <div class="data-element">
+              There's nothing you can do.
+            </div>
+          <% else %>
             <% @actions.each do |action|%>
-              <div class="options-element">
+              <div class="data-element">
                 <div class="value">
                   <span class="charges"><%= action.cost(@character) %></span>
                   <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>
@@ -192,6 +201,7 @@
                 </div>
               </div>
             <% end %>
+          <% end %>
       </div>
     </div>
 

@@ -131,6 +131,10 @@ div {
   padding-left:2px;
   padding-right:2px;
   border-radius:4px;
+
+  &.over{
+    background-color:#666;
+  }
 }
 
 a.basic-button{
