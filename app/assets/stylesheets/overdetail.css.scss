@@ -1,0 +1,10 @@
+.detailed{
+  border-bottom:1px dotted black;
+}
+.overdetail{
+  display: block;
+  position: absolute;
+  border:1px solid black;
+  background-color:white;
+  pointer-events:none;
+}
