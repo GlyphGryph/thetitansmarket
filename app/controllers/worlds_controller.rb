@@ -8,14 +8,15 @@ class WorldsController < ApplicationController
     end
     @world = World.find(params[:id])
     ActiveRecord::Base.transaction do
-      @character = @world.join(current_user)
+      @world.join(current_user)
+      @character = Character.where(:world => @world, :user => current_user).first
       CharacterTrait.new(:trait_id => trait.id, :character => @character).save!
     end
     respond_to do |format|
       if(@character.new_record?)
         format.html { redirect_to root_path, :alert => "Failed to join world." }
       else
-        format.html { redirect_to root_path, :notice => "World joined successfully."}
+        format.html { redirect_to character_overview_path(:id => @character.id), :notice => "World joined successfully."}
       end
     end
   end
