@@ -157,17 +157,11 @@
               <% action_cost = character_action.get.cost(@character) %>
               <% running_cost += action_cost %>
               <div class="data-element ">
-                <span class >
+                <span class="x" >
                   <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>
                 <span class="charges <%= (running_cost > @character.vigor) ? 'over':''%>">
-                  <% if character_action.stored_vigor -%>
-                    <%= character_action.stored_vigor -%>
-                  <% else -%>
-                    0 
-                  <% end -%>
-                  /<%= action_cost -%>
-                </span>
+                  <%= character_action.stored_vigor || 0 -%>/<%= action_cost -%></span>
                 <span class="value detailed" data-description="<%= character_action.get.description %>">
                   <%= character_action.get.name %> 
                   <% if character_action.get.requires_target? %>
@@ -202,6 +196,7 @@
               </div>
             <% end %>
           <% end %>
+        </div>
       </div>
     </div>
 
