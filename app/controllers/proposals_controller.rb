@@ -183,7 +183,7 @@ class ProposalsController < ApplicationController
         end
       end
     rescue => e
-      errors = [e.string, "Could not make this proposal."].concat(errors)
+      errors = [e.to_s, "Could not make this proposal."].concat(errors)
       if(proposal && !proposal.errors.empty?)
         errors = errors.concat(proposal.errors)
       end
