@@ -6,7 +6,7 @@
     <% @sender_possessions.each do |possession| %>
       <div>
         <%= number_field_tag("possessions[offered][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.get_name.to_s+" x"+possession.quantity.to_s) %>
+        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
       </div>
     <% end %>
   <% end %>
@@ -19,7 +19,7 @@
   <% else %>
     <% @sender_teachables.each do |knowledge| %>
       <div>
-        <%= number_field_tag("asked_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
+        <%= number_field_tag("offered_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
         <%= label_tag(knowledge[:id], knowledge[:name]) %>
         (<%= knowledge[:remaining_progress] %> lessons remain)
       </div>
@@ -35,7 +35,7 @@
     <% @receiver_possessions.each do |possession| %>
       <div>
         <%= number_field_tag("possessions[asked][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.get_name.to_s+" x"+possession.quantity.to_s) %>
+        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
       </div>
     <% end %>
   <% end %>

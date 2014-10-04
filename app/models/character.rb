@@ -309,6 +309,7 @@ class Character < ActiveRecord::Base
         :variant => character_possession.possession_variant, 
         :description => character_possession.get.description,
         :charges => character_possession.charges,
+        :name => character_possession.get_name(:singular),
         :quantity => 0
       )
       generics[tag].quantity += 1

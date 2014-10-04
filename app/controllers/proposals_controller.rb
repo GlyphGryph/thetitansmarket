@@ -81,15 +81,38 @@ class ProposalsController < ApplicationController
     errors = []
     success = false
     proposal = nil
-    begin
-      ActiveRecord::Base.transaction do
+    #begin
+      #ActiveRecord::Base.transaction do
         if(proposal_type == 'Trade')
           possessions = params[:possessions] || []
           logger.error possessions.inspect
           asked_knowledge_ids = params[:asked_knowledge_ids] || []
           offered_knowledge_ids = params[:offered_knowledge_ids] || []
+          
+          possessions_traded = false
+          possessions.each do |offer_type, possession_details|
+            possession_details.each do |possession_id, variant_details|
+              variant_details.each do |variant_id, quantity|
+                if(quantity && !quantity.empty? && quantity.to_i > 0)
+                  possessions_traded = true
+                end
+              end
+            end
+          end
 
-          if(!possessions.empty? || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
+          knowledges_traded = false
+          asked_knowledge_ids.each do |knowledge_id, attributes|
+            if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+              knowledges_traded
+            end
+          end
+          offered_knowledge_ids.each do |knowledge_id, attributes|
+            if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
+              knowledges_traded
+            end
+          end
+
+          if(possessions_traded || !asked_knowledge_ids.empty? || !offered_knowledge_ids.empty?)
             trade = Trade.new()
             # Make trade possession entries
             possessions.each do |offer_type, possession_details|
@@ -101,7 +124,7 @@ class ProposalsController < ApplicationController
                     :offered => offered,
                     :possession_id => possession_id,
                     :possession_variant_id => variant_id,
-                    :quantity => quantity
+                    :quantity => quantity.to_i
                   ).save!
                 end
               end
@@ -115,12 +138,12 @@ class ProposalsController < ApplicationController
                 TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
               end
             end
-            offered_knowledge_ids.each do |knowledge_id, duration|
+            offered_knowledge_ids.each do |knowledge_id, attributes|
               if(attributes && attributes[:duration] && attributes[:duration].to_i > 0)
                 if(!@character.knows?(knowledge_id) || target.knows?(knowledge_id))
                   errors << "You can't teach #{knowledge_id}"
                 end
-                TradeAskedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
+                TradeOfferedKnowledge.new(:trade => trade, :knowledge_id => knowledge_id, :duration => attributes[:duration]).save!
               end
             end
             trade.save!
@@ -181,14 +204,14 @@ class ProposalsController < ApplicationController
         if(!errors.empty?)
           raise "Proposal failed."
         end
-      end
-    rescue => e
-      errors = [e.to_s, "Could not make this proposal."].concat(errors)
-      if(proposal && !proposal.errors.empty?)
-        errors = errors.concat(proposal.errors)
-      end
-      success = false
-    end
+      #end
+    #rescue => e
+    #  errors = [e.to_s, "Could not make this proposal."].concat(errors)
+    #  if(proposal && !proposal.errors.empty?)
+    #    errors = errors.concat(proposal.errors)
+    #  end
+    #  success = false
+    #end
     respond_to do |format|
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }
