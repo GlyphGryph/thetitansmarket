@@ -138,8 +138,21 @@
     <div class="info-block" id="proposal-manager">
       <div class="info-block-head">Proposals</div>
       <div class="info-block-body">
-        <div><%= "New: #{@character.unread_proposals.count}" %></div>
-        <%= link_to "View Proposals", proposals_path(:id => @character.id) %>
+        <div class="data-block">
+          <div class="data-element">
+            <div class="label">Unread</div>
+            <div class="value"><%= @character.unread_proposals.count %></div>
+          </div>
+          <div class="data-element">
+            <div class="label">Waiting for Response</div>
+            <div class="value"><%= @character.unread_proposals.count %></div>
+          </div>
+        </div>
+        <div class="data-block">
+          <div class="data-element">
+            <%= link_to "View Proposals", proposals_path(:id => @character.id), :class => "basic-button" %>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -226,7 +239,7 @@
       </div>
     </div>
 
-    <div class="info-block" id="character-history">
+    <div class="info-block log" id="character-history">
       <div class="info-block-head">Recently...</div>
       <div class="info-block-body">
         <% @history.each do |story| %>

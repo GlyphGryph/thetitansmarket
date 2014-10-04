@@ -1,10 +1,6 @@
 Immediate goals:
 --STYLE BREAK--
-  Restyle character overview elements
-    Finish restyling the actions queue
-      Fix the bug with the action queue not being ordered correctly (by creation date)
-    Restyle Proposals
-    Restyle Status
+  Rewrite the logging system so logs don't muddy up the character object and can be styled based on the type of log entry.
   Finish the interactions pages
   Restyle all the submenus
 
@@ -12,6 +8,10 @@ Content Expansion: Communication
   Allow players to add additional gestures/texts
   Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
   Allow building of message chains composed of multiple gestures and texts.
+
+
+Fix the bug with the action queue not being ordered correctly (by creation date)
+Clean up the new history logic
 
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)

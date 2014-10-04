@@ -10,7 +10,6 @@ class CharacterValidator < ActiveModel::Validator
 end
 
 class Character < ActiveRecord::Base
-  serialize :history
   belongs_to :user
   belongs_to :world
   has_many :character_actions, :dependent => :destroy
@@ -20,6 +19,7 @@ class Character < ActiveRecord::Base
   has_many :character_knowledges, :dependent => :destroy
   has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
+  has_many :logs, :as => :owner, :dependent => :destroy
 
   validates_presence_of :user
   include ActiveModel::Validations
@@ -27,7 +27,7 @@ class Character < ActiveRecord::Base
 
   before_create :default_attributes
   after_create :default_relationships
-  
+
   def default_attributes
     self.max_health ||= 10
     self.health ||= self.max_health
@@ -40,7 +40,6 @@ class Character < ActiveRecord::Base
     self.resolve ||= self.max_resolve
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
-    self.history ||= [["You were born from the machine, and thrust into the world."]]
     self.nutrition ||= 0
   end
 
@@ -67,7 +66,7 @@ class Character < ActiveRecord::Base
       if(result.status != :impossible)
         self.change_vigor(-cost)
       end
-      self.recent_history << result.message
+      self.current_history.make_entry(:success, result.message)
     else
       if(self.vigor > 0)
         if(target)
@@ -88,9 +87,8 @@ class Character < ActiveRecord::Base
   end
 
   # Return true until we encounter an action we can't afford to execute
-  def execute_queued_action(character_action)
+  def execute_queued_action(character_action, log)
     cost = character_action.cost_remaining
-    messages = []
     succeeded = false
     if(cost <= self.vigor)
       result = character_action.result
@@ -98,7 +96,7 @@ class Character < ActiveRecord::Base
         self.change_vigor(-cost)
       end
       character_action.destroy!
-      messages << result.message
+      messages << Log.new("success", result.message)
       succeeded = true
     elsif(self.vigor > 0)
       character_action.stored_vigor += self.vigor
@@ -106,7 +104,7 @@ class Character < ActiveRecord::Base
       self.change_vigor(-self.vigor)
       succeeded =false
     end
-    return OpenStruct.new(:status => succeeded, :messages => messages)
+    return succeeded
   end
 
   def can_add_action?(action_id)
@@ -209,7 +207,7 @@ class Character < ActiveRecord::Base
   end
 
   def die
-    self.recent_history << "You have died."
+    self.current_history.make_entry("important", "You have died.")
     self.world = nil
   end
 
@@ -236,7 +234,7 @@ class Character < ActiveRecord::Base
   end
 
   def earlier_history
-    return history.slice(0,(history.length-1))
+    return logs.slice(0,(logs.length-1)) || []
   end
 
   def get
@@ -332,8 +330,8 @@ class Character < ActiveRecord::Base
     self.save!
   end
 
-  def recent_history
-    return history.last
+  def current_history
+    return logs.last || []
   end
 
   def unready
@@ -356,7 +354,7 @@ class Character < ActiveRecord::Base
   def execute
     self.unready
     
-    new_history = []
+    new_log = Log.new()
 
     #===============
     #= End Of Turn =
@@ -367,35 +365,14 @@ class Character < ActiveRecord::Base
     while(self.character_actions.size > 0 && continue)
       queue_result = self.execute_queued_action(self.character_actions.first)
       continue = queue_result.status
-      new_history.concat(queue_result.messages)
+      new_log.make_entries(queue_result.messages)
     end
-      # cost_remaining = next_up.get.cost(self)
-      # if(next_up.stored_vigor)
-      #   cost_remaining -= next_up.stored_vigor
-      # end
-      # # If we have a negative cost somehow, treat it as a free action
-      # if(cost_remaining < 0)
-      #   cost_remaining = 0
-      # end
-      # if(cost_remaining <= self.vigor)
-      #   action = next_up.get
-      #   result = action.result(self, next_up.target)
-      #   new_history << result.message
-      #   if(result.status != :impossible)
-      #     self.change_vigor(-cost_remaining)
-      #   end
-      #   next_up.destroy!
-      # else
-      #   next_up.stored_vigor = self.vigor
-      #   self.change_vigor(-self.vigor)
-      #   next_up.save!
-      # end
 
     # Process this character's active conditions
     self.character_conditions.each do |character_condition|
       effect = character_condition.result
       if(effect && !effect.empty?)
-        new_history << effect
+        new_log.make_entry("passive", effect)
       end
     end
 
@@ -419,12 +396,12 @@ class Character < ActiveRecord::Base
         possession = character_possession.get
         result = possession.age(character_possession)
         if(result.status == :loud)
-          new_history << result.message
+          new_log("passive", result.message)
         end
       end
     end
 
-    self.history << new_history
+    self.logs << new_log
 
     self.save!
   end
