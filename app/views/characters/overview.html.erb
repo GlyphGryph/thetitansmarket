@@ -163,10 +163,14 @@
                 <% end -%>
                 <span class="charges <%= (running_cost > @character.vigor) ? 'over':''%>">
                   <%= character_action.stored_vigor || 0 -%>/<%= action_cost -%></span>
-                <span class="value detailed" data-description="<%= character_action.get.description %>">
-                  <%= character_action.get.name %> 
+                <span class="value">
+                  <span>
+                    <%= character_action.get.name %>
+                  </span>
                   <% if character_action.get.requires_target? %>
-                    (<%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." %>)
+                    <span>
+                      <%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." -%>
+                    </span>
                   <% end %>
                 </span>
               </div>
