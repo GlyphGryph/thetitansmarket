@@ -61,7 +61,7 @@ class Character < ActiveRecord::Base
   end
 
   def execute_action(action, target)
-    cost = action.cost(self)
+    cost = action.cost(self, target)
     if(cost <= self.vigor)
       result = action.result(self, target)
       if(result.status != :impossible)
@@ -85,6 +85,29 @@ class Character < ActiveRecord::Base
       end
     end
     self.save!
+  end
+
+  # Return true until we encounter an action we can't afford to execute
+  def execute_queued_action(character_action, target_history)
+    cost = character_action.cost_remaining
+    if(cost <= self.vigor)
+      result = character_action.result
+      if(result.status != :impossible)
+        self.change_vigor(-cost)
+      end
+      character_action.destroy!
+      target_history << result.message
+      return true
+    else
+      if(self.vigor > 0)
+        character_action.stored_vigor += self.vigor
+        character_action.save
+        self.change_vigor(-self.vigor)
+        return false
+      else
+        return false
+      end
+    end
   end
 
   def can_add_action?(action_id)
@@ -184,15 +207,6 @@ class Character < ActiveRecord::Base
     else
       return found.first.progress
     end
-  end
-
-  # Returns the total cost of all actions in this character's action queue
-  def cost_of_all_actions
-    cost = 0
-    self.character_actions.each do |character_action|
-      cost+=character_action.get.cost(self)
-    end
-    return cost
   end
 
   def die
@@ -344,15 +358,36 @@ class Character < ActiveRecord::Base
     
     new_history = []
 
-    # Restore character's lost vigor for their next turn, before conditions potentially reduce it again
-    self.vigor = self.max_vigor
+    #===============
+    #= End Of Turn =
+    #===============
 
-    # Close out any unclosed proposals this character made this turn
-    self.recent_proposals.each do |proposal|
-      if(proposal.status == 'open')
-        proposal.cancel
-      end
+    # Process this character's queued actions until we run out of actions or run out of ap
+    continue = true
+    while(self.character_actions.size > 0 && continue)
+      continue = self.execute_queued_action(self.character_actions.first, new_history)
     end
+      # cost_remaining = next_up.get.cost(self)
+      # if(next_up.stored_vigor)
+      #   cost_remaining -= next_up.stored_vigor
+      # end
+      # # If we have a negative cost somehow, treat it as a free action
+      # if(cost_remaining < 0)
+      #   cost_remaining = 0
+      # end
+      # if(cost_remaining <= self.vigor)
+      #   action = next_up.get
+      #   result = action.result(self, next_up.target)
+      #   new_history << result.message
+      #   if(result.status != :impossible)
+      #     self.change_vigor(-cost_remaining)
+      #   end
+      #   next_up.destroy!
+      # else
+      #   next_up.stored_vigor = self.vigor
+      #   self.change_vigor(-self.vigor)
+      #   next_up.save!
+      # end
 
     # Process this character's active conditions
     self.character_conditions.each do |character_condition|
@@ -362,47 +397,27 @@ class Character < ActiveRecord::Base
       end
     end
 
-    # Age all this character's items
-    self.character_possessions.each do |character_possession|
-      possession = character_possession.get
-      result = possession.age(character_possession)
-      if(result.status == :loud)
-        new_history << result.message
-      end
-    end
+    #=====================
+    #= Beginning of Turn =
+    #=====================
     
-    # Processing conditions may have killed us - if so, skip the beginning of next turn stuff
-    unless(self.dead?)
-      # Process this character's queued actions until we run out of actions or run out of ap
-      continue_processing = true
-      while(continue_processing)
-        next_up = self.character_actions.first
-        # Stop processing if there are no more actions or the next action is too expensive
-        if(next_up)
-          cost_remaining = next_up.get.cost(self)
-          if(next_up.stored_vigor)
-            cost_remaining -= next_up.stored_vigor
-          end
-          # If we have a negative cost somehow, treat it as a free action
-          if(cost_remaining < 0)
-            cost_remaining = 0
-          end
-          if(cost_remaining <= self.vigor)
-            action = next_up.get
-            result = action.result(self, next_up.target)
-            new_history << result.message
-            if(result.status != :impossible)
-              self.change_vigor(-cost_remaining)
-            end
-            next_up.destroy!
-          else
-            next_up.stored_vigor = self.vigor
-            self.change_vigor(-self.vigor)
-            next_up.save!
-            continue_processing = false
-          end
-        else
-          continue_processing = false
+    if(!self.dead?)
+      # Restore character's lost vigor for their next turn, before conditions potentially reduce it again
+      self.vigor = self.max_vigor
+
+      # Close out any unclosed proposals this character made this turn
+      self.recent_proposals.each do |proposal|
+        if(proposal.status == 'open')
+          proposal.cancel
+        end
+      end
+
+      # Age all this character's items
+      self.character_possessions.each do |character_possession|
+        possession = character_possession.get
+        result = possession.age(character_possession)
+        if(result.status == :loud)
+          new_history << result.message
         end
       end
     end

@@ -12,6 +12,11 @@ class CharacterAction < ActiveRecord::Base
   validates_presence_of :action_id
   include ActiveModel::Validations
   validates_with CharacterActionValidator
+  before_create :default_attributes
+
+  def default_attributes
+    self.stored_vigor ||= 0
+  end
 
   def get
     element = Action.find(self.action_id) 
@@ -22,6 +27,18 @@ class CharacterAction < ActiveRecord::Base
   end
 
   def target
-    ActionTarget.find(self.target_type, self.target_id) 
+    return ActionTarget.find(self.target_type, self.target_id) 
+  end
+
+  def cost
+    return self.get.cost(self.character, self.target)
+  end
+
+  def cost_remaining
+    return self.cost - self.stored_vigor
+  end
+
+  def result
+    return self.get.result(self.character, self.target)
   end
 end

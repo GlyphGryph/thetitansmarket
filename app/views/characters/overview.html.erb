@@ -154,8 +154,8 @@
           <% else %>
             <% running_cost = 0 %>
             <% @character_actions.each do |character_action| %>
-              <% action_cost = character_action.get.cost(@character) %>
-              <% running_cost += action_cost %>
+              <% action_cost = character_action.cost %>
+              <% running_cost += character_action.cost_remaining %>
               <div class="data-element ">
                 <span class="x" >
                   <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>

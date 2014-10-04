@@ -2,12 +2,12 @@ Immediate goals:
 --STYLE BREAK--
   Restyle character overview elements
     Finish restyling the actions queue
-      Change the action queue to execute with any *remaining* vigor. 
       Add a continue button to manually continue any action.
       Style the cancel button to look better.
       Heck, rename the charges box to something more general since I'm using it everywhere.
       Remove the parens from targets? Doesn't seem needed.
       Add some space between charges and the action name.
+      Fix the bug with the action queue not being ordered correctly (by creation date)
     Restyle Proposals
     Restyle Status
   Finish the interactions pages

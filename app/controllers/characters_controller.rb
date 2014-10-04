@@ -16,7 +16,6 @@ class CharactersController < ApplicationController
       @ideas = @character.ideas
       @conditions = @character.character_conditions
       @history = @character.recent_history
-      @queue_cost = @character.cost_of_all_actions
       @other_characters = @world.characters.reject{|c| c==@character}
       @unready_characters = @world.unready_characters
     end
