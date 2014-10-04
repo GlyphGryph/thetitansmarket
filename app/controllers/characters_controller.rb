@@ -84,6 +84,16 @@ class CharactersController < ApplicationController
     end
   end
 
+  def complete_action
+    character_action = CharacterAction.find(params[:character_action_id])
+    queue_result = @character.execute_queued_action(character_action)
+    @character.recent_history.concat(queue_result.messages)
+    @character.save!
+    respond_to do |format|
+      format.html { redirect_to character_overview_path }
+    end
+  end
+
   def ready
     @character.ready
     respond_to do |format|

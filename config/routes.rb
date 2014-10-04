@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'character/:id/find_action_target/:action_id' => 'characters#find_action_target', :as => :find_action_target
   get 'character/:id/add_action/:action_id/:target_type/:target_id' => 'characters#add_action_with_target', :as => :add_action_with_target
   get 'character/:id/remove_action/:character_action_id' => 'characters#remove_action', :as => :remove_action
+  get 'character/:id/complete_action/:character_action_id' => 'characters#complete_action', :as => :complete_action
   get 'character/:id/ready' => 'characters#ready', :as => :ready
   get 'character/:id/unready' => 'characters#unready', :as => :unready
   get 'character/:id/execute/:world_id' => 'characters#execute', :as => :execute_world

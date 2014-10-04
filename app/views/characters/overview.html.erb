@@ -157,7 +157,7 @@
               <% action_cost = character_action.cost %>
               <% running_cost += character_action.cost_remaining %>
               <div class="data-element ">
-                <span class="x" >
+                <span class="remove" >
                   <%= link_to "X", remove_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>
                 <span class="charges <%= (running_cost > @character.vigor) ? 'over':''%>">
@@ -167,6 +167,9 @@
                   <% if character_action.get.requires_target? %>
                     (<%= character_action.target ? character_action.target.get.name : "ERROR: Target does not exist." %>)
                   <% end %>
+                </span>
+                <span class="basic-button" >
+                  <%= link_to "Complete", complete_action_path(:id => @character.id, :character_action_id => character_action.id) %>
                 </span>
               </div>
             <% end %>

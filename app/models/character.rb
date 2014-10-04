@@ -88,26 +88,25 @@ class Character < ActiveRecord::Base
   end
 
   # Return true until we encounter an action we can't afford to execute
-  def execute_queued_action(character_action, target_history)
+  def execute_queued_action(character_action)
     cost = character_action.cost_remaining
+    messages = []
+    succeeded = false
     if(cost <= self.vigor)
       result = character_action.result
       if(result.status != :impossible)
         self.change_vigor(-cost)
       end
       character_action.destroy!
-      target_history << result.message
-      return true
-    else
-      if(self.vigor > 0)
-        character_action.stored_vigor += self.vigor
-        character_action.save
-        self.change_vigor(-self.vigor)
-        return false
-      else
-        return false
-      end
+      messages << result.message
+      succeeded = true
+    elsif(self.vigor > 0)
+      character_action.stored_vigor += self.vigor
+      character_action.save
+      self.change_vigor(-self.vigor)
+      succeeded =false
     end
+    return OpenStruct.new(:status => succeeded, :messages => messages)
   end
 
   def can_add_action?(action_id)
@@ -365,7 +364,9 @@ class Character < ActiveRecord::Base
     # Process this character's queued actions until we run out of actions or run out of ap
     continue = true
     while(self.character_actions.size > 0 && continue)
-      continue = self.execute_queued_action(self.character_actions.first, new_history)
+      queue_result = self.execute_queued_action(self.character_actions.first)
+      continue = queue_result.status
+      new_history.concat(queue_result.messages)
     end
       # cost_remaining = next_up.get.cost(self)
       # if(next_up.stored_vigor)
