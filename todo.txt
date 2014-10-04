@@ -2,7 +2,6 @@ Immediate goals:
 --STYLE BREAK--
   Restyle character overview elements
     Finish restyling the actions queue
-      Add a continue button to manually continue any action.
       Style the cancel button to look better.
       Heck, rename the charges box to something more general since I'm using it everywhere.
       Remove the parens from targets? Doesn't seem needed.

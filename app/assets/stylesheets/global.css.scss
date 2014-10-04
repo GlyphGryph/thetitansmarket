@@ -157,9 +157,13 @@ a.basic-button{
   }
 
   &.tiny-button{
+    font-size:80%;
+    line-height:100%;
     border-radius:2px;
-    padding-left:2px;
-    padding-right:2px;
+    margin:0px;
+    padding:1px;
+    padding-left:3px;
+    padding-right:3px;
   }
 }
 
