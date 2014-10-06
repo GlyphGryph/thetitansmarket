@@ -69,7 +69,7 @@ class World < ActiveRecord::Base
 
   def join(user)
     new_character = Character.new(:user => user, :world => self)
-    new_character.save
+    new_character.save!
     return new_character
   end
 

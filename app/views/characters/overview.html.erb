@@ -242,8 +242,8 @@
     <div class="info-block log" id="character-history">
       <div class="info-block-head">Recently...</div>
       <div class="info-block-body">
-        <% @history.each do |story| %>
-          <div class="story"><%= story %></div>
+        <% @history.log_entries.each do |entry| %>
+          <div class="story <%= entry.status %>"><%= entry.body %></div>
         <% end %>
         <div class="full-history"><%= link_to "View full history", character_history_path(:id=>@character.id) %></div>
       </div>

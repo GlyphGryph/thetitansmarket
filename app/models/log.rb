@@ -3,13 +3,15 @@ class Log < ActiveRecord::Base
   validates_presence_of :owner
   has_many :log_entries, :dependent => :destroy
 
-  def make_entry(type, body)
-    LogEntry.new(:type => type, :body => body, :log => self).save!
+  def make_entry(status, body)
+    new_entry = LogEntry.new(:status => status, :body => body)
+    self.log_entries << new_entry
+    new_entry.save!
   end
 
-  def make_entries(type, new_entries)
+  def make_entries(status, new_entries)
     new_entries.each do |new_entry|
-      self.add_entry(type, new_entry)
+      self.make_entry(status, new_entry)
     end
   end
 

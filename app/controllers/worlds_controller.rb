@@ -8,8 +8,7 @@ class WorldsController < ApplicationController
     end
     @world = World.find(params[:id])
     ActiveRecord::Base.transaction do
-      @world.join(current_user)
-      @character = Character.where(:world => @world, :user => current_user).first
+      @character = @world.join(current_user)
       CharacterTrait.new(:trait_id => trait.id, :character => @character).save!
     end
     respond_to do |format|

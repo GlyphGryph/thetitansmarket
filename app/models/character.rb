@@ -41,12 +41,6 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.nutrition ||= 0
-    if(self.logs.empty?)
-      new_log = Log.new()
-      new_log.save!
-      new_log.make_entry(:passive, "You were born from the machine, and thrust into the world.")
-      self.logs << new_log
-    end
   end
 
   def default_relationships
@@ -56,6 +50,11 @@ class Character < ActiveRecord::Base
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :progress => Knowledge.find('cognition').components)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :progress => Knowledge.find('play').components)
     self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :progress => Knowledge.find('gestures').components)
+    if(self.logs.empty?)
+      new_log = Log.new(:owner => self)
+      new_log.save!
+      new_log.make_entry("passive", "You were born from the machine, and thrust into the world.")
+    end
   end
   
   # Checks whether or not this character can add this action
