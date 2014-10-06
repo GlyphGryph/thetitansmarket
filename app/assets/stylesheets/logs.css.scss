@@ -1,9 +1,24 @@
 .log{
+  .story{
+    &:before{
+      position:relative;
+      display:inline-block;
+      font-weight:bold;
+      top:-2px;
+      width:3px;
+      height:3px;
+      border:2px solid black;
+      border-radius:4px;
+      content: " ";
+      margin-right:2px;
+    }
+  }
+
   .important{
 
   }
   .passive{
-
+    color:#666
   }
   .success{
 
