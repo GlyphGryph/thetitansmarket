@@ -71,7 +71,7 @@ class Character < ActiveRecord::Base
       if(result.status != :impossible)
         self.change_vigor(-cost)
       end
-      self.current_history.make_entry(:success, result.message)
+      self.current_history.make_entry("success", result.message)
     else
       if(self.vigor > 0)
         if(target)

@@ -149,9 +149,9 @@ class Trade < ActiveRecord::Base
       sender_message = sender_message+errors
       receiver_message = receiver_message+errors
     end
-    sender.current_history.make_message(:success, sender_message.join(" "))
+    sender.current_history.make_message("success", sender_message.join(" "))
     sender.save!
-    receiver.current_history.make_message(:success, sender_message.join(" "))
+    receiver.current_history.make_message("success", sender_message.join(" "))
     receiver.save!
     return success
   end

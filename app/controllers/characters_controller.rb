@@ -87,7 +87,7 @@ class CharactersController < ApplicationController
   def complete_action
     character_action = CharacterAction.find(params[:character_action_id])
     queue_result = @character.execute_queued_action(character_action)
-    @character.current_history.make_entries(:success, queue_result.messages)
+    @character.current_history.make_entries("success", queue_result.messages)
     @character.save!
     respond_to do |format|
       format.html { redirect_to character_overview_path }
