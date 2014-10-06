@@ -23,4 +23,8 @@ class Log < ActiveRecord::Base
       self.add_entry(new_entry)
     end
   end
+
+  def empty?
+    return self.log_entries.empty?
+  end
 end

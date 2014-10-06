@@ -41,6 +41,12 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.nutrition ||= 0
+    if(self.logs.empty?)
+      new_log = Log.new()
+      new_log.save!
+      new_log.make_entry(:passive, "You were born from the machine, and thrust into the world.")
+      self.logs << new_log
+    end
   end
 
   def default_relationships
