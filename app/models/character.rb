@@ -71,7 +71,7 @@ class Character < ActiveRecord::Base
       if(result.status != :impossible)
         self.change_vigor(-cost)
       end
-      self.current_history.make_entry("success", result.message)
+      self.current_history.make_entry(result.status, result.message)
     else
       if(self.vigor > 0)
         if(target)
@@ -97,11 +97,11 @@ class Character < ActiveRecord::Base
     succeeded = false
     if(cost <= self.vigor)
       result = character_action.result
-      if(result.status != :impossible)
+      if(result.attempted?)
         self.change_vigor(-cost)
       end
       character_action.destroy!
-      messages << Log.new("success", result.message)
+      log.make_entry(result.status, result.message)
       succeeded = true
     elsif(self.vigor > 0)
       character_action.stored_vigor += self.vigor
@@ -368,9 +368,7 @@ class Character < ActiveRecord::Base
     # Process this character's queued actions until we run out of actions or run out of ap
     continue = true
     while(self.character_actions.size > 0 && continue)
-      queue_result = self.execute_queued_action(self.character_actions.first)
-      continue = queue_result.status
-      new_log.make_entries(queue_result.messages)
+      continue = self.execute_queued_action(self.character_actions.first, new_log)
     end
 
     # Process this character's active conditions
@@ -401,7 +399,7 @@ class Character < ActiveRecord::Base
         possession = character_possession.get
         result = possession.age(character_possession)
         if(result.status == :loud)
-          new_log("passive", result.message)
+          new_log.make_entry("passive", result.message)
         end
       end
     end

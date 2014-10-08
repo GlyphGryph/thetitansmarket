@@ -166,16 +166,16 @@ class Action
     success_chance = self.success_chance(character, target)
     if(!self.executable?(character, target))
       if(target)
-        outcome = ActionOutcome.new(:impossible, target.get.name)
+        outcome = ActionOutcome.new(:failure, :impossible, target.get.name)
       else
-        outcome = ActionOutcome.new(:impossible)
+        outcome = ActionOutcome.new(:failure, :impossible)
       end
     else
       if(rand(1..100) > success_chance)
         if(target)
-          outcome = ActionOutcome.new(:failure, target.get.name)
+          outcome = ActionOutcome.new(:failure, :failure, target.get.name)
         else
-          outcome = ActionOutcome.new(:failure)
+          outcome = ActionOutcome.new(:failure, :failure)
         end
       else
         outcome = @result.call(character, target)
@@ -190,10 +190,10 @@ class Action
         end
       end
     end
-    success = (outcome.status != :failure)
-    message = @messages[outcome.status] || lambda {|args| "Error: Message not provided for this outcome."}
+    attempted = (outcome.status != :impossible)
+    message = @messages[outcome.message] || lambda {|args| "Error: Message not provided for this outcome."}
     message = message.call(outcome.arguments)
-    return ActionResult.new(self.id, success, message, outcome.status)
+    return ActionResult.new(self.id, outcome.status, attempted, message)
   end
   
   def requires_target?
@@ -232,18 +232,23 @@ end
 class ActionResult
   attr_accessor :success, :cost, :message, :status
 
-  def initialize(action_id, success, message="Error: No Message Provided", status=:unknown)
-    @success = success
+  def initialize(action_id, status, attempted, message="Error: No Message Provided")
     @message = message
     @action_id = action_id
-    @status = status
+    @status = status.to_s
+    @attempted = attempted
+  end
+
+  def attempted?
+    return @attempted
   end
 end
 
 class ActionOutcome
-  attr_accessor :status, :arguments
-  def initialize(status, *arguments)
+  attr_accessor :status, :message, :arguments
+  def initialize(status, message, *arguments)
     @status = status
+    @message  = message
     @arguments = arguments
   end
 end

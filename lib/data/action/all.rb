@@ -34,7 +34,7 @@ Action.new("eat",
     :result => lambda { |character, target|
       character.nutrition+=1
       character.save!
-      return ActionOutcome.new(:success, "whatchamacallit")
+      return ActionOutcome.new(:success, :success, "whatchamacallit")
     },
     :messages => {
       :success => lambda { |args| "You eat the #{args[0]} and are no longer hungry." },
@@ -70,14 +70,14 @@ Action.new("forage",
           ).save!
         end
         amount_found_string = (amount_found > 1) ? "#{amount_found} meals" : "#{amount_found} meal"
-        return ActionOutcome.new(:basket_success, found.plant_name, found.food_name, amount_found_string)
+        return ActionOutcome.new(:success, :basket_success, found.plant_name, found.food_name, amount_found_string)
       else
         CharacterPossession.new(
           :character_id => character.id, 
           :possession_id => possession_id,
           :possession_variant => PossessionVariant.find_or_do(found.id, possession_id, Possession.find(possession_id).variant_name(found.id)),
         ).save!
-        return ActionOutcome.new(:success, found.plant_name, found.food_name)
+        return ActionOutcome.new(:success, :success, found.plant_name, found.food_name)
       end
     },
     :messages => {
@@ -103,7 +103,7 @@ Action.new("explore",
     :description => "Explore the wilds.", 
     :base_success_chance => 100,
     :result => lambda { |character, target| 
-      return ActionOutcome.new(:success, character.world.explore_with(character))
+      return ActionOutcome.new(:success, :success, character.world.explore_with(character))
     },
     :messages => {
       :success => lambda { |args| args[0] },
@@ -141,14 +141,14 @@ Action.new("ponder",
       end
       if(!found)
         text = text.join(" ")
-        return ActionOutcome.new(:failure, text)
+        return ActionOutcome.new(:failure, :failure, text)
       elsif(!succeeded)
         text = text.join(" ")
-        return ActionOutcome.new(:already_pondered, text)
+        return ActionOutcome.new(:failure, :already_pondered, text)
       end
 
       text = text.join(" ")
-      return ActionOutcome.new(:success, text)
+      return ActionOutcome.new(:success, :success, text)
     },
     :messages => {
       :success => lambda { |args| args[0] },
@@ -186,7 +186,7 @@ Action.new("investigate",
       target = target.get
       if(target.type == 'knowledge' && Knowledge.find(target.id))
         if(character.knows?(target.id))
-          return ActionOutcome.new(:already_investigated, target.name)
+          return ActionOutcome.new(:failure, :already_investigated, target.name)
         else
           character.learn(target.id, 1)
           character.reload
@@ -195,10 +195,10 @@ Action.new("investigate",
           else
             knowledge_research = "There is still more to discover, however!"
           end
-          return ActionOutcome.new(:success, target.name, knowledge_research)
+          return ActionOutcome.new(:success, :success, target.name, knowledge_research)
         end
       else
-        return ActionOutcome.new(:impossible, target.name)
+        return ActionOutcome.new(:impossible, :impossible, target.name)
       end
     },
     :messages => {
@@ -245,7 +245,7 @@ Action.new("clear_land",
           ).save!
         end
       end
-      return ActionOutcome.new(:success, target.name)
+      return ActionOutcome.new(:success, :success, target.name)
       return "You clear a field."
     },
     :messages => {
@@ -287,7 +287,7 @@ Action.new("plant",
         :charges => Possession.find(possession_id).max_charges,
       )
       new_character_possession.save!
-      return ActionOutcome.new(:success, new_character_possession.get_name)
+      return ActionOutcome.new(:success, :success, new_character_possession.get_name)
     },
     :messages => {
       :success => lambda { |args| "You plow a field and plant your #{args[0]}." },
@@ -338,7 +338,7 @@ Action.new("harvest_fields",
         ).save!
       end
       CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
-      return ActionOutcome.new(:success, food_name, amount)
+      return ActionOutcome.new(:success, :success, food_name, amount)
     },
     :messages => {
       :success => lambda { |args| "You harvest a field of #{args[0]}, gaining #{args[1]} food." },
@@ -374,17 +374,17 @@ Action.new("play_with_toy",
         toy = character.character_possessions.where(:possession_id => "simple_toy").first
         if(rand(1..100) < 25)
           toy.destroy!
-          return ActionOutcome.new(:success_broken)
+          return ActionOutcome.new(:success, :success_broken)
         else
-          return ActionOutcome.new(:success)
+          return ActionOutcome.new(:success, :success)
         end
       else
         if(rand(1..100) < 25)
           toy = character.character_possessions.where(:possession_id => "simple_toy").first
           toy.destroy!
-          return ActionOutcome.new(:failure_broken)
+          return ActionOutcome.new(:failure, :failure_broken)
         else
-          return ActionOutcome.new(:failure)
+          return ActionOutcome.new(:failure, :failure)
         end
       end
     },
@@ -429,12 +429,12 @@ Action.new("harvest_dolait",
           CharacterPossession.new(:character_id => character.id, :possession_id => "field").save!
         end
         if(character.possesses?("cutter"))
-          return ActionOutcome.new(:success_cutter)
+          return ActionOutcome.new(:success, :success_cutter)
         else
-          return ActionOutcome.new(:success)
+          return ActionOutcome.new(:success, :success)
         end
       else
-        return ActionOutcome.new(:impossible, "There was no dolait remaining.") 
+        return ActionOutcome.new(:impossible, :impossible, "There was no dolait remaining.") 
       end
     },
     :messages => {
@@ -488,17 +488,17 @@ Action.new("gather_tomatunk",
             end
           end
           if(amount_found > 1)
-            return ActionOutcome.new(:basket_success, "#{amount_found.to_s} blocks")
+            return ActionOutcome.new(:success, :basket_success, "#{amount_found.to_s} blocks")
           else
-            return ActionOutcome.new(:basket_success, "1 block")
+            return ActionOutcome.new(:success, :basket_success, "1 block")
           end
         else
           target.deplete(1)
           CharacterPossession.new(:character_id => character.id, :possession_id => "tomatunk").save!
-          return ActionOutcome.new(:success)
+          return ActionOutcome.new(:success, :success)
         end
       else
-        return ActionOutcome.new(:failure) 
+        return ActionOutcome.new(:failure, :failure) 
       end
     },
     :messages => {
@@ -535,9 +535,9 @@ Action.new("gather_wampoon",
     :result => lambda { |character, target|
       if(target.deplete(1))
         CharacterPossession.new(:character_id => character.id, :possession_id => "wampoon").save!
-        return ActionOutcome.new(:success)
+        return ActionOutcome.new(:success, :success)
       else
-        return ActionOutcome.new(:failure)
+        return ActionOutcome.new(:failure, :failure)
       end
     },
     :messages => {
@@ -578,7 +578,7 @@ Action.new("craft_basket",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "basket").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You weave strips of dolait into a basket, and then treat the material to harden it." },
@@ -617,7 +617,7 @@ Action.new("craft_cutter",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "cutter").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You craft a simple cutter." },
@@ -657,7 +657,7 @@ Action.new("craft_shaper_a",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_a").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You craft an oblong shaper." },
@@ -696,7 +696,7 @@ Action.new("craft_shaper_b",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_b").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You craft an angled shaper." },
@@ -735,7 +735,7 @@ Action.new("craft_shaper_c",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "shaper_c").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You craft a pronged shaper." },
@@ -774,7 +774,7 @@ Action.new("craft_toy",
     },
     :result => lambda { |character, target|
       CharacterPossession.new(:character_id => character.id, :possession_id => "simple_toy").save!
-      return ActionOutcome.new(:success)
+      return ActionOutcome.new(:success, :success)
     },
     :messages => {
       :success => lambda { |args| "You craft a simple toy." },

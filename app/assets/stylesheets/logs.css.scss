@@ -13,17 +13,20 @@
       margin-right:2px;
     }
   }
-
   .important{
-
+    font-weight:bold;
+  }
+  .impossible{
+    color:#A77;
   }
   .passive{
-    color:#666
+    color:#666;
   }
   .success{
+    color:#7A7;
 
   }
   .failure{
-
+    color:#77A;
   }
 }
