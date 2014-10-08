@@ -7,13 +7,13 @@ Condition.new("hunger",
     :result => lambda { |character_condition| 
       character = character_condition.character
       if(character_condition.active?)
+        character.current_history.make_entry("passive", "You suffer from starvation.")
         character.change_health(-3)
         character.change_resolve(-1)
-        return "You suffer from starvation."
       else
+        character.current_history.make_entry("passive", "You feel hungry again.")
         character.nutrition = 0
         character.save!
-        return "You feel hungry again."
       end
     },
     :active => lambda { |character_condition|
@@ -27,8 +27,9 @@ Condition.new("weariness",
     :description=>"Life keeps on keeping on.", 
     :result => lambda { |character_condition| 
       character = character_condition.character
+      character.current_history.make_entry("passive", "As time passes, your feel a weight settle on your soul.")
+      character = character_condition.character
       character.change_resolve(-1)
-      return "As time passes, your feel a weight settle on your soul."
     },
   }
 )
@@ -37,8 +38,9 @@ Condition.new("resilience",
     :description=>"Pull yourself together, kid.", 
     :result => lambda { |character_condition| 
       character = character_condition.character
+      character.current_history.make_entry("passive", "You feel your body recovering from the damage it's sustained.")
+      character = character_condition.character
       character.change_health(1)
-      return "You feel your body recovering from the damage it's sustained."
     },
   }
 )
@@ -46,7 +48,6 @@ Condition.new("pure_grit",
   { :name=>"Pure Grit", 
     :description=>"You're holding yourself together with nothing but willpower and determination at this point, but it can't last much longer...", 
     :result => lambda { |character_condition| 
-      return "This is a result."
     },
   }
 )
@@ -55,8 +56,9 @@ Condition.new("nihilism",
     :description=>"Is it even worth going on, if this is all life is?", 
     :result => lambda { |character_condition| 
       character = character_condition.character
+      character.current_history.make_entry("passive", "You feel your body falling apart, but can't bring yourself to care.")
+      character = character_condition.character
       character.change_health(-2)
-      return "You feel your body falling apart, but can't bring yourself to care."
     },
   }
 )

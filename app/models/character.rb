@@ -92,7 +92,7 @@ class Character < ActiveRecord::Base
   end
 
   # Return true until we encounter an action we can't afford to execute
-  def execute_queued_action(character_action, log)
+  def execute_queued_action(character_action)
     cost = character_action.cost_remaining
     succeeded = false
     if(cost <= self.vigor)
@@ -101,7 +101,7 @@ class Character < ActiveRecord::Base
         self.change_vigor(-cost)
       end
       character_action.destroy!
-      log.make_entry(result.status, result.message)
+      self.current_history.make_entry(result.status, result.message)
       succeeded = true
     elsif(self.vigor > 0)
       character_action.stored_vigor += self.vigor
@@ -129,6 +129,7 @@ class Character < ActiveRecord::Base
       self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'nihilism')
       if(self.has_condition?("pure_grit"))
         self.die
+        return
       end
     end
 
@@ -178,6 +179,7 @@ class Character < ActiveRecord::Base
         self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
         if(self.has_condition?('nihilism'))
           self.die
+          return
         end
       end
 
@@ -214,6 +216,7 @@ class Character < ActiveRecord::Base
   def die
     self.current_history.make_entry("important", "You have died.")
     self.world = nil
+    self.save!
   end
 
   def dead?
@@ -360,6 +363,7 @@ class Character < ActiveRecord::Base
     self.unready
     
     new_log = Log.new()
+    self.logs << new_log
 
     #===============
     #= End Of Turn =
@@ -368,14 +372,15 @@ class Character < ActiveRecord::Base
     # Process this character's queued actions until we run out of actions or run out of ap
     continue = true
     while(self.character_actions.size > 0 && continue)
-      continue = self.execute_queued_action(self.character_actions.first, new_log)
+      continue = self.execute_queued_action(self.character_actions.first)
     end
 
-    # Process this character's active conditions
+    # Process this character's active conditions, so long as they are not dead
     self.character_conditions.each do |character_condition|
-      effect = character_condition.result
-      if(effect && !effect.empty?)
-        new_log.make_entry("passive", effect)
+      if(self.dead?)
+        break
+      else
+        character_condition.result
       end
     end
 
@@ -403,8 +408,6 @@ class Character < ActiveRecord::Base
         end
       end
     end
-
-    self.logs << new_log
 
     self.save!
   end

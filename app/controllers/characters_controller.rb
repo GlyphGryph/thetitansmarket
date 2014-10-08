@@ -87,7 +87,7 @@ class CharactersController < ApplicationController
   def complete_action
     logger.error "\n\n\n\n\n\n\nBOOOOO\n\n\n\n\n\n\n\n\n"
     character_action = CharacterAction.find(params[:character_action_id])
-    @character.execute_queued_action(character_action, @character.current_history)
+    @character.execute_queued_action(character_action)
     respond_to do |format|
       format.html { redirect_to character_overview_path }
     end
