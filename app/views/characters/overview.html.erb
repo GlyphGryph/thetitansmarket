@@ -242,11 +242,9 @@
     <div class="info-block log" id="character-history">
       <div class="info-block-head">Recently...</div>
       <div class="info-block-body">
-        <% @history.log_entries.each do |entry| %>
-          <div class="story <%= entry.status %>"><%= entry.body %></div>
-        <% end %>
-        <div class="full-history"><%= link_to "View full history", character_history_path(:id=>@character.id) %></div>
+        <%= render :partial => "log", :locals => {:log => log} %>
       </div>
+      <div class="full-history"><%= link_to "View full history", character_history_path(:id=>@character.id) %></div>
     </div>
   </div>
 </div>

@@ -1,16 +1,16 @@
 <div id="character-history">
-  <div class="info-block">
+  <div class="info-block log">
     <div class="info-block-head">Recently...</div>
     <div class="info-block-body">
-      <%= render :partial => "stories", :locals => {:stories => character.recent_history} %>
+      <%= render :partial => "log", :locals => {:log => character.current_history} %>
     </div>
   </div>
 
-  <% character.earlier_history.reverse.each do |step| %>
-    <div class="info-block">
+  <% character.earlier_history.reverse.each do |log| %>
+    <div class="info-block log">
       <div class="info-block-head">Earlier...</div>
       <div class="info-block-body">
-        <%= render :partial => "stories", :locals => {:stories => step} %>
+        <%= render :partial => "log", :locals => {:log => log} %>
       </div>
     </div>
   <% end %>
