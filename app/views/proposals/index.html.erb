@@ -4,9 +4,9 @@
 </div>
 
 <div>
-  <%= link_to "Trade", new_proposal_path(:id => @character.id, :proposal_type => 'Trade') %>
-  <%= link_to "Interact", new_proposal_path(:id => @character.id, :proposal_type => 'Interaction') %>
-  <%= link_to "Send a message", new_proposal_path(:id => @character.id, :proposal_type => 'Message') %>
+  <%= link_to "Trade", new_proposal_path(:id => @character.id, :proposal_type => 'Trade'), :class => "basic-button" %>
+  <%= link_to "Interact", new_proposal_path(:id => @character.id, :proposal_type => 'Interaction'), :class => "basic-button" %>
+  <%= link_to "Send a message", new_proposal_path(:id => @character.id, :proposal_type => 'Message'), :class => "basic-button" %>
 </div>
 
 <% @proposals_hash.each do |proposal_data| %>
