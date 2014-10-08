@@ -1,6 +1,5 @@
 Immediate goals:
 --STYLE BREAK--
-  Rewrite the logging system so logs don't muddy up the character object and can be styled based on the type of log entry.
   Finish the interactions pages
   Restyle all the submenus
 
@@ -11,7 +10,6 @@ Content Expansion: Communication
 
 
 Fix the bug with the action queue not being ordered correctly (by creation date)
-Clean up the new history logic
 
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
