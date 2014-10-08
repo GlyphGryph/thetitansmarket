@@ -244,7 +244,7 @@
       <div class="info-block-body">
         <%= render :partial => "log", :locals => {:log => @character.current_history} %>
       </div>
-      <div class="full-history"><%= link_to "View full history", character_history_path(:id=>@character.id) %></div>
+      <%= link_to "View full history", character_history_path(:id=>@character.id), :class => 'basic-button' %>
     </div>
   </div>
 </div>
