@@ -77,45 +77,52 @@
       border-right:2px solid #888;
     }
   }
+}
 
-  &.new-proposal, &.open-proposal{
-    .proposal-controls{
-      .proposal-control{
-        display:inline-block;
+.proposal-controls{
+  .proposal-control{
+    display:inline-block;
 
-        a{
-          color:black;
-          display:inline-block;
-          padding:0px;
-          line-height:12px;
-          font-size:10px;
-          border:1px outset black;
-          border-radius:2px;
-          padding-left:2px;
-          padding-right:2px;
-          text-decoration:none;
-        }
+    a{
+      color:black;
+      display:inline-block;
+      padding:0px;
+      line-height:12px;
+      font-size:10px;
+      border:1px outset black;
+      border-radius:2px;
+      padding-left:2px;
+      padding-right:2px;
+      text-decoration:none;
+    }
 
-        &.accept a{
-          background-color:#aca;
+    &.accept a{
+      background-color:#aca;
 
-          &:hover{
-            border:1px inset black;
-            border-radius:2px;
-            color:#ccc;
-            background-color:#151;
-          }
-        }
-        &.decline a{
-          background-color:#caa;
+      &:hover{
+        border:1px inset black;
+        border-radius:2px;
+        color:#ccc;
+        background-color:#151;
+      }
+    }
+    &.decline a{
+      background-color:#caa;
 
-          &:hover{
-            border:1px inset black;
-            border-radius:2px;
-            color:#ccc;
-            background-color:#511;
-          }
-        }
+      &:hover{
+        border:1px inset black;
+        border-radius:2px;
+        color:#ccc;
+        background-color:#511;
+      }
+    }
+    &.cancel a{
+
+      &:hover{
+        border:1px inset black;
+        border-radius:2px;
+        color:#ccc;
+        background-color:black;
       }
     }
   }

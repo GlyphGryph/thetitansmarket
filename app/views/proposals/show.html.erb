@@ -22,6 +22,15 @@
     </div>
   <% end %>
 
-  </div>
+  <% if @proposal.status == 'open' && @proposal.acceptable? && @proposal.receiver == @character %>
+    <div class="proposal-controls">
+      <div class="proposal-control accept"><%= link_to "Accept", accept_proposal_path(:id => @character.id, :proposal_id => @proposal.id) %></div>
+      <div class="proposal-control decline"><%= link_to "Decline", decline_proposal_path(:id => @character.id, :proposal_id => @proposal.id) %></div>
+    </div>
+  <% elsif @proposal.status == 'open' && @proposal.acceptable? && @proposal.sender == @character %>
+    <div class="proposal-controls">
+      <div class="proposal-control cancel"><%= link_to "Cancel Offer", cancel_proposal_path(:id => @character.id, :proposal_id => @proposal.id) %></div>
+    </div>
+  <% end %>
 </div>
 
