@@ -1,1 +1,5 @@
-<h2>Interaction</h2>
+<h2 class="proposal-name"><%= (@proposal.sender==@character) ? @proposal.name_for_sender : @proposal.name_for_receiver %></h2>
+
+
+<%= @proposal.content.get.description %>
+

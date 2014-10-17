@@ -81,8 +81,8 @@ class ProposalsController < ApplicationController
     errors = []
     success = false
     proposal = nil
-    #begin
-      #ActiveRecord::Base.transaction do
+    begin
+      ActiveRecord::Base.transaction do
         if(proposal_type == 'Trade')
           possessions = params[:possessions] || []
           logger.error possessions.inspect
@@ -204,14 +204,14 @@ class ProposalsController < ApplicationController
         if(!errors.empty?)
           raise "Proposal failed."
         end
-      #end
-    #rescue => e
-    #  errors = [e.to_s, "Could not make this proposal."].concat(errors)
-    #  if(proposal && !proposal.errors.empty?)
-    #    errors = errors.concat(proposal.errors)
-    #  end
-    #  success = false
-    #end
+      end
+    rescue => e
+      errors = [e.to_s, "Could not make this proposal."].concat(errors)
+      if(proposal && !proposal.errors.empty?)
+        errors = errors.concat(proposal.errors)
+      end
+      success = false
+    end
     respond_to do |format|
       if(success)
         format.html { redirect_to proposals_path, :notice => "Proposal sent." }

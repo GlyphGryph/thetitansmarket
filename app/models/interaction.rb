@@ -24,6 +24,10 @@ class Interaction < ActiveRecord::Base
     return Activity.find(self.activity_id).name
   end
 
+  def get
+    Activity.find(self.activity_id)
+  end
+
   def name_for_sender
     return "Request to #{Activity.find(self.activity_id).name} with  "+self.receiver.name
   end
