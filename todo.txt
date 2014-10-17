@@ -1,8 +1,4 @@
 Immediate goals:
---STYLE BREAK--
-  Finish the interactions pages
-  Restyle all the submenus
-
 Content Expansion: Communication
   Allow players to add additional gestures/texts
   Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
