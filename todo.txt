@@ -1,8 +1,23 @@
 Immediate goals:
-Content Expansion: Communication
-  Allow players to add additional gestures/texts
-  Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
-  Allow building of message chains composed of multiple gestures and texts.
+| Content Expansion: Communication
+|   Allow players to add additional gestures/texts
+|   Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
+|   Allow building of message chains composed of multiple gestures and texts.
+| 
+| Communications flow:
+| Character selects target, and is presented with a page. Every character can see an option to "gesture", and characters who know a language can see the option to "speak".
+| Selecting the gesture button adds an element, above (at the end of a queue of elements) with a blank content row and a list of available gestures. It also removes the options to add a new element. Selecting an option moves the option to the content row, and if further options must be made, displays a new list to choose from. If there are no further options to be made, the "gesture" and "speak" options are re-added.
+| If speak is selected, the player is provided with a text box in which to type, and a drop down of languages to choose from. The default value will be whichever language the player learned first, which will be set as their "default language". Selected a different language on this page temporarily changes their default language (within the context of this page) to the newly selected language, so multiple speech boxes will only require manual selection the first time (assuming you only want to speak in one language).
+| 
+| Players may add any number of gestures or spoken elements. Once they are completed, they press the submit button and it all gets sent off to the server.
+| 
+| The server must check to make sure each requested gesture and language is available to this player or throw an error. If they are correct, it will create a new communication object with all the elements inside.
+| 
+| When the recipient views this message, they will see any spoken component from a language they don't understand as gobbledygook with roughly the same amount of letters but otherwise no similarities to the orginal text.
+| 
+| Add a way for players to change their "default language".
+|
+| Add gestures that can do narrow targeting - pointing at body parts for example, or injuries.
 
 Fix the bug with the action queue not being ordered correctly (by creation date)
 
@@ -24,6 +39,14 @@ While active, this condition randomly damages a player for 2 to 6 damage each ro
 This condition also tracks and displays the packs current target, a random player. It has an 80% chance to deal it's damage to the targeted player instead of any other player. If the player is killed, a new target is immediately randomly selected.
 The predator condition is given a duration attribute "predator health", that is reduced when players choose the fight off predators action and by a slight amount each turn, and by a large amount if they successfully kill a player.
 When this attribute reaches zero or lower, the condition ends and the log receives a message that the predators have departed.
+
+--TRADING--
+Restrict the amount of knowledge a player requires of the target. Players can only request lessons in something they have an idea about, and can request things the other player doesn't know, as well as offer to teach things the other player doesn't need to learn. Items for now will still be public, but lessons should probably be worked out via communication. Simply getting an offer for a specific knowledge, however, should give the player the "idea" that they can learn it, allowing them to make a counter-offer for that knowledge.
+
+Additionally, we need some way to indicate when a trade proposal element becomes impossible without cancelling the trade. If the person offering offers a knowledge the target knows, or an item they no longer possess, the recipient should be able to see that - but accept anyway. If the recipient lacks a knowledge or item requested, they should not be able to accept but they should be able to see what they are missing, go and get that thing and THEN accept.
+
+Allow players to quickly create "counter-offers", where the current offer is cancelled/denied, and they are pushed to the page to create a new offer with all the current offer elements already selected on it with the same amounts, so they merely need to adjust the offer rather than completely recreating it.
+---/TRADING--
 
 --REFACTOR BREAK--
 Actions stuff:
@@ -48,6 +71,7 @@ Replace the "play with toy" action with a "use item" action, that can genericall
 Multiply all vigor costs and values by 10, to allow for finer calculation in cost bonuses. Especially for cheaper items, it's getting hard to balance...
 
 --FAR FUTURE--
+Add a way for players to "spy on" other players and intercept their messages.
 More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.
 Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
 Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
