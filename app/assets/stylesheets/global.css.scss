@@ -137,7 +137,7 @@ div {
   }
 }
 
-a.basic-button{
+.basic-button{
   display:inline-block;
   text-decoration:none;
   margin-left:5px;
@@ -152,6 +152,7 @@ a.basic-button{
 
 
   &:hover{
+    cursor: pointer;
     color:#ccc;
     background-color:black;
   }
@@ -186,4 +187,8 @@ ul{
 
 .alert{
   background-color:red
+}
+
+.reference-template{
+  display:none;
 }

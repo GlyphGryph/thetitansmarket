@@ -5,7 +5,7 @@ class Gesture
 
   def initialize(id, params={})
     @id = id
-    @names = params[:name] || "ERROR: Unknown Name"
+    @name = params[:name] || "ERROR: Unknown Name"
     @description = params[:description] || "ERROR: UNKNOWN DESCRIPTION"
     @result = params[:result] || lambda do |viewer, actor, target|
       if(viewer==actor)
