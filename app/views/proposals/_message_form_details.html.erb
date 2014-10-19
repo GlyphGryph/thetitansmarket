@@ -1,34 +1,53 @@
-<div class="message-form">
-  <h4>Compose your message</h4>
-
-  <div class="message-list">
+<div class="info-block message-details">
+  <div class="info-block-head">
+    Message To <%= @target.name %>
   </div>
-  
-  <div class="message-form-controls">
-    <a class="basic-button add-gesture">Gesture</a>
-    <% if @character.knows?('language') %>
-      <a class="basic-button add-speech">Speak</a>
+
+  <div class="info-block-body">
+    <h4>Compose your message</h4>
+
+    <%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
+      <div class="message-list">
+      </div>
+      
+      <div class="message-details-controls">
+        <a class="basic-button add-gesture">Gesture</a>
+        <% if @character.knows?('language') %>
+          <a class="basic-button add-speech">Speak</a>
+        <% end %>
+      </div>
+
+      <%= submit_tag "Submit" %>
     <% end %>
   </div>
-</div>
-<div class="reference-template new-gesture">
-  <div class='message-element gesture-element'>
-    <div class="gesture-builder">
+
+  <div class="reference-template new-gesture">
+    <div class='message-element gesture-element'>
+      <div class="gesture-builder">
+      </div>
     </div>
   </div>
-</div>
-<div class="reference-template select-gesture">
-  <div class='gesture-list'>
-    <% @gestures.each do |gesture| %>
-      <div class='gesture-option basic-button' data-id="<%=gesture.id%>">
-        <div class='option-label'><%= gesture.name %></div>
-        <div class='option-description'><%= gesture.description %></div>
-      </div>
-    <% end %>
+  <div class="reference-template select-gesture">
+    <div class='gesture-list'>
+      <% @gestures.each do |gesture| %>
+        <div class='gesture-option basic-button' data-id="<%=gesture.id%>">
+          <div class='option-label'><%= gesture.name %></div>
+          <div class='option-description'><%= gesture.description %></div>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
+  <div class="reference-template commit-gesture">
+    <input type="hidden" class="id-field"></input>
+    <input type="hidden" class="type-field" value="gesture"></input>
+    <div class="description"></div>
+  </div>
 
 
-<div class="reference-template new-speech">
-  <%= text_area_tag("message_components[1][value]") %>
+  <div class="reference-template new-speech">
+    <div class='message-element speech-element'>
+      <input type="hidden" class="type-field" value="speech"></input>
+      <textarea class='text-field'></textarea>
+    </div>
+  </div>
 </div>

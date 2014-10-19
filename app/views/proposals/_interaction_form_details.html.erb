@@ -1,22 +1,31 @@
-<div>
-  <h4>Possible Activities</h4>
-  <ul>
-  <% @activities.each do |activity| %>
-    <li>
-      <div class="activity-title-row">
-        <%= radio_button_tag('activity', activity.id, :required => 'required') %>
-        <%= label_tag('activity_'+activity.id, "#{activity.name}: #{activity.description}") %>
-      </div>
-      <% if(activity.character_addendum(@character, @target)) %>
-        <div class="activity-addendum-row">
-          <%= activity.character_addendum(@character, @target) %>
-        </div>
+<div class="info-block trade-details">
+  <div class="info-block-head">
+    Interact With <%= @target.name %>
+  </div>
+
+  <div class="info-block-body">
+    <h4>Possible Activities</h4>
+    <%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
+      <ul>
+      <% @activities.each do |activity| %>
+        <li>
+          <div class="activity-title-row">
+            <%= radio_button_tag('activity', activity.id, :required => 'required') %>
+            <%= label_tag('activity_'+activity.id, "#{activity.name}: #{activity.description}") %>
+          </div>
+          <% if(activity.character_addendum(@character, @target)) %>
+            <div class="activity-addendum-row">
+              <%= activity.character_addendum(@character, @target) %>
+            </div>
+          <% end %>
+          <% if(activity.target_addendum(@character, @target)) %>
+            <div class="activity-addendum-row">
+              <%= activity.target_addendum(@character, @target) %>
+            </div>
+          <% end %>
       <% end %>
-      <% if(activity.target_addendum(@character, @target)) %>
-        <div class="activity-addendum-row">
-          <%= activity.target_addendum(@character, @target) %>
-        </div>
-      <% end %>
-  <% end %>
-  </ul>
+      </ul>
+      <%= submit_tag "Submit" %>
+    <% end %>
+  </div>
 </div>

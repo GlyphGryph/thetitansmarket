@@ -4,33 +4,12 @@
   <%= link_to "Back to Proposals", proposals_path(:id=>@character.id) %>
 </div>
 
-<%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
-  <div class="info-block">
-    <div class="info-block-head">
-      <% if @proposal_type == 'Trade' %>
-        Trade and Teaching Offer To <%= @target.name %>
-      <% elsif @proposal_type == 'Interaction' %>
-        Interaction Proposal To <%= @target.name %>
-      <% elsif @proposal_type == 'Message' %>
-        Message To <%= @target.name %>
-      <% else %>
-        No stop
-      <% end %>
-    </div>
-    <div class="info-block-body">
-      <% if @proposal_type == 'Trade' %>
-        <%= render :partial => 'trade_form_details' %>
-      <% elsif @proposal_type == 'Interaction' %>
-        <%= render :partial => 'interaction_form_details' %>
-      <% elsif @proposal_type == 'Message' %>
-        <%= render :partial => 'message_form_details' %>
-      <% else %>
-        You're messing with forces beyond your control, kid.
-      <% end %>
-    </div>
-  </div>
-
-  <div>
-    <%= submit_tag "Submit" %>
-  </div>
+<% if @proposal_type == 'Trade' %>
+  <%= render :partial => 'trade_form_details' %>
+<% elsif @proposal_type == 'Interaction' %>
+  <%= render :partial => 'interaction_form_details' %>
+<% elsif @proposal_type == 'Message' %>
+  <%= render :partial => 'message_form_details' %>
+<% else %>
+  You're messing with forces beyond your control, kid.
 <% end %>

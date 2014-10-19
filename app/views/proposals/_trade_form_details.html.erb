@@ -1,59 +1,70 @@
-<div>
-  <h4>Offer</h4>
-  <% if @sender_possessions.empty? %>
-    You have nothing to offer.
-  <% else %>
-    <% @sender_possessions.each do |possession| %>
-      <div>
-        <%= number_field_tag("possessions[offered][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
-      </div>
-    <% end %>
-  <% end %>
-</div>
+<div class="info-block trade-details">
+  <div class="info-block-head">
+    Trade With <%= @target.name %>
+  </div>
 
-<div>
-  <h4>Teach</h4>
-  <% if @sender_teachables.empty? %>
-    You have nothing to teach.
-  <% else %>
-    <% @sender_teachables.each do |knowledge| %>
+  <div class="info-block-body">
+    <%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
       <div>
-        <%= number_field_tag("offered_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
-        <%= label_tag(knowledge[:id], knowledge[:name]) %>
-        (<%= knowledge[:remaining_progress] %> lessons remain)
+        <h4>Offer</h4>
+        <% if @sender_possessions.empty? %>
+          You have nothing to offer.
+        <% else %>
+          <% @sender_possessions.each do |possession| %>
+            <div>
+              <%= number_field_tag("possessions[offered][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
+              <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
+            </div>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
-  <% end %>
-</div>
 
-<div>
-  <h4>Request</h4>
-  <% if @receiver_possessions.empty? %>
-    They have nothing to request.
-  <% else %>
-    <% @receiver_possessions.each do |possession| %>
       <div>
-        <%= number_field_tag("possessions[asked][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
-        <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
+        <h4>Teach</h4>
+        <% if @sender_teachables.empty? %>
+          You have nothing to teach.
+        <% else %>
+          <% @sender_teachables.each do |knowledge| %>
+            <div>
+              <%= number_field_tag("offered_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
+              <%= label_tag(knowledge[:id], knowledge[:name]) %>
+              (<%= knowledge[:remaining_progress] %> lessons remain)
+            </div>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
-  <% end %>
-</div>
 
-<div>
-  <h4>Learn</h4>
-  <% if @receiver_teachables.empty? %>
-    You have nothing to learn.
-  <% else %>
-    <% @receiver_teachables.each do |knowledge| %>
       <div>
-        <%= number_field_tag("asked_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
-        <%= label_tag(knowledge[:id], knowledge[:name]) %>
-        (<%= knowledge[:remaining_progress] %> lessons remain)
+        <h4>Request</h4>
+        <% if @receiver_possessions.empty? %>
+          They have nothing to request.
+        <% else %>
+          <% @receiver_possessions.each do |possession| %>
+            <div>
+              <%= number_field_tag("possessions[asked][#{possession.id}][#{possession.variant.id}]", nil, :step => 1, :min => 0, :max => possession.quantity) %>
+              <%= label_tag(possession.id, possession.name.to_s+" x"+possession.quantity.to_s) %>
+            </div>
+          <% end %>
+        <% end %>
       </div>
-    <% end %>
-  <% end %>
-</div>
 
+      <div>
+        <h4>Learn</h4>
+        <% if @receiver_teachables.empty? %>
+          You have nothing to learn.
+        <% else %>
+          <% @receiver_teachables.each do |knowledge| %>
+            <div>
+              <%= number_field_tag("asked_knowledge_ids[#{knowledge[:id]}]duration", nil, :step => 1, :min => 0, :max => knowledge[:remaining_progress]) %>
+              <%= label_tag(knowledge[:id], knowledge[:name]) %>
+              (<%= knowledge[:remaining_progress] %> lessons remain)
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <%= submit_tag "Submit" %>
+    <% end %>
+  </div>
+</div>
 
