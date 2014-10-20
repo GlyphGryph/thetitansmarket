@@ -1,25 +1,25 @@
 Immediate goals:
-| Content Expansion: Communication
-|   Allow players to add additional gestures/texts
-|   Allow players to actually target their gestures at things other than the other player. (Well, this will quickly get complex)
-|   Allow building of message chains composed of multiple gestures and texts.
-| 
-| Communications flow:
-| Character selects target, and is presented with a page. Every character can see an option to "gesture", and characters who know a language can see the option to "speak".
-| Selecting the gesture button adds an element, above (at the end of a queue of elements) with a blank content row and a list of available gestures. It also removes the options to add a new element. Selecting an option moves the option to the content row, and if further options must be made, displays a new list to choose from. If there are no further options to be made, the "gesture" and "speak" options are re-added.
-| If speak is selected, the player is provided with a text box in which to type, and a drop down of languages to choose from. The default value will be whichever language the player learned first, which will be set as their "default language". Selected a different language on this page temporarily changes their default language (within the context of this page) to the newly selected language, so multiple speech boxes will only require manual selection the first time (assuming you only want to speak in one language).
-| 
-| Players may add any number of gestures or spoken elements. Once they are completed, they press the submit button and it all gets sent off to the server.
-| 
-| The server must check to make sure each requested gesture and language is available to this player or throw an error. If they are correct, it will create a new communication object with all the elements inside.
-| 
-| When the recipient views this message, they will see any spoken component from a language they don't understand as gobbledygook with roughly the same amount of letters but otherwise no similarities to the orginal text.
-| 
-| Add a way for players to change their "default language".
-|
-| Add gestures that can do narrow targeting - pointing at body parts for example, or injuries.
-
-Fix the bug with the action queue not being ordered correctly (by creation date)
+Gesture Targeting
+  Valid targets for gesture
+  Target by item class rather than individual item
+  Include a number of gesture-only options, such as body parts.
+Add more gestures - Look at, shake fist, scowl, stick out tongue, growl
+Expand gesture implementation
+  Assign a "doer" to each message component.
+  Have gestures have variations for how the action is seen by the doer and how its seen by others.
+  Have speeches be described as "You say" or "(name) says" as appropriate.
+Multiple Language Support
+  Creation/Investigation of new languages
+    - From pondering gestures or language, the player should always get a unique language idea to investigate
+  Autonaming of new languages (for now some unique hash is fine)
+  Tracking languages moving from player to player
+  Binding actual language variants to the world somehow - are variants already worldbound?
+Allow players to choose language for text boxes
+  Messages in a language players do not understand are converted to nonsense
+  Players should have a default language for these text boxes
+  Once a text box language has changed, the selected language becomes the new default for this page
+Add a character settings page where characters can change their default language
+Allow players to delete elements from unsubmitted messages
 
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
