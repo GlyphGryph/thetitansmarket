@@ -6,7 +6,7 @@
   <div class="info-block-body">
     <h4>Compose your message</h4>
 
-    <%= form_tag(create_proposal_path(:id => @character.id, :proposal_type => @proposal_type, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
+    <%= form_tag(create_message_path(:id => @character.id, :target_id => @target.id), :class => 'proposal-form', :method => 'post') do %>
       <div class="message-list">
       </div>
       

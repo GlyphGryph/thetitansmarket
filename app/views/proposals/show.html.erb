@@ -11,9 +11,7 @@
     <%= render :partial => 'interaction' %>
   <% elsif @proposal.content_type == 'Message' %>
     <%= render :partial => 'message' %>
-    <% if @character = @proposal.receiver %>
-      <%= link_to "Reply", new_proposal_details_path(:id => @character.id, :target_id => @proposal.sender.id, :proposal_type => 'Message') %>
-    <% end %>
+
   <% else %>
     <h2>Unknown Proposal from <%= @proposal.sender.name %></h2>
     <div class="info-block">

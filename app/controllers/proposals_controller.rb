@@ -162,43 +162,7 @@ class ProposalsController < ApplicationController
           else
             errors << " Could not find an activity with the given id."
           end
-        elsif(proposal_type == 'Message')
-          components = params[:message_components]
-          if(components && !components.empty?)
-            all_components_good = true
-            message = Message.new()
-            components.transform_keys!{ |key| key.to_i }
-            keys = components.keys.sort
-            keys.each do |key|
-              component = components[key]
-              if(component['type']=="gesture")
-                gesture = Gesture.find(component['value'])
-                if(gesture)
-                  message.add_gesture(gesture, target)
-                else
-                  all_components_good = false
-                  errors << " Bad component #{component['value']}."
-                end
-              elsif(component['type']=="text")
-                message.add_text(component['value'])
-              else
-                all_components_good = false
-                errors << "Could not recognize the type of Message requested."
-              end
-            end
-
-            if(all_components_good)
-              message.save!
-              proposal = Proposal.new(:sender => @character, :receiver => target, :content => message)
-              proposal.save!
-              success=true
-            else
-              errors << " Bad components."
-            end
-          else
-            errors << " No message components provided."
-          end
-        else
+       else
           errors << " Invalid proposal type."
         end
         if(!errors.empty?)
@@ -218,6 +182,34 @@ class ProposalsController < ApplicationController
       else
         format.html { redirect_to new_proposal_details_path, :alert => errors.join(" ")}
       end
+    end
+  end
+
+  def create_message
+    begin
+      ActiveRecord::Base.transaction do
+        components = params[:message_components]
+        if(components && !components.empty?)
+          target = Character.find(params[:target_id])
+          proposal = Proposal.new(:sender => @character, :receiver => target)
+          message = Message.new(:proposal => proposal)
+          message.save!
+          components.each do |index, component|
+            if(component[:type]=="speech")
+              is_speech = true
+              body = component[:value]
+            elsif(component[:type]=="gesture")
+              body = Gesture.find(component[:value]).result(@character, target, target)
+            else
+              raise "Unrecognized message component type."
+            end
+            MessageComponent.new(:is_speech => is_speech, :body => body, :message => message).save!
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to proposals_path, :notice => "Proposal sent." }
     end
   end
 

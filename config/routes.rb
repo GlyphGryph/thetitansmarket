@@ -33,7 +33,8 @@ Rails.application.routes.draw do
   get 'character/:id/proposal/:proposal_id/show' => 'proposals#show', :as => :show_proposal
   get 'character/:id/proposal/new/:proposal_type' => 'proposals#new_target', :as => :new_proposal
   get 'character/:id/proposal/new/:proposal_type/with/:target_id' => 'proposals#new_details', :as => :new_proposal_details
-  post 'character/:id/proposal/create/:proposal_type/with/:target_id' => 'proposals#create', :as => :create_proposal
+  post 'character/:id/proposal/create/message/with/:target_id' => 'proposals#create_message', :as => :create_message
+  post 'character/:id/proposal/create/:proposal_type/with/:target_id' => 'proposals#create', :as => :create_trade_proposal
   get 'character/:id/proposal/:proposal_id/accept' => 'proposals#accept', :as => :accept_proposal
   get 'character/:id/proposal/:proposal_id/decline' => 'proposals#decline', :as => :decline_proposal
   get 'character/:id/proposal/:proposal_id/cancel' => 'proposals#cancel', :as => :cancel_proposal

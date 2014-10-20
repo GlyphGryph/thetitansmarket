@@ -1,3 +1,14 @@
 <h2>Message</h2>
-<%= @proposal.content.text_for(@character).html_safe %>
+<% @proposal.content.message_components.each do |component| %>
+  <% if component.speech? %>
+    <div><%= @proposal.sender.name %> says:
+      <div style="border:1px dashed grey; padding:8px;"><%= component.body %></div>
+    </div>
+  <% else %>
+    <div><%= component.body %></div>
+  <% end %>
+<% end %>
 
+<% if @character == @proposal.receiver %>
+  <%= link_to "Reply", new_proposal_details_path(:id => @character.id, :target_id => @proposal.sender.id, :proposal_type => 'Message') %>
+<% end %>

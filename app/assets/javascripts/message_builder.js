@@ -45,8 +45,8 @@ jQuery("document").ready(function(){
     var gesture_element = selected.parents(".message-element")
     gesture_element.html(template_content);
     gesture_element.find(".id-field").val(selected_id);
-    gesture_element.find(".id-field").attr("name", "message_components["+next_component_id+"][id]");
-    gesture_element.find(".type-field").attr("name", "message_components["+next_component_id+"][value]");
+    gesture_element.find(".id-field").attr("name", "message_components["+next_component_id+"][value]");
+    gesture_element.find(".type-field").attr("name", "message_components["+next_component_id+"][type]");
     gesture_element.find(".description").text(selected_text);
     next_component_id+=1;
     enableNew();

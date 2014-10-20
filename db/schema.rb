@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141006024918) do
+ActiveRecord::Schema.define(version: 20141019213056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,9 +89,14 @@ ActiveRecord::Schema.define(version: 20141006024918) do
     t.integer "owner_id"
   end
 
+  create_table "message_components", force: true do |t|
+    t.string  "message_id"
+    t.text    "body"
+    t.boolean "is_speech"
+  end
+
   create_table "messages", force: true do |t|
     t.text     "title"
-    t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
