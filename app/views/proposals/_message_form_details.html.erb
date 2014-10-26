@@ -1,4 +1,4 @@
-<div class="info-block message-details">
+<div class="info-block message-details" data-apply-script="message-builder">
   <div class="info-block-head">
     Message To <%= @target.name %>
   </div>
@@ -23,14 +23,12 @@
 
   <div class="reference-template new-gesture">
     <div class='message-element gesture-element'>
-      <div class="gesture-builder">
-      </div>
     </div>
   </div>
   <div class="reference-template select-gesture">
     <div class='gesture-list'>
       <% @gestures.each do |gesture| %>
-        <div class='gesture-option basic-button' data-id="<%=gesture.id%>">
+        <div class='gesture-option basic-button' data-gesture-id="<%=gesture.id%>">
           <div class='option-label'><%= gesture.name %></div>
           <div class='option-description'><%= gesture.description %></div>
         </div>
@@ -39,10 +37,32 @@
   </div>
   <div class="reference-template commit-gesture">
     <input type="hidden" class="id-field"></input>
-    <input type="hidden" class="type-field" value="gesture"></input>
+    <input type="hidden" class="type-field"></input>
+    <input type="hidden" class="target-id-field"></input>
+    <input type="hidden" class="target-type-field"></input>
     <div class="description"></div>
   </div>
 
+  <% @gestures.each do |gesture| %>
+    <div class="reference-template gesture-targets" data-gesture-id="<%= gesture.id %>">
+      <div class="description"><%= gesture.description %></div>
+      <% gesture.targets_by_category(@character).each do |key, category| %>
+        <div class="options-category"><%= category.name %></div>
+        <% category.targets.each do |target| %>
+          <span class='gesture-option basic-button' 
+            data-target-id=<%= target.id %> 
+            data-target-type=<%= key %> 
+            data-target-name=<%= target.get_name(:singular) %>
+          >
+            <%= target.get_name(:singular) %>
+            <% if(target.methods.include?(:charges)) && target.charges > 0 %>
+              <span class="charges"><%= target.charges %></span>
+            <% end %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div class="reference-template new-speech">
     <div class='message-element speech-element'>

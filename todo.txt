@@ -1,7 +1,6 @@
 Immediate goals:
 Gesture Targeting
-  Valid targets for gesture
-  Target by item class rather than individual item
+  Add backend processing for submitting targeted gestures
   Include a number of gesture-only options, such as body parts.
 Add more gestures - Look at, shake fist, scowl, stick out tongue, growl
 Expand gesture implementation

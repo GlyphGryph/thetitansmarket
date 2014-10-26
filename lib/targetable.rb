@@ -50,12 +50,43 @@ module Targetable
             end
           end
         end
+      elsif(target_type == :body)
+        #TODO
       else
-        raise "Invalid target type for Action: valid targets"
+        raise "Invalid target type '#{target_type.inspect}' for Action: valid targets"
       end
       valid[target_type]=target_objects
     end
     return valid
+  end
+
+  def targets_by_category(character)
+    targets_by_category = {}
+    self.targets(character).each do |key, targets|
+      if(targets.count > 0)
+        targets_by_category[key] = OpenStruct.new(:name => self.category_name(key), :targets => targets)
+      end
+    end
+
+    return targets_by_category
+  end
+
+  def category_name(category_id)
+    name = "Unknown Type"
+    if(category_id == :possession)
+      name = "Possessions"
+    elsif(category_id == :condition)
+      name = "Conditions"
+    elsif(category_id == :character)
+      name = "Characters"
+    elsif(category_id == :knowledge)
+      name = "Knowledge"
+    elsif(category_id == :idea)
+      name = "Ideas"
+    elsif(category_id == :body)
+      name = "Body Parts"
+    end
+    return name
   end
 
   def requires_target?

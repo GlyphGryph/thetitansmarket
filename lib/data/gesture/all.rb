@@ -24,7 +24,7 @@ Gesture.new("point",
       end     
     },
     :requires_target => true,
-    :valid_targets => {"possession"=>['all'], "condition"=>['all'], "knowledge"=>['all'], "character"=>['all']},
+    :valid_targets => {:possession=>['all'], :character=>['all'], :body=>['all']},
     :target_prompt => "What would you like to point at?",
   }
 )
