@@ -27,7 +27,7 @@ class CharacterAction < ActiveRecord::Base
   end
 
   def target
-    return ActionTarget.find(self.target_type, self.target_id) 
+    return Action.find_target(self.target_type, self.target_id) 
   end
 
   def cost

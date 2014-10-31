@@ -199,7 +199,14 @@ class ProposalsController < ApplicationController
               is_speech = true
               body = component[:value]
             elsif(component[:type]=="gesture")
-              body = Gesture.find(component[:value]).result(@character, target, target)
+              if(component[:target])
+                gesture_target_id = component[:target][:id]
+                gesture_target_type = component[:target][:type]
+                gesture_target = Gesture.find_target(gesture_target_type, gesture_target_id)
+              else
+                gesture_target = nil
+              end
+              body = Gesture.find(component[:value]).result(@character, target, gesture_target)
             else
               raise "Unrecognized message component type."
             end

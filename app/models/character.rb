@@ -60,7 +60,7 @@ class Character < ActiveRecord::Base
   # Checks whether or not this character can add this action
   def add_action(action_id, target_type=nil, target_id=nil)
     action = Action.find(action_id)
-    target = ActionTarget.find(target_type, target_id) 
+    target = Action.find_target(target_type, target_id) 
     execute_action(action, target)
   end
 

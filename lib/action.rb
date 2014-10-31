@@ -252,24 +252,5 @@ class ActionOutcome
     @arguments = arguments
   end
 end
-
-class ActionTarget
-  def self.find(type, id)
-    if(type == "possession")
-      return CharacterPossession.where(:id=>id).first
-    elsif(type == "condition")
-      return CharacterCondition.where(:id=>id).first
-    elsif(type == "character")
-      return Character.where(:id=>id).first
-    elsif(type == "knowledge" || type =="idea")
-      return CharacterKnowledge.where(:id=>id).first
-    elsif(type == nil)
-      return nil
-    else
-      raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
-    end
-  end
-end
-
 # Load data
 require_dependency "data/action/all"

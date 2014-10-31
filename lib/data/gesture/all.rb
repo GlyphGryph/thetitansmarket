@@ -3,9 +3,9 @@ Gesture.new("wave",
     :description=>"Wave at the other person.", 
     :result => lambda { |viewer, actor, target|
       if(viewer==actor)
-        return "You wave at #{target.name}."
+        return "You wave at #{target.get.name}."
       else
-        return "#{viewer.name} waves at you."
+        return "#{viewer.get.name} waves at you."
       end     
     },
   }
@@ -18,9 +18,9 @@ Gesture.new("point",
       if(viewer==actor)
         return "You point at #{target.name}."
       elsif(viewer==target)
-        return "#{actor.name} points at you."
+        return "#{actor.get.name} points at you."
       else
-        return "#{actor.name} points at #{target.name}"
+        return "#{actor.get.name} points at #{target.get.name}"
       end     
     },
     :requires_target => true,
