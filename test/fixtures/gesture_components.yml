@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  actor: 1
+  owner: 1
+  target_name: MyString
+  owner_is_target: false
+
+two:
+  actor: 1
+  owner: 1
+  target_name: MyString
+  owner_is_target: false

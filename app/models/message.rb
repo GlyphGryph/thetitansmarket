@@ -2,7 +2,7 @@ class Message < ActiveRecord::Base
   has_one :proposal, :as => :content
   has_one :sender, :through => :proposal, :class_name => "Character"
   has_one :receiver, :through => :proposal, :class_name => "Character"
-  has_many :message_components
+  has_many :message_components, :dependent => :destroy
 
   def acceptable?
     false

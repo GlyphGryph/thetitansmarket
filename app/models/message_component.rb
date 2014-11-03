@@ -1,11 +1,8 @@
 class MessageComponent < ActiveRecord::Base
   belongs_to :message
-  
-  def speech?
-    return is_speech
-  end
+  belongs_to :element, :polymorphic => true, :dependent => :destroy
 
-  def gesture?
-    return !is_speech
+  def display_for(viewer)
+    element.body(viewer)
   end
 end

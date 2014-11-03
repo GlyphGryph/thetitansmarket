@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141019213056) do
+ActiveRecord::Schema.define(version: 20141103233018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,15 @@ ActiveRecord::Schema.define(version: 20141019213056) do
     t.integer  "nutrition"
   end
 
+  create_table "gesture_components", force: true do |t|
+    t.integer  "actor_id"
+    t.integer  "owner_id"
+    t.string   "target_name"
+    t.boolean  "owner_is_target"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "interactions", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -90,13 +99,12 @@ ActiveRecord::Schema.define(version: 20141019213056) do
   end
 
   create_table "message_components", force: true do |t|
-    t.string  "message_id"
-    t.text    "body"
-    t.boolean "is_speech"
+    t.string  "element_type"
+    t.integer "element_id"
+    t.integer "message_id"
   end
 
   create_table "messages", force: true do |t|
-    t.text     "title"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -119,6 +127,11 @@ ActiveRecord::Schema.define(version: 20141019213056) do
     t.datetime "updated_at"
     t.boolean  "viewed_by_receiver"
     t.boolean  "viewed_by_sender"
+  end
+
+  create_table "speech_components", force: true do |t|
+    t.integer "message_component_id"
+    t.text    "quote"
   end
 
   create_table "trade_asked_knowledges", force: true do |t|
