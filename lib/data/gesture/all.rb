@@ -44,7 +44,7 @@ Gesture.new("point",
           :owner_is_not_target => "%{actor} points at your %{target}",
         },
         :nothing => {
-          :owner_is_target => "%{actor} points at %{targer}",
+          :owner_is_target => "%{actor} points at %{target}",
           :owner_is_not_target => "%{actor} points at %{owned} %{target}",
         }
       },
