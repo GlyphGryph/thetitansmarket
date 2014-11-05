@@ -17,7 +17,7 @@ Gesture.new("wave",
           :owner_is_not_target => "%{actor} waves at your %{target}",
         },
         :nothing => {
-          :owner_is_target => "%{actor} waves at %{targer}",
+          :owner_is_target => "%{actor} waves at %{target}",
           :owner_is_not_target => "%{actor} waves at %{owned} %{target}",
         }
       }
