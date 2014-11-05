@@ -186,35 +186,8 @@ class ProposalsController < ApplicationController
   end
 
   def create_message
-    begin
-      ActiveRecord::Base.transaction do
-        components = params[:message_components]
-        if(components && !components.empty?)
-          target = Character.find(params[:target_id])
-          proposal = Proposal.new(:sender => @character, :receiver => target)
-          message = Message.new(:proposal => proposal)
-          message.save!
-          components.each do |index, component|
-            if(component[:type]=="speech")
-              is_speech = true
-              body = component[:value]
-            elsif(component[:type]=="gesture")
-              if(component[:target])
-                gesture_target_id = component[:target][:id]
-                gesture_target_type = component[:target][:type]
-                gesture_target = Gesture.find_target(gesture_target_type, gesture_target_id)
-              else
-                gesture_target = nil
-              end
-              body = Gesture.find(component[:value]).result(@character, target, gesture_target)
-            else
-              raise "Unrecognized message component type."
-            end
-            MessageComponent.new(:is_speech => is_speech, :body => body, :message => message).save!
-          end
-        end
-      end
-    end
+    target_character = Character.find(params[:target_id])
+    success = Proposal.build(:message, @character, target_character, params[:message_components])
     respond_to do |format|
       format.html { redirect_to proposals_path, :notice => "Proposal sent." }
     end

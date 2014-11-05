@@ -15,4 +15,31 @@ class Message < ActiveRecord::Base
   def name_for_receiver
     return "A message from "+self.sender.name
   end
+
+  def display_for(viewer)
+    message_components.each do 
+      message.display_for(viewer)
+    end
+  end
+
+  def self.build(sender, message_components)
+    raise "sender cannot be nil" unless sender
+    message = nil
+    ActiveRecord::Base.transaction do
+      message = self.new()
+      # This turns the key/value pairs of index/value into a list of values sorted by index
+      sorted_message_components = []
+      message_components.each do |key, value|
+        sorted_message_components[key.to_i] = value
+      end
+      sorted_message_components.compact!
+
+      sorted_message_components.each do |component|
+        message.message_components << MessageComponent.build(sender, component[:type], component[:value], component[:target])
+      end
+      message.save!
+    end
+    raise "Failed to create message." unless message.inspect
+    return message
+  end
 end

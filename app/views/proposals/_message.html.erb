@@ -1,12 +1,6 @@
 <h2>Message</h2>
 <% @proposal.content.message_components.each do |component| %>
-  <% if component.speech? %>
-    <div><%= @proposal.sender.name %> says:
-      <div style="border:1px dashed grey; padding:8px;"><%= component.body %></div>
-    </div>
-  <% else %>
-    <div><%= component.body %></div>
-  <% end %>
+  <div style="border:1px dashed grey; padding:8px;"><%= component.display_for(@character) %></div>
 <% end %>
 
 <% if @character == @proposal.receiver %>

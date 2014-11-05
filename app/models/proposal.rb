@@ -107,4 +107,19 @@ class Proposal < ActiveRecord::Base
   def name_for_receiver
     content.name_for_receiver || "Unknown Proposal from #{self.sender.name}"
   end
+
+  def self.build(type, sender, receiver, components)
+    proposal = nil
+    ActiveRecord::Base.transaction do
+      proposal = self.new(:sender => sender, :receiver => receiver)
+      if(type == :message)
+        proposal.content = Message.build(sender, components)
+      else
+        raise "Invalid proposal type '#{type.inspect}'"
+      end
+      proposal.save!
+    end
+    raise "Failed to create proposal." unless proposal
+    return proposal
+  end
 end

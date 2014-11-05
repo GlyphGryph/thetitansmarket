@@ -1,12 +1,7 @@
 Immediate goals:
 Continue new setup for messsage building.
-  Speech and Gesture items are given their own classes and tables with a property to sort by when they are combined.
-  Need a single relationship that returns both.
-  GestureComponents will store actor, owner, and the name of the target, as well as information on whether or not the owner IS the target.
   Both components will return the correct output for a supplied viewer.
-  need to delate old messagecomponent stuff
-  need to add new speech table, probably fix gesture table
-  set up polymorphic relationship
+  Add validation for gestures, to make sure the outcomes structure is valid
 
 
 

@@ -8,10 +8,7 @@ class Gesture
     @name = params[:name] || "ERROR: Unknown Name"
     @description = params[:description] || "ERROR: UNKNOWN DESCRIPTION"
 
-    @viewer_is_actor_string = params[:viewer_is_actor_string] || "You do something unspeakable to %target"
-    @viewer_is_target_string = params[:viewer_is_target_string] || "%actor does something unspeakable to you."
-    @viewer_is_both_string = params[:viewer_is_both_string] || "You do something unspeakable to yourself."
-    @viewer_is_neither_string = params[:viewer_is_neither_string] || "%actor does something unspeakable to %target."
+    @outcomes = params[:outcomes] || {}
 
     @valid_targets = params[:valid_targets] || {}
     @requires_target = params[:requires_target] || false
@@ -19,9 +16,26 @@ class Gesture
     self.class.add(@id, self)
   end
 
-  def result(viewer, actor, owner, target_name)
-    base_string = "invalid"
-    return base_string % {:viewer => viewer.get.name, :actor => actor.get.name, :target => target.get.name}
+  def result(viewer, actor, owner, owner_is_target, target_name)
+    if(viewer == actor && actor == owner)
+      state = @outcomes[:viewer_is][:actor_and_owner]
+    elsif(viewer == actor)
+      state = @outcomes[:viewer_is][:actor]
+    elsif(viewer == owner)
+      state = @outcomes[:viewer_is][:owner]
+    else
+      state = @outcomes[:viewer_is][:nothing]
+    end
+
+    base_string = owner_is_target ? state[:owner_is_target] : state[:owner_is_not_target]
+    # If the owner is the actor, refer to the item as "their item", else it is "name's item"
+    # This should be ignored in situations where it is "your item" since the string will not have an owner replacement value
+    if(actor==owner)
+      owned_name = "their"
+    else
+      owned_name = "#{owner.get_name}'s"
+    end
+    return base_string % {:viewer => viewer.get_name, :actor => actor.get_name, :owned => owned_name, :target => target_name}
   end
 end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141103233018) do
+ActiveRecord::Schema.define(version: 20141105010412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20141103233018) do
     t.boolean  "owner_is_target"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "gesture_id"
   end
 
   create_table "interactions", force: true do |t|
