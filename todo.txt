@@ -1,34 +1,8 @@
 Immediate goals:
-Continue new setup for messsage building.
-  Both components will return the correct output for a supplied viewer.
-  Add validation for gestures, to make sure the outcomes structure is valid
+---
+-REORGANIZE TODO LIST
+---
 
-
-
-Gesture Targeting
-  Add backend processing for submitting targeted gestures
-  Include a number of gesture-only options, such as body parts.
-Add more gestures - Look at, shake fist, scowl, stick out tongue, growl
-Expand gesture implementation
-  Assign a "doer" to each message component.
-  Have gestures have variations for how the action is seen by the doer and how its seen by others.
-  Have speeches be described as "You say" or "(name) says" as appropriate.
-Multiple Language Support
-  Creation/Investigation of new languages
-    - From pondering gestures or language, the player should always get a unique language idea to investigate
-  Autonaming of new languages (for now some unique hash is fine)
-  Tracking languages moving from player to player
-  Binding actual language variants to the world somehow - are variants already worldbound?
-Allow players to choose language for text boxes
-  Messages in a language players do not understand are converted to nonsense
-  Players should have a default language for these text boxes
-  Once a text box language has changed, the selected language becomes the new default for this page
-Add a character settings page where characters can change their default language
-Allow players to delete elements from unsubmitted messages
-
-Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
-Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
-Async changes to character stats as the result of conditions and actions - track temporary values, and then commit them (only then comparing to things like max or min possible values) only at the end of the execution run.
 Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
 Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
 Change the queue to only spend at *end* of turn until down to zero, instead of at beginning.
@@ -44,6 +18,29 @@ While active, this condition randomly damages a player for 2 to 6 damage each ro
 This condition also tracks and displays the packs current target, a random player. It has an 80% chance to deal it's damage to the targeted player instead of any other player. If the player is killed, a new target is immediately randomly selected.
 The predator condition is given a duration attribute "predator health", that is reduced when players choose the fight off predators action and by a slight amount each turn, and by a large amount if they successfully kill a player.
 When this attribute reaches zero or lower, the condition ends and the log receives a message that the predators have departed.
+
+
+Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
+Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
+
+Continue new setup for messsage building.
+  Add validation for gestures, to make sure the outcomes structure is valid
+  Include a number of gesture-only options, such as body parts.
+Add more gestures - Look at, shake fist, scowl, stick out tongue, growl
+Multiple Language Support
+  Creation/Investigation of new languages
+    - From pondering gestures or language, the player should always get a unique language idea to investigate
+  Autonaming of new languages (for now some unique hash is fine)
+  Tracking languages moving from player to player
+  Binding actual language variants to the world somehow - are variants already worldbound?
+Allow players to choose language for text boxes
+  Messages in a language players do not understand are converted to nonsense
+  Players should have a default language for these text boxes
+  Once a text box language has changed, the selected language becomes the new default for this page
+Add a character settings page where characters can change their default language
+Allow players to delete elements from unsubmitted messages
+
+
 
 --TRADING--
 Restrict the amount of knowledge a player requires of the target. Players can only request lessons in something they have an idea about, and can request things the other player doesn't know, as well as offer to teach things the other player doesn't need to learn. Items for now will still be public, but lessons should probably be worked out via communication. Simply getting an offer for a specific knowledge, however, should give the player the "idea" that they can learn it, allowing them to make a counter-offer for that knowledge.
