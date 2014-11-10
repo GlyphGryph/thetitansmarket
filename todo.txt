@@ -1,32 +1,162 @@
-Immediate goals:
 ---
 -REORGANIZE TODO LIST
 ---
 
-Add requirements for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting.
-Actions should return a full "status" object, with messages to pass, success or failure, an id for what happened. This will allow for historical comparison (actions that only work if another action is used this turn), and the refunding of AP for an aborted action (trying to use an item that is stolen for example).
-Change the queue to only spend at *end* of turn until down to zero, instead of at beginning.
+************
+* Dev Plan *
+************
+Content Milestone 1
+Events System Version 1
+Content Milestone 2
+Combat System Version 1
+Content Milestone 3
+Seasons System Version 1
+Content Milestone 4
+Styling Milestone 1
+Alpha Test - 8+ player game
 
-PVE/Gamification
-Introduce the "events" system. Events are things that can happen each day. Some events are good - perfect weather might result in a bountiful harvest, for example. Others are bad, like disease or if the group has attracted a pack of wild predators, and may required coordinated effort to overcome.
+***********
+* Next Up *
+***********
+ ________________
+| CONTENT MILESTONE 1
+| ---
+| ] Gesturing at Body Parts: Arm, Leg, Head, Mouth, Stomache, Eye, Hand, Foot, Butt
+| ] Additional Gestures: Rub, Shake, Look, Scowl, Stick Out Tongue, Growl, Wave Arms, Scream, Grimace, Smile, Laugh
+|________________
 
--Introduce the "predator pack".
-Every cycle change, implement a chance for a "A group of predators has arrived" event to occur, otherwise "Nothing of note happens." When the event occurs, log it.
-This event creates a "world condition", that can be viewed in the world status box, and persists indefinitely. The predators arriving event cannot occur while this condition is active.
-This condition unlocks a new action "fight off predators".
-While active, this condition randomly damages a player for 2 to 6 damage each round.
-This condition also tracks and displays the packs current target, a random player. It has an 80% chance to deal it's damage to the targeted player instead of any other player. If the player is killed, a new target is immediately randomly selected.
-The predator condition is given a duration attribute "predator health", that is reduced when players choose the fight off predators action and by a slight amount each turn, and by a large amount if they successfully kill a player.
-When this attribute reaches zero or lower, the condition ends and the log receives a message that the predators have departed.
+*********
+* Queue *
+*********
+ ________________
+| EVENTS SYSTEM VERSION 1
+| ---
+| ] Three types of Events: Visitors, Conditions, and Occurences
+|  \] Visitors create a tracked visitor object with interaction opportunities
+|    \] Are listed in a Visitors section
+|     ] Persist until the Visitors depart or are removed
+|     ] Often have effects at end of turn, so there is time to respond
+|     ] Examples include: Predator, Prey
+|   ] Conditions primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
+|    \] Are listed in a Conditions section
+|     ] Might have an immediate effect when they come into play
+|     ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
+|     ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
+|   ] Occurences have an immediate once-offs
+|    \] Only visible in log, does not persist. May not be globally visible
+|     ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
+| ] Add Predators, which target a player once spawned and attack him a few times each turn.
+|  \] Has a "target" player when spawned, which is visible
+|   ] Attacks target player at end of turn
+|    \] Attacks three times, 75% chance of dealing 1 damage each attack
+|     ] Player has a 25% chance to damage the predator pack when being attacked. 
+|     ] Predator pack has a 10% chance to switch targets after each attack. 
+|      \] If damaged by the target during the attack, this increases to 50%.
+|   ] Has a 10% chance to depart each turn
+|    \] This chance increases by 20% for every point of damage taken
+|   ] Has 6 health. 
+|   ] If it reaches 0 health, it dies
+| ] Add Prey, which do nothing but sit around
+|  \] 25% chance to leave on any given turn
+|   ] +75% chance to leave for each point of damage taken
+|   ] Has 3 health. 
+|   ] If it reaches 0 health, it dies
+| ] Players get option to "attack" Predators and Prey
+| ] Add Harsh Weather
+|  \] Lasts 1 turn
+|   ] Causes 1 damage to all characters, Predators, and Prey.
+|   ] Actions that require finding things have their chance to succeed significantly reduced
+| ] All players "see a distant flash of light" as an occurence
+|________________
+
+ ________________
+| CONTENT MILESTONE 2
+| ---
+| ] Player has a chance of finding a Strange Artifact or Perfectly Generic Object as an Occurence
+| ] Player has a chance of having an item of food stolen by wild animals as an Occurence
+| ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
+| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Condition. 1-3 turns.
+| ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
+|________________
+ ________________
+| COMBAT SYSTEM VERSION 1
+| ---
+| ] Players can attack other players.
+|  \] Deals 1 damage to target
+|   ] 50% chance of taking 1 damage
+| ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
+| ] Taking damage from an attack causes a "wound"
+|  \] Described as a "bruise" when coming from players
+|   ] Describes as a "gash" when coming from predator packs
+| ] Wounds reduce a players max health, in addition to dealing damage, as long as they exist
+|  \] Wounds have a "damage" value, which is the amount current and max health is reduced by.
+| ] Wounds have a chance of healing each turn
+|  \] Wounds have a "healing required" value. When this reaches zero, the wound is removed.
+|   ] Wounds have a "chance to heal" value. This is the chance each turn the wound value will decrease.
+|   ] Bruises have a healing required of 1, and a chance to heal of 90%
+|    \] Message: "Your bruise has faded over time."
+|   ] Gashes have a healing required of 2, and a chance to heal of 50%
+|    \] Messages: "Your gash has scabbed over.", "Your gash has healed, though it left a faint scar."
+|   ] A wound being removed restores max health, but does NOT heal the character - their overall health is separate.
+|   ] Wounds are removed before player healing occurs
+|________________
+ ________________
+| CONTENT MILESTONE 3
+| ---
+| ] Killing Predatora or Prey provides meat and skin
+| ] Acquiring or Pondering a wound gives the character knowledge of "Pain"
+| ] Researching Pain gives the character ideas for "Bandages" and "Fighting"
+| \] Researching Bandages requires a Skin, and the prototype is a Bandage item
+|  ] Knowing "Fighting" reduces the chance a player will get hurt when attacking another player by 10%
+| ] If the character ponders Fighting or Basic Crafting, and has the other, they have an idea for "Weapon Crafting"
+| \] Researching Weapon Crafting requires a Dolait item, and the prototype is a club
+| ] Characters can make a "club" item, which aids in combat
+| \] Clubs increase the potential damage 
+| ] Characters can make "bandage" item, which can be applied to wounds, and improves the chance of them healing
+| \] Requires "Bandages" knowledge and a Skin
+|  ] Can be applied to a wound
+|  ] Bandages increase chance to heal by 50%
+|  ] Only one bandage can be applied to a wound
+| ] Characters can make a "Club" item with weapon crafting, which gives them a 50% chance to cause a worse wound when attacking
+|________________
+
+ ________________
+| SEASONS SYSTEM 1
+| ] Implement a season property for worlds
+| ] Character Overview displays current season, from Dawn, Summer, Dusk, The Long Dark
+| ] Season advances every other turn
+| ] Change page CSS each season
+| ] Players cannot farm during The Long Dark, and farmed fields turn into regular fields
+|________________
+
+ ________________
+| CONTENT MILESTONE 4
+| ] Player's chance to gather food during The Long Dark is greatly reduced, and is increased in Dawn and Summer
+| ] Prey are more less likely to appear and more likely to leave during The Long Dark
+| ] Predators are more likely to appear and less likely to leave during The Long Dark
+| ] Locusts only appear during Dusk
+| ] Blood Moon cannot appear during summer, dispelled by summer
+|________________
+
+ ________________
+| STYLE MILESTONE 1
+| ] This space intentionally left blank
+|________________
+
+******************
+* Distant Future *
+******************
 
 
-Remove display of duplicates in the ponder screen (Harder than it looks, since right now ponder is processed against content_possessions...)
+
+***********************
+* Needs a Second Look *
+***********************
+Add requirements structure for thoughts. Example: You can only come up with the idea to craft toys if you ponder weariness AFTER you've researched the basics of crafting. You can only research that idea if you have the required tools and materials.
+
+Fire Knolwedge allows making fire. Provides heat during the Long Dark.
 Create "Cooking" knowledge based on pondering Fire, which grants the "cook" action (1ap). This sacrifices a Dolait to turn a basic food into a "Meal" which restores some happiness in addition to restoring the same amount of nutrition as the previous item. Meals execute to "spoil" at the end of turn and get destroyed.
 
-Continue new setup for messsage building.
-  Add validation for gestures, to make sure the outcomes structure is valid
-  Include a number of gesture-only options, such as body parts.
-Add more gestures - Look at, shake fist, scowl, stick out tongue, growl
 Multiple Language Support
   Creation/Investigation of new languages
     - From pondering gestures or language, the player should always get a unique language idea to investigate
@@ -40,14 +170,15 @@ Allow players to choose language for text boxes
 Add a character settings page where characters can change their default language
 Allow players to delete elements from unsubmitted messages
 
-
-
 --TRADING--
-Restrict the amount of knowledge a player requires of the target. Players can only request lessons in something they have an idea about, and can request things the other player doesn't know, as well as offer to teach things the other player doesn't need to learn. Items for now will still be public, but lessons should probably be worked out via communication. Simply getting an offer for a specific knowledge, however, should give the player the "idea" that they can learn it, allowing them to make a counter-offer for that knowledge.
+Restrict the amount of knowledge a player requires of the target. Players can only request lessons in something they have an idea about, and can request things the other player doesn't know, as well as offer to teach things the other player doesn't need to learn. Items for now will still be public, but lessons should probably be worked out via communication. Simply getting an offer for a specific knowledge, however, should give the player the "idea" that they can learn it, allowing them to make a counter-offer for that knowledge. If this happens, trade offers will probably need to be accepted by both sides to allow players to send "conditional" trades, trades where the offer from the other side is open.
 
 Additionally, we need some way to indicate when a trade proposal element becomes impossible without cancelling the trade. If the person offering offers a knowledge the target knows, or an item they no longer possess, the recipient should be able to see that - but accept anyway. If the recipient lacks a knowledge or item requested, they should not be able to accept but they should be able to see what they are missing, go and get that thing and THEN accept.
 
 Allow players to quickly create "counter-offers", where the current offer is cancelled/denied, and they are pushed to the page to create a new offer with all the current offer elements already selected on it with the same amounts, so they merely need to adjust the offer rather than completely recreating it.
+
+-Trade Expansion
+  Add the ability to fill an offer automatically from items of the right type, or to choose [i]specifically[/i] which item is offered, and the ability to see it's details (condition, uses remaining, etc.). You can not fill in specific items for the other party, only for yourself.
 ---/TRADING--
 
 --REFACTOR BREAK--
@@ -56,35 +187,44 @@ Actions stuff:
  Implement a general lack of requirements message instead of having each action define it's own, though the action should still probably contribute a unique component. This is so we can have a complex "list all items and other things missing and the amounts that were required" sort of thing without complex message logic in the action definition.
 --/REFACTOR BREAK--
 
---CONTENT BREAK--
-???Forage requires wildlands to forage in, target_allowed stuff would need to work first though
-??Add explore result that results in a concussion and the loss of a knowledge - Should wait until things can be taught!
---CONTENT BREAK--
-
--Trade Expansion
-  Add the requirement for both parties to "accept" an offer.
-  Add the ability for players to edit an existing trade offer. This should reset acceptance status for both players.
-  Make sure to add a check to prevent a player's accept from succeeding against an offer that has been updated since they last viewed it. Display a message saying the offer could not be accepted as it has changed.
-  Add the ability to fill an offer automatically from items of the right type, or to choose [i]specifically[/i] which item is offered, and the ability to see it's details (condition, uses remaining, etc.). You can not fill in specific items for the other party, only for yourself.
+Add explore result that results in a concussion and the loss of a knowledge - Should wait until things can be taught!
 
 Add a "target_allowed" flag that works like target required, but with a default option specified, usually "Any Available" or "None"
 Have hunger actually require a certain amount of "nutrition" each turn, and food provides an amount based on the level of it's food quality. Eating reduces this value until it reaches zero and then removes the condition.
 Replace the "play with toy" action with a "use item" action, that can generically target any item with a "use" action defined.
 Multiply all vigor costs and values by 10, to allow for finer calculation in cost bonuses. Especially for cheaper items, it's getting hard to balance...
 
---FAR FUTURE--
+Add a way for players to steal from others players.
+Considering another player gives several ideas depending. If they have possessions, you gain the idea of "theft", which allows you to try and steal items.
+
+Multiple AP amounts and costs by 10 to allow for greater gradiation.
+
+Territory rewrite. 
+-Add an actual map.
+-Things like forage target the territory you're in.
+-Cost a small amount of AP to move between territories, can only move to adjacent territories.
+-Structures grant bonuses but are tied to territories.
+-Players don't actually "own" territories, but can set up defenses to keep other players (and wildlife) out.
+-Any concept of property policy will require actual social structure
+-Players have a limited inventory, (can be increased with some worn items), other items must be left on the ground.
+-Items left on the ground can be picked up (stolen) by any other player.
+-Certain actions are only available in certain territories.
+-Exploring is replaced by actually moving into undiscovered territories.
+-Players can learn more about a territory by a new exploration action. This will provide some information about the territories specific resources, beyond the name, as well as give a chance of uncovering any artifacts that may be there. Taking other actions there (hunting, foraging, clearing the land, etc.) may also reveal information, but not as efficiently and maybe not all information. They can still uncover artifacts though.
+-Each players map of the world is personal, though they can share that knowledge with others.
+-Clearing land frees up "plots", and most territories can have a number of plots. 
+-Each plot can support one planted seed and grow one plant. 
+-Most plants can generate multiple seeds, and most plants only generate one food. 
+-Plants have a decent chance of failing to grow.
+-Every plot freed up comes from one of the territories existing "surface plots" - dolait grove plots or wildland plots.
+-A normal territory has 20+ plots.
+-Swamps and badlands cannot be cleared, but increase the chance of finding their respective resources.
+-Deposits occur *under* surface plots. Accessing them destroys the surface plot and can be done with mining.
+
 Add a way for players to "spy on" other players and intercept their messages.
 More robust system for handling crafting. Introduce item qualities, have quality degrade from use. Have items break if used at low quality. Have learning to craft actions result in a prototype, and require materials.
-Allow creation of language variants. Players can create custom langauges (and know multiple languages) but only communicate via text to those who know the same language (making a kind of game out of getting one language to dominate for ease of communication vs. the effort of learning a new language). Obviously, this will require teaching/learning to be implemented first.
-Allow hiding items, and a config to hide new items be default. Also allow making them publicly viewable. Perhaps require the player to build a shack first?
 Allow creation of broadcasts
 Pull the item list from the worlds instead of from a global item list, and vary the resulting items, esp. qualities. Change the current item stuff to be templates rather than final definitions, with multiple options for various bits to build the real item base.
-Have lots of variant wildlands with their own forage results, and have deposits be an attribute on wildlands. Deposits will be hidden until something something something.
-Add remembered tasks. Make sure the task is remembered as a % of task completed.
-"Strife", the knowledge of attacking other players, becomes a starting knowledge. Strife is a type of proposal that is automatically and immediately executed. The basic knowledge grants the "attack' proposal at a cost of 3ap(+10 from physical injury). The attacker has two 50% chances of dealing 1 damage to the defender, and the defender has one 50% chance of dealing 1 damage to the attacker. Attacking or being attacked by someone gives you the idea "brawling", which increases your odds when both attacking and defending to 75%.
-Add the "craft weapon" knowledge and "weapon" item, made from tomatunk.
-Considering another player gives several ideas depending. If they have possessions, you gain the idea of "theft", which allows you to try and steal items. If they are hurt, you gain the idea of "caretaking", which allows you to improve another player's healing for a turn.
-Add a settting to allow players to turn off auto-eating and force-starve themselves.
 Investigation knowledge model. Each "knowledge" is made up of several "pieces of the puzzle". Investigation offers several random selections from the pieces of the puzzle list and grants them to the player. When the player has all the pieces of the puzzle, they gain the knowledge. Players can share their pieces of the puzzle with other players. Earlier, basic knowledges may only have one piece to their puzzles.
 Add random events each turn.
 Allow players to destroy items they own.
@@ -103,17 +243,12 @@ Consider the onboarding process - perhaps allow new players to join developed wo
 
 Spread rumours of a "hidden" stat called "divine favour". A "low divine favour" can cause the character to be struck by meteors or lightning, or be more likely to be attacked by animals and such. In reality, this events will be manually controlled by moderators. 
 
-Characters have the following stats yet to be implemented:
-Happiness (happy)
-Max Happiness (max_happy)
-Traits: [hard worker, nimble fingers, keen eyes, sharp mind, pretty face, organized multitasker, big heart]
-
 BUGLIST AND SECURITY CONCERNS:
 Everything right now is handled by get requests, we should probably switch post request to... post requests.
 
     ...====''''''''''''''''''====...
 ........................................
-=== Ultimate Plan - Playing the game ===
+=== Ultimate Plan - Winning the game ===
 ''''''''''''''''''''''''''''''''''''''''
 A number of players are introduced to a new game. Their characters have lifespans - limited time in the world. The goals are not straightforward, but living as long as possible, advancing as much as possible, and building a thriving situation while holding off the forces that threaten to bring everything down are all common goals. Ultimately, instead of dying, a sufficiently advanced civilization can allow its citizens to "Transcend" - acquiring Transcendence tokens is one of the keys to success in the meta-game. Any account may only enter a world once, and only 5 characters from any world may ever Transcend. Once they have done so, no new souls will be able to enter that world.
 
