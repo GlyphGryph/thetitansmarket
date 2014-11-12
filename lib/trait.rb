@@ -15,4 +15,4 @@ class Trait
 end 
 
 # Load data
-require_dependency "data/traits/all"
+require_dependency "data/trait/all"

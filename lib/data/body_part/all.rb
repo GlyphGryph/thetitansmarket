@@ -1,0 +1,16 @@
+BodyPart.new("head",
+  {
+  }
+)
+BodyPart.new("mouth",
+  {
+  }
+)
+BodyPart.new("eye",
+  {
+  }
+)
+BodyPart.new("neck",
+  {
+  }
+)

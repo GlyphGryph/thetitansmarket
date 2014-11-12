@@ -2,7 +2,7 @@ module Targetable
   def self.included(base)
     base.extend(InstanceMethods)
   end
-
+  
   module InstanceMethods
     def find_target(type, id)
       if(type == "possession")
@@ -13,14 +13,14 @@ module Targetable
         return Character.where(:id=>id).first
       elsif(type == "knowledge" || type =="idea")
         return CharacterKnowledge.where(:id=>id).first
-      elsif(type == nil)
-        return nil
+      elsif(type == "body")
+        return CharacterBodyPart.find(id)
       else
         raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
       end
     end
   end
-
+    
   # Takes a actor, and returns a list of valid targets, sorted by type, that actor can select for this action
   def targets(actor)
     valid = {}
@@ -73,7 +73,9 @@ module Targetable
           end
         end
       elsif(target_type == :body)
-        #TODO
+        if(values.include?('all'))
+          target_objects = actor.character_body_parts
+        end
       else
         raise "Invalid target type '#{target_type.inspect}' for Action: valid targets"
       end

@@ -17,6 +17,7 @@ class Character < ActiveRecord::Base
   has_many :character_conditions, :dependent => :destroy
   has_many :character_traits, :dependent => :destroy
   has_many :character_knowledges, :dependent => :destroy
+  has_many :character_body_parts, :dependent => :destroy
   has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :logs, :as => :owner, :dependent => :destroy
@@ -41,6 +42,9 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.nutrition ||= 0
+    BodyPart.all.each do |part|
+      self.character_body_parts << CharacterBodyPart.new(:body_part_id => part.id)
+    end
   end
 
   def default_relationships
