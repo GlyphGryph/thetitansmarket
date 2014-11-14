@@ -5,7 +5,7 @@
 ************
 * Dev Plan *
 ************
-Content Milestone 1
+X Content Milestone 1 
 Events System Version 1
 Content Milestone 2
 Combat System Version 1
@@ -18,16 +18,6 @@ Alpha Test - 8+ player game
 ***********
 * Next Up *
 ***********
- ________________
-| CONTENT MILESTONE 1
-| ---
-| ] Gesturing at Body Parts: Arm, Leg, Head, Mouth, Stomache, Eye, Hand, Foot, Butt
-| ] Additional Gestures: Rub, Shake, Look, Scowl, Stick Out Tongue, Growl, Wave Arms, Scream, Grimace, Smile, Laugh
-|________________
-
-*********
-* Queue *
-*********
  ________________
 | EVENTS SYSTEM VERSION 1
 | ---
@@ -69,6 +59,9 @@ Alpha Test - 8+ player game
 | ] All players "see a distant flash of light" as an occurence
 |________________
 
+*********
+* Queue *
+*********
  ________________
 | CONTENT MILESTONE 2
 | ---

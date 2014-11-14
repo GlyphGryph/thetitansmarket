@@ -2,14 +2,36 @@ class Gesture
   extend CollectionTracker
   include Targetable
   attr_reader :id, :description, :name
+  
+  @@outcomes = {
+    :viewer_is => {
+      :actor_and_owner => {
+        :owner_is_target => "You %{verb} yourself.",
+        :owner_is_not_target => "You %{verb} your %{target}",
+      },
+      :actor => {
+        :owner_is_target => "You %{verb} %{target}",
+        :owner_is_not_target => "You %{verb} %{owned} %{target}",
+      },
+      :owner => {
+        :owner_is_target => "%{actor} %{verb} you.",
+        :owner_is_not_target => "%{actor} %{verb} your %{target}",
+      },
+      :nothing => {
+        :owner_is_target => "%{actor} %{verb} %{target}",
+        :owner_is_not_target => "%{actor} %{verb} %{owned} %{target}",
+      }
+    },
+  }
 
   def initialize(id, params={})
     @id = id
     @name = params[:name] || "ERROR: Unknown Name"
     @description = params[:description] || "ERROR: UNKNOWN DESCRIPTION"
-
-    @outcomes = params[:outcomes] || {}
-
+    
+    @second_person = params[:second_person]
+    @third_person = params[:third_person]
+    
     @valid_targets = params[:valid_targets] || {}
     @requires_target = params[:requires_target] || false
     @target_prompt = params[:target_prompt] || "Targeting Prompt error"
@@ -18,13 +40,17 @@ class Gesture
 
   def result(viewer, actor, owner, owner_is_target, target_name)
     if(viewer == actor && actor == owner)
-      state = @outcomes[:viewer_is][:actor_and_owner]
+      verb = @second_person
+      state = @@outcomes[:viewer_is][:actor_and_owner]
     elsif(viewer == actor)
-      state = @outcomes[:viewer_is][:actor]
+      verb = @second_person
+      state = @@outcomes[:viewer_is][:actor]
     elsif(viewer == owner)
-      state = @outcomes[:viewer_is][:owner]
+      verb = @third_person
+      state = @@outcomes[:viewer_is][:owner]
     else
-      state = @outcomes[:viewer_is][:nothing]
+      verb = @third_person
+      state = @@outcomes[:viewer_is][:nothing]
     end
 
     base_string = owner_is_target ? state[:owner_is_target] : state[:owner_is_not_target]
@@ -35,7 +61,7 @@ class Gesture
     else
       owned_name = "#{owner.get_name}'s"
     end
-    return base_string % {:viewer => viewer.get_name, :actor => actor.get_name, :owned => owned_name, :target => target_name}
+    return base_string % {:viewer => viewer.get_name, :actor => actor.get_name, :owned => owned_name, :target => target_name, :verb => verb}
   end
 end
 
