@@ -142,3 +142,32 @@ Gesture.new("laugh",
     :requires_target => false,
   }
 )
+Gesture.new("cry",
+  { :name => "Cry",
+    :description => "Cry a little.",
+    :second_person => "cry",
+    :third_person => "cries",
+    :target_prompt => "What would you like to cry about?",
+    :requires_target => false,
+  }
+)
+Gesture.new("shrug",
+  { :name => "Shrug",
+    :description => "Shrug your shoulders.",
+    :second_person => "shrug",
+    :third_person => "shrugs",
+    :target_prompt => "What would you like to shrug at?",
+    :requires_target => false,
+  }
+)
+Gesture.new("raise",
+  { :name => "Raise",
+    :description => "Raise something.",
+    :second_person => "raise",
+    :third_person => "raises",
+    :addendum => "into the air",
+    :target_prompt => "What would you like to raise?",
+    :requires_target => true,
+    :valid_targets => {:body=>['all']},
+  }
+)

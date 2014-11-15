@@ -29,8 +29,9 @@ class Gesture
     @name = params[:name] || "ERROR: Unknown Name"
     @description = params[:description] || "ERROR: UNKNOWN DESCRIPTION"
     
-    @second_person = params[:second_person]
-    @third_person = params[:third_person]
+    @second_person = params[:second_person] || "something"
+    @third_person = params[:third_person] || "somethings"
+    @addendum = params[:addendum] || nil
     
     @valid_targets = params[:valid_targets] || {}
     @requires_target = params[:requires_target] || false
@@ -61,7 +62,11 @@ class Gesture
     else
       owned_name = "#{owner.get_name}'s"
     end
-    return base_string % {:viewer => viewer.get_name, :actor => actor.get_name, :owned => owned_name, :target => target_name, :verb => verb}
+    result_string = base_string % {:viewer => viewer.get_name, :actor => actor.get_name, :owned => owned_name, :target => target_name, :verb => verb}
+    if(@addendum)
+      result_string+= " #{@addendum}"
+    end
+    return result_string
   end
 end
 

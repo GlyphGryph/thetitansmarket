@@ -22,6 +22,10 @@ BodyPart.new("hand",
   {
   }
 )
+BodyPart.new("fist",
+  {
+  }
+)
 BodyPart.new("belly",
   {
   }
