@@ -57,8 +57,12 @@ class Character < ActiveRecord::Base
     if(self.logs.empty?)
       new_log = Log.new(:owner => self)
       new_log.save!
-      new_log.make_entry("passive", "You were born from the machine, and thrust into the world.")
+      self.record("passive", "You were born from the machine, and thrust into the world.")
     end
+  end
+
+  def record(type, message)
+    self.current_history.make_entry(type, message)
   end
   
   # Checks whether or not this character can add this action
@@ -75,7 +79,7 @@ class Character < ActiveRecord::Base
       if(result.status != :impossible)
         self.change_vigor(-cost)
       end
-      self.current_history.make_entry(result.status, result.message)
+      self.record(result.status, result.message)
     else
       if(self.vigor > 0)
         if(target)
@@ -105,7 +109,7 @@ class Character < ActiveRecord::Base
         self.change_vigor(-cost)
       end
       character_action.destroy!
-      self.current_history.make_entry(result.status, result.message)
+      self.record(result.status, result.message)
       succeeded = true
     elsif(self.vigor > 0)
       character_action.stored_vigor += self.vigor
@@ -218,7 +222,7 @@ class Character < ActiveRecord::Base
   end
 
   def die
-    self.current_history.make_entry("important", "You have died.")
+    self.record("important", "You have died.")
     self.world = nil
     self.save!
   end
@@ -366,8 +370,7 @@ class Character < ActiveRecord::Base
   def execute
     self.unready
     
-    new_log = Log.new()
-    self.logs << new_log
+    self.logs << Log.new()
 
     #===============
     #= End Of Turn =
@@ -408,7 +411,7 @@ class Character < ActiveRecord::Base
         possession = character_possession.get
         result = possession.age(character_possession)
         if(result.status == :loud)
-          new_log.make_entry("passive", result.message)
+          self.record("passive", result.message)
         end
       end
     end

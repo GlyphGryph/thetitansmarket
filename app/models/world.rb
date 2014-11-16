@@ -26,6 +26,12 @@ class World < ActiveRecord::Base
     self.build_exploration_pool
   end
 
+  def broadcast(type, message)
+    self.characters.each do |character|
+      character.record(type, message)
+    end
+  end
+
   def build_exploration_pool
     50.times do
       self.world_explorations << WorldExploration.new(:world => self, :exploration_id => 'wildlands_claim')
@@ -95,6 +101,10 @@ class World < ActiveRecord::Base
         ActiveRecord::Base.transaction do
           self.characters.each do |character|
             character.execute
+          end
+          event = Event.draw(self)
+          if(!event.silent)
+            self.broadcast("event", event.description)
           end
           self.turn += 1
           self.last_turned = Time.now

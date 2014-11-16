@@ -1,16 +1,35 @@
 .log{
   .entry{
-    &:before{
-      position:relative;
-      display:inline-block;
-      font-weight:bold;
-      top:-2px;
-      width:3px;
-      height:3px;
-      border:2px solid black;
-      border-radius:4px;
-      content: " ";
-      margin-right:2px;
+    // Personal type log icons
+    &.important, &.impossible, &.passive, &.success, &.failure{
+      &:before{
+        position:relative;
+        display:inline-block;
+        font-weight:bold;
+        top:-2px;
+        width:3px;
+        height:3px;
+        border:2px solid black;
+        border-radius:4px;
+        content: " ";
+        margin-right:2px;
+      }
+    }
+    // World type log icons
+    &.event{
+      &:before{
+        position:relative;
+        display:inline-block;
+        font-weight:bold;
+        top:-2px;
+        width:5px;
+        height:5px;
+        border:1px solid #557;
+        background-color:#77A;
+        border-radius:4px;
+        content: " ";
+        margin-right:2px;
+      }
     }
   }
   .important{
@@ -24,9 +43,12 @@
   }
   .success{
     color:#7A7;
-
   }
   .failure{
     color:#77A;
+  }
+  .event{
+    font-weight:bold;
+    color:#494;
   }
 }
