@@ -207,6 +207,9 @@
                 <div class="value">
                   <span class="charges"><%= action.cost(@character) %></span>
                   <%= link_to action.name, add_action_path(:id => @character.id, :action_id => action.id) %>
+                  <% if(!action.requires_target?)%>
+                    (<%= action.success_chance(@character) %>)
+                  <% end %>
                 </div>
                 <div class="sub-value">
                   <%= action.description %> 
@@ -224,7 +227,7 @@
     <div class="info-block" id="world-info">
       <div class="info-block-head"><%= @world.name %> - The world has turned <%= @world.turn%> times.</div>
       <div class="info-block-body">
-        <div id="world-peers">
+        <div id="world-peers" class="data-block">
           <% if @other_characters.empty? %>
             You are alone.
           <% else %>
@@ -236,6 +239,11 @@
             </ul>
           <% end %>
         </div>
+        <% @world.world_situations.each do |world_situation| %>
+          <div class="data-block">
+            <%= world_situation.get.description %>
+          </div>
+        <% end %>
       </div>
     </div>
 

@@ -48,12 +48,12 @@ class Character < ActiveRecord::Base
   end
 
   def default_relationships
-    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'resilience')
-    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'hunger')
-    self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'weariness')
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'cognition', :progress => Knowledge.find('cognition').components)
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'play', :progress => Knowledge.find('play').components)
-    self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => 'gestures', :progress => Knowledge.find('gestures').components)
+    self.character_conditions << CharacterCondition.new(:condition_id => 'resilience')
+    self.character_conditions << CharacterCondition.new(:condition_id => 'hunger')
+    self.character_conditions << CharacterCondition.new(:condition_id => 'weariness')
+    self.character_knowledges << CharacterKnowledge.new(:knowledge_id => 'cognition', :progress => Knowledge.find('cognition').components)
+    self.character_knowledges << CharacterKnowledge.new(:knowledge_id => 'play', :progress => Knowledge.find('play').components)
+    self.character_knowledges << CharacterKnowledge.new(:knowledge_id => 'gestures', :progress => Knowledge.find('gestures').components)
     if(self.logs.empty?)
       new_log = Log.new(:owner => self)
       new_log.save!

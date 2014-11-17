@@ -54,7 +54,6 @@ Alpha Test - 8+ player game
 | ] Players get option to "attack" Predators and Prey
 | ] Add Harsh Weather
 |  \] Lasts 1 turn
-|   ] Causes 1 damage to all characters, Predators, and Prey.
 |   ] Actions that require finding things have their chance to succeed significantly reduced
 | ] All players "see a distant flash of light" as an occurence
 |________________

@@ -1,6 +1,7 @@
 class World < ActiveRecord::Base
   has_many :characters, :dependent => :destroy
   has_many :world_explorations, :dependent => :destroy
+  has_many :world_situations, :dependent => :destroy
   before_create :default_attributes
   after_create :default_relationships
   
@@ -73,6 +74,10 @@ class World < ActiveRecord::Base
     end
   end
 
+  def has_situation?(situation_id)
+    return (self.world_situations.where(:situation_id => situation_id).count > 0)
+  end
+
   def join(user)
     new_character = Character.new(:user => user, :world => self)
     new_character.save!
@@ -102,10 +107,7 @@ class World < ActiveRecord::Base
           self.characters.each do |character|
             character.execute
           end
-          event = Event.draw(self)
-          if(!event.silent)
-            self.broadcast("event", event.description)
-          end
+          Event.draw(self).execute(self)
           self.turn += 1
           self.last_turned = Time.now
           self.save!

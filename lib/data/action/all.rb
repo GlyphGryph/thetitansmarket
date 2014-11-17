@@ -56,6 +56,9 @@ Action.new("forage",
       :trait => [
         {:id => 'keen_eyes', :modifier => 25},
       ],
+      :situation => [
+        {:id => 'harsh_weather', :modifier => -25},
+      ],
     },
     :result => lambda { |character, target|
       found = Plant.all.sample
@@ -115,6 +118,9 @@ Action.new("explore",
       :despair => 5,
       :trait => [
         {:id => 'keen_eyes', :modifier => -3},
+      ],
+      :situation => [
+        {:id => 'harsh_weather', :modifier => +3},
       ],
     },
   }
@@ -420,6 +426,9 @@ Action.new("harvest_dolait",
       :trait => [
         {:id => 'hard_worker', :modifier => 25},
       ],
+      :situation => [
+        {:id => 'harsh_weather', :modifier => -25},
+      ],
     },
     :result => lambda { |character, target|
       if(target.deplete(1))
@@ -470,6 +479,9 @@ Action.new("gather_tomatunk",
       :trait => [
         {:id => 'hard_worker', :modifier => 16},
         {:id => 'keen_eye', :modifier => 26},
+      ],
+      :situation => [
+        {:id => 'harsh_weather', :modifier => -25},
       ],
     },
     :result => lambda { |character, target|
@@ -530,6 +542,9 @@ Action.new("gather_wampoon",
     :success_modifiers => {
       :trait => [
         {:id => 'keen_eye', :modifier => 15},
+      ],
+      :situation => [
+        {:id => 'harsh_weather', :modifier => -25},
       ],
     },
     :result => lambda { |character, target|

@@ -156,6 +156,13 @@ class Action
         end
       end
     end
+    if(@cost_modifiers[:situation])
+      @cost_modifiers[:situation].each do |situation|
+        if character.world.has_situation?(situation[:id])
+          modifier += situation[:modifier]
+        end
+      end
+    end
 
     modifier = modifier.round
 
@@ -200,7 +207,7 @@ class Action
     return !!@requires[:target]
   end
 
-  def success_chance(character, target)
+  def success_chance(character, target=nil)
     chance = @base_success_chance
     if(@success_modifiers[:possession])
       @success_modifiers[:possession].each do |possession|
@@ -218,6 +225,13 @@ class Action
       @success_modifiers[:trait].each do |trait|
         if character.has_trait?(trait[:id])
           chance += trait[:modifier]
+        end
+      end
+    end
+    if(@success_modifiers[:situation])
+      @success_modifiers[:situation].each do |situation|
+        if character.world.has_situation?(situation[:id])
+          chance += situation[:modifier]
         end
       end
     end

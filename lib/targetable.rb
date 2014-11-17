@@ -15,6 +15,8 @@ module Targetable
         return CharacterKnowledge.where(:id=>id).first
       elsif(type == "body")
         return CharacterBodyPart.find(id)
+      elsif(type == nil)
+        return nil
       else
         raise "Invalid type provided. Could not find rule to handle target #{type}, #{id}."
       end

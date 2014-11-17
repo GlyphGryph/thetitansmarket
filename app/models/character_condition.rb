@@ -6,7 +6,7 @@ class CharacterCondition < ActiveRecord::Base
   def get
     element = Condition.find(self.condition_id)
     unless(element)
-      raise "Could not find action for CharacterCondition with id #{self.id}"
+      raise "Could not find condition for CharacterCondition with id #{self.id} looking for #{self.condition_id}"
     end
     return element
   end
