@@ -107,7 +107,13 @@ class World < ActiveRecord::Base
           self.characters.each do |character|
             character.execute
           end
+
           Event.draw(self).execute(self)
+          # Process this character's active conditions, so long as they are not dead
+          self.world_situations.each do |world_situation|
+            world_situation.age
+          end
+
           self.turn += 1
           self.last_turned = Time.now
           self.save!

@@ -15,7 +15,12 @@ class WorldSituation < ActiveRecord::Base
     return self.get.name
   end
 
-  def should_die?
-    return self.duration <= 0
+  def age
+    self.duration-=1
+    if(self.duration < 0)
+      self.destroy!
+    else
+      self.save!
+    end
   end
 end

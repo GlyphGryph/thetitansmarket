@@ -7,7 +7,16 @@ class Event
     @description = params[:description] || "Description Error"
     @silent = params[:silent] || false
     @tickets = params[:tickets] || 0
-    @creates = params[:creates] || {}
+    creates = params[:creates] || {}
+    @situations = []
+    @occurences = []
+    if(creates[:situation])
+      @situations << creates[:situation]
+    end
+    if(creates[:occurence])
+      
+      @occurences << Occurence.new(creates[:occurence])
+    end
     self.class.add(@id, self)
   end
 
@@ -27,15 +36,59 @@ class Event
   end
 
   def execute(world)
-    if(@creates[:situation])
-      to_create = @creates[:situation]
-      world.world_situations << WorldSituation.new(:situation_id => to_create[:id], :duration => to_create[:duration])
-    end
     if(!self.silent?)
       world.broadcast("event", self.description)
     end
+    if(@situations)
+      @situations.each do |situation|
+        to_create = @creates[:situation]
+        world.world_situations << WorldSituation.new(:situation_id => to_create[:id], :duration => to_create[:duration])
+      end
+    end
+    if(@occurences)
+      @occurences.each do |occurence|
+        occurence.execute(world)
+      end
+    end
   end
-end 
+end
+
+class Occurence
+  def initialize(params={})
+    @characters = params[:characters] || :all
+    outcome_definitions = params[:outcomes] || []
+    @outcomes = []
+    outcome_definitions.each do |outcome_definition|
+      new_outcome = OccurenceOutcome.new(outcome_definition)
+      new_outcome.tickets.times do
+        @outcomes << new_outcome
+      end
+    end
+  end
+
+  def execute(world)
+    if(@characters == :all)
+      world.characters.each do |character|
+        @outcomes.sample.execute(character)
+      end
+    else
+      raise "Invalid character targeting value '#{@character}' for this occurence"
+    end
+  end
+end
+
+class OccurenceOutcome
+  attr_reader :tickets
+
+  def initialize(params={})
+    @tickets = params[:tickets] || 1
+    @result = params[:result] || lambda { |character| return false }
+  end
+
+  def execute(character)
+    @result.call(character)
+  end
+end
 
 # Load data
 require_dependency "data/event/all"

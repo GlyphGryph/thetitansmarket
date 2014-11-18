@@ -21,14 +21,14 @@ Alpha Test - 8+ player game
  ________________
 | EVENTS SYSTEM VERSION 1
 | ---
-| ] Three types of Events: Visitors, Conditions, and Occurences
+| ] Three types of Events: Visitors, Situations, and Occurences
 |  \] Visitors create a tracked visitor object with interaction opportunities
 |    \] Are listed in a Visitors section
 |     ] Persist until the Visitors depart or are removed
 |     ] Often have effects at end of turn, so there is time to respond
 |     ] Examples include: Predator, Prey
-|   ] Conditions primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
-|    \] Are listed in a Conditions section
+|   ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
+|    \] Are listed in a Situations section
 |     ] Might have an immediate effect when they come into play
 |     ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
 |     ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
@@ -52,10 +52,10 @@ Alpha Test - 8+ player game
 |   ] Has 3 health. 
 |   ] If it reaches 0 health, it dies
 | ] Players get option to "attack" Predators and Prey
-| ] Add Harsh Weather
-|  \] Lasts 1 turn
-|   ] Actions that require finding things have their chance to succeed significantly reduced
-| ] All players "see a distant flash of light" as an occurence
+| x ] Add Harsh Weather
+| x  \] Lasts 1 turn
+| x  ] Actions that require finding things have their chance to succeed significantly reduced
+| x ] All players "see a distant flash of light" as an occurence which grants one morale
 |________________
 
 *********
@@ -67,7 +67,7 @@ Alpha Test - 8+ player game
 | ] Player has a chance of finding a Strange Artifact or Perfectly Generic Object as an Occurence
 | ] Player has a chance of having an item of food stolen by wild animals as an Occurence
 | ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
-| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Condition. 1-3 turns.
+| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
 | ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
 |________________
  ________________
