@@ -41,8 +41,7 @@ class Event
     end
     if(@situations)
       @situations.each do |situation|
-        to_create = @creates[:situation]
-        world.world_situations << WorldSituation.new(:situation_id => to_create[:id], :duration => to_create[:duration])
+        world.world_situations << WorldSituation.new(:situation_id => situation[:id], :duration => situation[:duration])
       end
     end
     if(@occurences)
@@ -68,11 +67,14 @@ class Occurence
 
   def execute(world)
     if(@characters == :all)
-      world.characters.each do |character|
-        @outcomes.sample.execute(character)
-      end
+      # Do to all characters
+      target_characters = world.characters
     else
-      raise "Invalid character targeting value '#{@character}' for this occurence"
+      # Or do to a given number of characters
+      target_characters = world.characters.sample(@characters)
+    end
+    target_characters.each do |character|
+      @outcomes.sample.execute(character)
     end
   end
 end

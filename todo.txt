@@ -56,6 +56,8 @@ Alpha Test - 8+ player game
 | x  \] Lasts 1 turn
 | x  ] Actions that require finding things have their chance to succeed significantly reduced
 | x ] All players "see a distant flash of light" as an occurence which grants one morale
+| ] Add "found a generic object" occurence
+|   \] Happens only to a single character
 |________________
 
 *********
