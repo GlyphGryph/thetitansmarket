@@ -244,6 +244,11 @@
             <%= world_situation.get.description %>
           </div>
         <% end %>
+        <% @world.world_visitors.each do |world_visitor| %>
+          <div class="data-block">
+            <%= world_visitor.get_name %> - <%= world_visitor.get.description %>
+          </div>
+        <% end %>
       </div>
     </div>
 

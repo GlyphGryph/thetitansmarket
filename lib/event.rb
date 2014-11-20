@@ -10,12 +10,15 @@ class Event
     creates = params[:creates] || {}
     @situations = []
     @occurences = []
+    @visitors = []
     if(creates[:situation])
       @situations << creates[:situation]
     end
     if(creates[:occurence])
-      
       @occurences << Occurence.new(creates[:occurence])
+    end
+    if(creates[:visitor])
+      @visitors << creates[:visitor]
     end
     self.class.add(@id, self)
   end
@@ -47,6 +50,11 @@ class Event
     if(@occurences)
       @occurences.each do |occurence|
         occurence.execute(world)
+      end
+    end
+    if(@visitors)
+      @visitors.each do |visitor|
+        world.world_visitors << WorldVisitor.new(:visitor_id => visitor[:id])
       end
     end
   end

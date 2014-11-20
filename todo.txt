@@ -27,14 +27,14 @@ Alpha Test - 8+ player game
 |     ] Persist until the Visitors depart or are removed
 |     ] Often have effects at end of turn, so there is time to respond
 |     ] Examples include: Predator, Prey
-|   ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
-|    \] Are listed in a Situations section
-|     ] Might have an immediate effect when they come into play
-|     ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
-|     ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
-|   ] Occurences have an immediate once-offs
-|    \] Only visible in log, does not persist. May not be globally visible
-|     ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
+|   x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
+|   x  \] Are listed in a Situations section
+|   x   ] Might have an immediate effect when they come into play
+|   x   ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
+|   x   ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
+|   x ] Occurences have an immediate once-offs
+|   x  \] Only visible in log, does not persist. May not be globally visible
+|   x   ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
 | ] Add Predators, which target a player once spawned and attack him a few times each turn.
 |  \] Has a "target" player when spawned, which is visible
 |   ] Attacks target player at end of turn
@@ -54,10 +54,10 @@ Alpha Test - 8+ player game
 | ] Players get option to "attack" Predators and Prey
 | x ] Add Harsh Weather
 | x  \] Lasts 1 turn
-| x  ] Actions that require finding things have their chance to succeed significantly reduced
+| x   ] Actions that require finding things have their chance to succeed significantly reduced
 | x ] All players "see a distant flash of light" as an occurence which grants one morale
-| ] Add "found a generic object" occurence
-|   \] Happens only to a single character
+| x ] Add "found a generic object" occurence
+| x  \] Happens only to a single character
 |________________
 
 *********

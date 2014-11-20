@@ -53,3 +53,12 @@ Event.new("harsh_weather",
     }
   },
 )
+Event.new("visitor",
+  :tickets => 100,
+  :description => "A vile force of darkness has arrived.",
+  :creates => {
+    :visitor => {
+      :id => "being"
+    }
+  },
+)
