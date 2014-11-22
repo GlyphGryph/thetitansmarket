@@ -18,4 +18,8 @@ class WorldVisitor < ActiveRecord::Base
   def execute
     return self.get.execute(self)
   end
+
+  def depart
+    self.destroy!
+  end
 end

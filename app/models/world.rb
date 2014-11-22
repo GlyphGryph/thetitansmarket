@@ -116,6 +116,11 @@ class World < ActiveRecord::Base
             world_situation.age
           end
 
+          # Process visitor actions
+          self.world_visitors.each do |visitor|
+            visitor.execute
+          end
+
           self.turn += 1
           self.last_turned = Time.now
           self.save!

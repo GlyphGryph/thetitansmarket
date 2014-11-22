@@ -54,7 +54,7 @@ Event.new("harsh_weather",
   },
 )
 Event.new("visitor",
-  :tickets => 100,
+  :tickets => 1,
   :description => "A vile force of darkness has arrived.",
   :creates => {
     :visitor => {
