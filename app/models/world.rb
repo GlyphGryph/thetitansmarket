@@ -3,6 +3,7 @@ class World < ActiveRecord::Base
   has_many :world_explorations, :dependent => :destroy
   has_many :world_situations, :dependent => :destroy
   has_many :world_visitors, :dependent => :destroy
+  has_many :character_possessions, :through => :characters
   before_create :default_attributes
   after_create :default_relationships
   
