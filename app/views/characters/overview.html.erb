@@ -246,7 +246,8 @@
         <% end %>
         <% @world.world_visitors.each do |world_visitor| %>
           <div class="data-block">
-            <%= world_visitor.get_name %> - <%= world_visitor.get.description %>
+            <div><%= world_visitor.get_name %> - <%= world_visitor.get.description %></div>
+            <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
           </div>
         <% end %>
       </div>

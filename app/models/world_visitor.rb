@@ -2,6 +2,7 @@ class WorldVisitor < ActiveRecord::Base
   belongs_to :world
   validates_presence_of :world_id
   validates_presence_of :visitor_id
+  belongs_to :target, :polymorphic=>true
 
   def get
     element = Visitor.find(self.visitor_id)

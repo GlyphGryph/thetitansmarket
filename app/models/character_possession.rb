@@ -4,6 +4,7 @@ class CharacterPossession < ActiveRecord::Base
   has_many :trade_asked_character_possessions
   has_many :trade_offered_character_possessions
   has_one :world, :through => :character
+  has_many :world_visitors, :as => :target
   validates_presence_of :character
   validates_presence_of :possession_id
   attr_accessor :type, :contains

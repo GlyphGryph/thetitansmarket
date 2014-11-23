@@ -23,9 +23,9 @@ Alpha Test - 8+ player game
 | ---
 | ] Three types of Events: Visitors, Situations, and Occurences
 |  \] Visitors create a tracked visitor object with interaction opportunities
-|    \] Are listed in a Visitors section
-|     ] Persist until the Visitors depart or are removed
-|     ] Often have effects at end of turn, so there is time to respond
+|   x \] Are listed in a Visitors section
+|   x  ] Persist until the Visitors depart or are removed
+|   x  ] Often have effects at end of turn, so there is time to respond
 |     ] Examples include: Predator, Prey
 |   x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
 |   x  \] Are listed in a Situations section
@@ -59,6 +59,38 @@ Alpha Test - 8+ player game
 | x ] Add "found a generic object" occurence
 | x  \] Happens only to a single character
 |________________
+
+Implementation notes, questions, concerns:
+Can multiple events happen at once?
+
+Our final goal is to create Visitors. What are Visitors?
+Visitors are or do:
+Interactive (stub out attack and scare actions for now)
+Execute actions of their own (execute at end of turn, maybe multiple times).
+- Predators attack players or leave
+- Prey stand around, eat some farm fields (if possible), or leave
+Killable (have stubbed out attack option do this)
+Have health which allows them to survive multiple attacks, and a morale tracker that influences their decision to leave
+Change their behaviour depending on their interaction history with the players
+- Prey who've eaten farm food will be more likely to stick around
+- Visitors who've been injured will be more likely to leave
+Visitors can interact with each other - Predators can attack prey
+x Have current targets
+x Have a chance of switching targets
+x Displays current activity ("grazing on Joe's field, hunting Joe")
+NOTE: WHAT HAPPENS WHEN A TARGET DIES? HAVE A NON-DESTROYING DEPENDENT BEHAVIOUR
+
+Maybe:
+Group together
+The group enters and leaves as one
+Members of the group getting injured or kills influences the groups decisions
+Groups can contain different members - perhaps an alpha predator and several other predators
+Groups can be split up (for example, a group of predators can be broken up by killing the alpha predator)
+
+Okay, so, we'll need, to start:
+A template to build visitors from in the normal style
+An association between worlds and visitors like the one between worlds and characters or situations
+Processing visitors whenever the world turns
 
 *********
 * Queue *
