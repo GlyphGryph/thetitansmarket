@@ -23,9 +23,9 @@ Alpha Test - 8+ player game
 | ---
 | ] Three types of Events: Visitors, Situations, and Occurences
 |  \] Visitors create a tracked visitor object with interaction opportunities
-|   x \] Are listed in a Visitors section
-|   x  ] Persist until the Visitors depart or are removed
-|   x  ] Often have effects at end of turn, so there is time to respond
+|   x\] Are listed in a Visitors section
+|   x ] Persist until the Visitors depart or are removed
+|   x ] Often have effects at end of turn, so there is time to respond
 |     ] Examples include: Predator, Prey
 |   x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
 |   x  \] Are listed in a Situations section
@@ -35,6 +35,11 @@ Alpha Test - 8+ player game
 |   x ] Occurences have an immediate once-offs
 |   x  \] Only visible in log, does not persist. May not be globally visible
 |   x   ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
+|     ] Visitors have several stats:
+|      \] Health - Reduced by taking damage. When it reaches zero, creature dies.
+|       ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
+|       ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
+|     ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
 | ] Add Predators, which target a player once spawned and attack him a few times each turn.
 |  \] Has a "target" player when spawned, which is visible
 |   ] Attacks target player at end of turn
