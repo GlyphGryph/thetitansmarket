@@ -4,6 +4,14 @@ class WorldVisitor < ActiveRecord::Base
   validates_presence_of :visitor_id
   belongs_to :target, :polymorphic=>true
 
+  before_create :default_attributes
+
+  def default_attributes
+    self.health ||= self.get.starting_health
+    self.anger ||= self.get.starting_anger
+    self.fear ||= self.get.starting_fear
+  end
+
   def get
     element = Visitor.find(self.visitor_id)
     unless(element)
@@ -30,5 +38,25 @@ class WorldVisitor < ActiveRecord::Base
 
   def scared_by(character)
     self.get.scared(self, character)
+  end
+
+  def change_fear(amount)
+    self.fear+=amount
+    self.save!
+  end
+
+  def change_health(amount)
+    self.health+=amount
+    self.save!
+  end
+
+  def change_anger(amount)
+    self.anger+=amount
+    self.save!
+  end
+
+  def change_target_to(new_target)
+    self.target = new_target
+    self.save!
   end
 end

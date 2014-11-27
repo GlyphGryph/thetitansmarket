@@ -1,6 +1,6 @@
 class Visitor
   extend CollectionTracker
-  attr_reader :id, :name, :description
+  attr_reader :id, :name, :description, :starting_health, :starting_anger, :starting_fear
 
   def initialize(id, params={})
     @id = id
@@ -9,6 +9,9 @@ class Visitor
     @result = params[:result] || lambda { |instance, character| return false}
     @attacked = params[:attacked] || lambda { |instance, character| return false}
     @scared = params[:scared] || lambda { |instance, character| return false}
+    @starting_health = params[:health]
+    @starting_anger = params[:anger]
+    @starting_fear = params[:fear]
     self.class.add(@id, self)
   end
 

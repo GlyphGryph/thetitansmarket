@@ -35,11 +35,11 @@ Alpha Test - 8+ player game
 |   x ] Occurences have an immediate once-offs
 |   x  \] Only visible in log, does not persist. May not be globally visible
 |   x   ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
-|     ] Visitors have several stats:
-|      \] Health - Reduced by taking damage. When it reaches zero, creature dies.
-|       ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
-|       ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
-|     ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
+|   x ] Visitors have several stats:
+|   x  \] Health - Reduced by taking damage. When it reaches zero, creature dies.
+|   x   ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
+|   x   ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
+|   x ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
 | ] Add Predators, which target a player once spawned and attack him a few times each turn.
 |  \] Has a "target" player when spawned, which is visible
 |   ] Attacks target player at end of turn
@@ -50,18 +50,13 @@ Alpha Test - 8+ player game
 |   ] Has a 10% chance to depart each turn
 |    \] This chance increases by 20% for every point of damage taken
 |   ] Has 6 health. 
-|   ] If it reaches 0 health, it dies
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
 | ] Add Prey, which do nothing but sit around
 |  \] 25% chance to leave on any given turn
 |   ] +75% chance to leave for each point of damage taken
 |   ] Has 3 health. 
-|   ] If it reaches 0 health, it dies
-| ] Players get option to "attack" Predators and Prey
----
-  Might require world_visitor controller
-  Will definitely require new actions (but maybe this is a character action)
-  Will want the result of this behaviour defined in the visitor definition
----
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
+| x ] Players get option to "attack" Predators and Prey
 | x ] Add Harsh Weather
 | x  \] Lasts 1 turn
 | x   ] Actions that require finding things have their chance to succeed significantly reduced

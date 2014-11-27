@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123185418) do
+ActiveRecord::Schema.define(version: 20141127160044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,6 +202,9 @@ ActiveRecord::Schema.define(version: 20141123185418) do
     t.string  "visitor_id"
     t.string  "target_type"
     t.integer "target_id"
+    t.integer "health"
+    t.integer "anger"
+    t.integer "fear"
   end
 
   create_table "worlds", force: true do |t|
