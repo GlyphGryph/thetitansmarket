@@ -57,6 +57,11 @@ Alpha Test - 8+ player game
 |   ] Has 3 health. 
 |   ] If it reaches 0 health, it dies
 | ] Players get option to "attack" Predators and Prey
+---
+  Might require world_visitor controller
+  Will definitely require new actions (but maybe this is a character action)
+  Will want the result of this behaviour defined in the visitor definition
+---
 | x ] Add Harsh Weather
 | x  \] Lasts 1 turn
 | x   ] Actions that require finding things have their chance to succeed significantly reduced

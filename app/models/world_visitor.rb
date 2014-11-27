@@ -23,4 +23,12 @@ class WorldVisitor < ActiveRecord::Base
   def depart
     self.destroy!
   end
+
+  def attacked_by(character)
+    self.get.attacked(self, character)
+  end
+
+  def scared_by(character)
+    self.get.scared(self, character)
+  end
 end

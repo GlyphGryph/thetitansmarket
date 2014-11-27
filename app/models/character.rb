@@ -222,6 +222,14 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def attack_visitor(world_visitor)
+    world_visitor.attacked_by(self)
+  end
+
+  def scare_visitor(world_visitor)
+    world_visitor.scared_by(self)
+  end
+
   def die
     self.record("important", "You have died.")
     self.world = nil

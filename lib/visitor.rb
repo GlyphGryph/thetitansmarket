@@ -13,6 +13,14 @@ class Visitor
   def execute(character_condition)
     @result.call(character_condition)
   end
+
+  def attacked(instance, character)
+    character.record("important", "You attack the creature!")
+  end
+
+  def scared(instance, character)
+    character.record("important", "You shout at the creature!")
+  end
 end 
 
 # Load data

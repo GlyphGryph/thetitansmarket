@@ -248,6 +248,10 @@
           <div class="data-block">
             <div><%= world_visitor.get_name %> - <%= world_visitor.get.description %></div>
             <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
+            <div>Interact: 
+              <%= link_to "attack", attack_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+              <%= link_to "shout", scare_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+            </div>
           </div>
         <% end %>
       </div>
