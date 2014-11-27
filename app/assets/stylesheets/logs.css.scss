@@ -15,6 +15,19 @@
         margin-right:2px;
       }
     }
+    &.danger{
+      &:before{
+        position:relative;
+        display:inline-block;
+        font-weight:bold;
+        top:-2px;
+        width:5px;
+        height:5px;
+        color: #C55;
+        content: "-";
+        margin-right:2px;
+      }
+    }
     // World type log icons
     &.event{
       &:before{
@@ -50,5 +63,9 @@
   .event{
     font-weight:bold;
     color:#494;
+  }
+  .danger{
+    font-weight:bold;
+    color:#C55;
   }
 }

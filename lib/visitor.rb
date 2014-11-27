@@ -6,7 +6,9 @@ class Visitor
     @id = id
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
-    @result = params[:result] || lambda { |instance| return false}
+    @result = params[:result] || lambda { |instance, character| return false}
+    @attacked = params[:attacked] || lambda { |instance, character| return false}
+    @scared = params[:scared] || lambda { |instance, character| return false}
     self.class.add(@id, self)
   end
 
@@ -15,11 +17,11 @@ class Visitor
   end
 
   def attacked(instance, character)
-    character.record("important", "You attack the creature!")
+    @attacked.call(instance, character)
   end
 
   def scared(instance, character)
-    character.record("important", "You shout at the creature!")
+    @scared.call(instance, character)
   end
 end 
 

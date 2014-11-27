@@ -203,6 +203,11 @@ class Character < ActiveRecord::Base
     end  
   end
 
+  def hurt(amount)
+    self.record('danger', "You've taken #{amount} points of damage!")
+    self.change_health(-amount)
+  end
+
   def consider(knowledge_id)
     unless(considers?(knowledge_id) || knows?(knowledge_id))
       self.character_knowledges << CharacterKnowledge.new(:character => self, :knowledge_id => knowledge_id, :progress => 0)
