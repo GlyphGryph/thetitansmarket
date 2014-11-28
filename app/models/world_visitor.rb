@@ -25,18 +25,30 @@ class WorldVisitor < ActiveRecord::Base
   end
 
   def execute
+    if self.dead?
+      return false
+    end
     return self.get.execute(self)
   end
 
   def depart
+    if self.dead?
+      return false
+    end
     self.destroy!
   end
 
   def attacked_by(character)
+    if self.dead?
+      return false
+    end
     self.get.attacked(self, character)
   end
 
   def scared_by(character)
+    if self.dead?
+      return false
+    end
     self.get.scared(self, character)
   end
 
@@ -48,6 +60,9 @@ class WorldVisitor < ActiveRecord::Base
   def change_health(amount)
     self.health+=amount
     self.save!
+    if(health <= 0)
+      self.die 
+    end
   end
 
   def change_anger(amount)
@@ -58,5 +73,17 @@ class WorldVisitor < ActiveRecord::Base
   def change_target_to(new_target)
     self.target = new_target
     self.save!
+  end
+
+  def die
+    if self.dead?
+      return false
+    end
+    self.dead = true
+    self.world.broadcast('event', "The Being has died!")
+  end
+
+  def dead?
+    return dead
   end
 end

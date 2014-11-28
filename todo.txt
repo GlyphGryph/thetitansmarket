@@ -22,40 +22,30 @@ Alpha Test - 8+ player game
 | EVENTS SYSTEM VERSION 1
 | ---
 | ] Three types of Events: Visitors, Situations, and Occurences
-|  \] Visitors create a tracked visitor object with interaction opportunities
-|   x\] Are listed in a Visitors section
-|   x ] Persist until the Visitors depart or are removed
-|   x ] Often have effects at end of turn, so there is time to respond
-|     ] Examples include: Predator, Prey
-|   x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
-|   x  \] Are listed in a Situations section
-|   x   ] Might have an immediate effect when they come into play
-|   x   ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
-|   x   ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
-|   x ] Occurences have an immediate once-offs
-|   x  \] Only visible in log, does not persist. May not be globally visible
-|   x   ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
-|   x ] Visitors have several stats:
-|   x  \] Health - Reduced by taking damage. When it reaches zero, creature dies.
-|   x   ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
-|   x   ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
-|   x ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
-| ] Add Predators, which target a player once spawned and attack him a few times each turn.
-|  \] Has a "target" player when spawned, which is visible
-|   ] Attacks target player at end of turn
-|    \] Attacks three times, 75% chance of dealing 1 damage each attack
-|     ] Player has a 25% chance to damage the predator pack when being attacked. 
-|     ] Predator pack has a 10% chance to switch targets after each attack. 
-|      \] If damaged by the target during the attack, this increases to 50%.
-|   ] Has a 10% chance to depart each turn
-|    \] This chance increases by 20% for every point of damage taken
-|   ] Has 6 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
-| ] Add Prey, which do nothing but sit around
-|  \] 25% chance to leave on any given turn
-|   ] +75% chance to leave for each point of damage taken
-|   ] Has 3 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
+|  \] Visitors 
+     \]create a tracked visitor object with interaction opportunities
+|     x ] Are listed in a Visitors section
+|     x ] Persist until the Visitors depart or are removed
+|     x ] Often have effects at end of turn, so there is time to respond
+|       ] Examples include: Predator, Prey
+|       ] interactions with them
+|       ] Reducing a visitor to zero health kills them
+|       ] Interactions cost ap!
+| x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
+| x  \] Are listed in a Situations section
+| x   ] Might have an immediate effect when they come into play
+| x   ] Persist for a set amount of time, usually one to three turns, and have effects at end of each turn
+| x   ] Examples include: Harsh Weather, Spirit of Optimism, Bad Omen
+| x ] Occurences have an immediate once-offs
+| x  \] Only visible in log, does not persist. May not be globally visible
+| x   ] Examples include: Players regain an extra point of health, a player stumbles across a free item or catches a disease
+| x ] Visitors 
+| x  \] have several stats:
+| x    \] Health - Reduced by taking damage. When it reaches zero, creature dies.
+| x     ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
+| x     ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
+|     ] Die properly when killed
+| x ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
 | x ] Players get option to "attack" Predators and Prey
 | x ] Add Harsh Weather
 | x  \] Lasts 1 turn
@@ -70,20 +60,11 @@ Can multiple events happen at once?
 
 Our final goal is to create Visitors. What are Visitors?
 Visitors are or do:
-Interactive (stub out attack and scare actions for now)
-Execute actions of their own (execute at end of turn, maybe multiple times).
-- Predators attack players or leave
-- Prey stand around, eat some farm fields (if possible), or leave
 Killable (have stubbed out attack option do this)
-Have health which allows them to survive multiple attacks, and a morale tracker that influences their decision to leave
-Change their behaviour depending on their interaction history with the players
-- Prey who've eaten farm food will be more likely to stick around
-- Visitors who've been injured will be more likely to leave
+Have creatures die properly when they run out of health
+Prey who've eaten farm food will be more likely to stick around
 Visitors can interact with each other - Predators can attack prey
-x Have current targets
-x Have a chance of switching targets
-x Displays current activity ("grazing on Joe's field, hunting Joe")
-NOTE: WHAT HAPPENS WHEN A TARGET DIES? HAVE A NON-DESTROYING DEPENDENT BEHAVIOUR
+Have "enter" and "die" action hooks, so creatures can, for example, identify a target upon entrance or create a body (or explode) upon death.
 
 Maybe:
 Group together
@@ -103,7 +84,23 @@ Processing visitors whenever the world turns
  ________________
 | CONTENT MILESTONE 2
 | ---
-| ] Player has a chance of finding a Strange Artifact or Perfectly Generic Object as an Occurence
+| ] Add Predators, which target a player once spawned and attack him a few times each turn.
+|  \] Has a "target" player when spawned, which is visible
+|   ] Attacks target player at end of turn
+|    \] Attacks three times, 75% chance of dealing 1 damage each attack
+|     ] Player has a 25% chance to damage the predator pack when being attacked. 
+|     ] Predator pack has a 10% chance to switch targets after each attack. 
+|      \] If damaged by the target during the attack, this increases to 50%.
+|   ] Has a 10% chance to depart each turn
+|    \] This chance increases by 20% for every point of damage taken
+|   ] Has 6 health. 
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
+| ] Add Prey, which do nothing but sit around
+|  \] 25% chance to leave on any given turn
+|   ] +75% chance to leave for each point of damage taken
+|   ] Has 3 health. 
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
+|   ] Prey who've eaten farm food will be more likely to stick around
 | ] Player has a chance of having an item of food stolen by wild animals as an Occurence
 | ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
 | ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.

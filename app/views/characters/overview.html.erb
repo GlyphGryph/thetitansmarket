@@ -247,14 +247,18 @@
         <% @world.world_visitors.each do |world_visitor| %>
           <div class="data-block visitor-block">
             <div><%= world_visitor.get_name %> - <%= world_visitor.get.description %></div>
-            <div>Health: <%= world_visitor.health %></div>
-            <div>Anger: <%= world_visitor.anger %></div>
-            <div>Fear: <%= world_visitor.fear %></div>
-            <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
-            <div>Interact: 
-              <%= link_to "attack", attack_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
-              <%= link_to "shout", scare_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
-            </div>
+            <% if world_visitor.dead? %>
+              *DEAD* - Butcher me, captain!
+            <% else %>
+              <div>Health: <%= world_visitor.health %></div>
+              <div>Anger: <%= world_visitor.anger %></div>
+              <div>Fear: <%= world_visitor.fear %></div>
+              <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
+              <div>Interact: 
+                <%= link_to "attack", attack_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+                <%= link_to "shout", scare_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+              </div>
+            <% end %>
           </div>
         <% end %>
       </div>

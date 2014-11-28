@@ -21,7 +21,7 @@ class Character < ActiveRecord::Base
   has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :logs, :as => :owner, :dependent => :destroy
-  has_many :world_visitors, :as => :target
+  has_many :world_visitors, :as => :target, :dependent => :nullify
 
   validates_presence_of :user
   include ActiveModel::Validations

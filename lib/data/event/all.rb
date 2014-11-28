@@ -1,5 +1,5 @@
 Event.new("nothing",
-  :tickets => 4,
+  :tickets => 1,
   :description => "Nothing happens.",
   :silent => true,
 )
@@ -54,7 +54,7 @@ Event.new("harsh_weather",
   },
 )
 Event.new("visitor",
-  :tickets => 1,
+  :tickets => 4,
   :description => "A vile force of darkness has arrived.",
   :creates => {
     :visitor => {

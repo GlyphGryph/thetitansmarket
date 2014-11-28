@@ -118,7 +118,11 @@ class World < ActiveRecord::Base
 
           # Process visitor actions
           self.world_visitors.each do |visitor|
-            visitor.execute
+            if(visitor.dead?)
+              visitor.destroy!
+            else
+              visitor.execute
+            end
           end
 
           self.turn += 1
