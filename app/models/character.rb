@@ -48,6 +48,10 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def attack_cost
+    return 1
+  end
+
   def default_relationships
     self.character_conditions << CharacterCondition.new(:condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:condition_id => 'hunger')
@@ -123,6 +127,10 @@ class Character < ActiveRecord::Base
 
   def can_add_action?(action_id)
     return Action.find(action_id).available?(self)
+  end
+
+  def can_attack?(target)
+    return self.vigor > self.attack_cost
   end
 
   def change_resolve(value)
@@ -228,11 +236,32 @@ class Character < ActiveRecord::Base
   end
 
   def attack_visitor(world_visitor)
-    world_visitor.attacked_by(self)
+    if(world_visitor.dead?)
+      self.record('important', "You can't attack the dead.")
+    else
+      require_vigor(self.attack_cost) do
+        world_visitor.attacked_by(self)
+      end
+    end
   end
 
   def scare_visitor(world_visitor)
-    world_visitor.scared_by(self)
+    if(world_visitor.dead?)
+      self.record('important', "You can't frighten the dead.")
+    else
+      require_vigor(self.attack_cost) do
+        world_visitor.scared_by(self)
+      end
+    end
+  end
+
+  def require_vigor(amount)
+    if(self.vigor > amount)
+      self.change_vigor(-amount)
+      yield
+    else
+      self.record('important', "You don't have enough vigor to do that.")
+    end
   end
 
   def die

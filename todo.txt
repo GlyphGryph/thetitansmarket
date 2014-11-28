@@ -23,14 +23,14 @@ Alpha Test - 8+ player game
 | ---
 | ] Three types of Events: Visitors, Situations, and Occurences
 |  \] Visitors 
-     \]create a tracked visitor object with interaction opportunities
-|     x ] Are listed in a Visitors section
-|     x ] Persist until the Visitors depart or are removed
-|     x ] Often have effects at end of turn, so there is time to respond
-|       ] Examples include: Predator, Prey
-|       ] interactions with them
-|       ] Reducing a visitor to zero health kills them
-|       ] Interactions cost ap!
+|    \]create a tracked visitor object with interaction opportunities
+| x   ] Are listed in a Visitors section
+| x   ] Persist until the Visitors depart or are removed
+| x   ] Often have effects at end of turn, so there is time to respond
+| x   ] Examples include: Predator, Prey
+| x   ] interactions with them
+| x   ] Reducing a visitor to zero health kills them
+|     ] Interactions cost ap!
 | x ] Situations primarily serve as modifiers for other things happening - increasing/decreasing costs and yields
 | x  \] Are listed in a Situations section
 | x   ] Might have an immediate effect when they come into play
@@ -44,7 +44,7 @@ Alpha Test - 8+ player game
 | x    \] Health - Reduced by taking damage. When it reaches zero, creature dies.
 | x     ] Fear - Increases chance of departing, different behaviour raise fear but taking damage almost always does so
 | x     ] Anger - Increases chance of aggressing, different behaviour raises anger, but being attacked or stolen from almost always does so
-|     ] Die properly when killed
+| x   ] Die properly when killed
 | x ] Attacking creatures tends to raise both anger and fear - effectively putting them into "fight or flight" mode.
 | x ] Players get option to "attack" Predators and Prey
 | x ] Add Harsh Weather
