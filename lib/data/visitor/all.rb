@@ -96,5 +96,15 @@ Visitor.new("being",
         character.record("success", "The being seems surprised.")
       end
     },
+    :butchered => lambda { |instance, character|
+      variant_id = "meat"
+      possession_id = "food"
+      CharacterPossession.new(
+        :character_id => character.id, 
+        :possession_id => possession_id,
+        :possession_variant => PossessionVariant.find_or_do(variant_id, possession_id, Possession.find(possession_id).variant_name(variant_id)),
+      ).save!
+      character.record("event", "You turn the slaughtered Being into delicious meat.")
+    },
   },
 )

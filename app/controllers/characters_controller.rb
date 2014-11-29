@@ -37,6 +37,14 @@ class CharactersController < ApplicationController
     end
   end
 
+  def butcher_visitor
+    @world_visitor = WorldVisitor.find(params[:world_visitor_id])
+    @character.butcher_visitor(@world_visitor)
+    respond_to do |format|
+      format.html { redirect_to character_overview_path }
+    end
+  end
+
   def add_action
     action = Action.find(params[:action_id])
     if(params[:target_type] && params[:target_id])

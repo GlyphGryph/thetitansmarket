@@ -16,3 +16,9 @@ Plant.new("blackberry",
     :food_name=>"Blackberries",
   }
 )
+Plant.new("meat",
+  { :plant_name=>"Meat Stalk",
+    :seed_name=>"Meat Seeds",
+    :food_name=>"Meat",
+  }
+)

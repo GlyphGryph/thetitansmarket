@@ -52,6 +52,15 @@ class WorldVisitor < ActiveRecord::Base
     self.get.scared(self, character)
   end
 
+  def butchered_by(character)
+    if self.dead?
+      self.get.butchered(self, character)
+      self.destroy!
+      return true
+    end
+    return false
+  end
+
   def change_fear(amount)
     self.fear+=amount
     self.save!

@@ -52,6 +52,10 @@ class Character < ActiveRecord::Base
     return 1
   end
 
+  def butcher_cost
+    return 2
+  end
+
   def default_relationships
     self.character_conditions << CharacterCondition.new(:condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:condition_id => 'hunger')
@@ -252,6 +256,16 @@ class Character < ActiveRecord::Base
       require_vigor(self.attack_cost) do
         world_visitor.scared_by(self)
       end
+    end
+  end
+
+  def butcher_visitor(world_visitor)
+    if(world_visitor.dead?)
+      require_vigor(self.butcher_cost) do
+        world_visitor.butchered_by(self)
+      end
+    else
+      self.record('important', "You can't butcher the living.")
     end
   end
 

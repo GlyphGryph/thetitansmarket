@@ -14,6 +14,7 @@ Seasons System Version 1
 Content Milestone 4
 Styling Milestone 1
 Alpha Test - 8+ player game
+CODE CLEANUP
 
 ***********
 * Next Up *
@@ -169,6 +170,17 @@ Processing visitors whenever the world turns
  ________________
 | STYLE MILESTONE 1
 | ] This space intentionally left blank
+|________________
+
+________________
+| ALPHA TEST
+| ] Run alpha test
+|________________
+
+________________
+| CODE CLEANUP
+| ] Break up the collosal character overview page.
+| ] Rewrite the "variant" stuff - the logic is spaghetti, there must be a better way to handle it.
 |________________
 
 ******************
