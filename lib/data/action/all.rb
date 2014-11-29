@@ -61,7 +61,8 @@ Action.new("forage",
       ],
     },
     :result => lambda { |character, target|
-      found = Plant.all.sample
+      findable = ['strawberry', 'blueberry', 'blackberry']
+      found = Plant.find(findable.sample)
       possession_id = "food"
       if(character.possesses?("basket"))
         amount_found = rand(3)+1
