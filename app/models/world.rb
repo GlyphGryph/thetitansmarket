@@ -29,9 +29,11 @@ class World < ActiveRecord::Base
     self.build_exploration_pool
   end
 
-  def broadcast(type, message)
+  def broadcast(type, message, params = {})
     self.characters.each do |character|
-      character.record(type, message)
+      unless(params[:exceptions] && params[:exceptions].include?(character))
+        character.record(type, message)
+      end
     end
   end
 

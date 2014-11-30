@@ -10,6 +10,8 @@ class CharacterValidator < ActiveModel::Validator
 end
 
 class Character < ActiveRecord::Base
+  include ActiveModel::Validations
+  include ConceptModule
   belongs_to :user
   belongs_to :world
   has_many :character_actions, :dependent => :destroy
@@ -21,10 +23,8 @@ class Character < ActiveRecord::Base
   has_many :sent_proposals, :foreign_key => 'sender_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :received_proposals, :foreign_key => 'receiver_id', :class_name => 'Proposal', :dependent => :destroy
   has_many :logs, :as => :owner, :dependent => :destroy
-  has_many :world_visitors, :as => :target, :dependent => :nullify
 
   validates_presence_of :user
-  include ActiveModel::Validations
   validates_with CharacterValidator
 
   before_create :default_attributes
@@ -145,14 +145,11 @@ class Character < ActiveRecord::Base
     end
     
     # If our morale falls to or below zero, add nihilism and remove resilience
-    if(!self.has_condition?("nihilism") && new_resolve <= 0)
+    if(new_resolve <= 0 && !self.has_condition?("nihilism"))
       self.character_conditions.where(:condition_id => 'resilience').destroy_all
       self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'nihilism')
-      if(self.has_condition?("pure_grit"))
-        self.die
-        return
-      end
     end
+
 
     # If we were suffering from nihilism, but we've regained morale, remove it and restore resilience
     if(self.has_condition?("nihilism") && new_resolve > 0)
@@ -165,6 +162,8 @@ class Character < ActiveRecord::Base
       self.resolve = new_resolve
       self.save!
     end
+
+    self.check_for_death
   end
   
   def change_vigor(value)
@@ -198,10 +197,6 @@ class Character < ActiveRecord::Base
         self.change_resolve(new_health*2)
         new_health = 0
         self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
-        if(self.has_condition?('nihilism'))
-          self.die
-          return
-        end
       end
 
       if(self.has_condition?('pure_grit') && new_health > 0)
@@ -212,7 +207,9 @@ class Character < ActiveRecord::Base
     if(self.health != new_health)
       self.health = new_health
       self.save!
-    end  
+    end
+
+    self.check_for_death
   end
 
   def hurt(amount)
@@ -278,7 +275,14 @@ class Character < ActiveRecord::Base
     end
   end
 
+  def check_for_death
+    if(self.has_condition?("pure_grit") && self.has_condition?('nihilism') && self.world)
+      self.die
+    end
+  end
+
   def die
+    self.world.broadcast('important', "#{self.name} has died.", :exceptions => [self])
     self.record("important", "You have died.")
     self.world = nil
     self.save!

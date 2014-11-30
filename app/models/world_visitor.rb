@@ -1,4 +1,5 @@
 class WorldVisitor < ActiveRecord::Base
+  include ConceptModule
   belongs_to :world
   validates_presence_of :world_id
   validates_presence_of :visitor_id
@@ -89,7 +90,8 @@ class WorldVisitor < ActiveRecord::Base
       return false
     end
     self.dead = true
-    self.world.broadcast('event', "The Being has died!")
+    self.world.broadcast('event', "#{self.get.name} has died!")
+    self.save!
   end
 
   def dead?

@@ -1,9 +1,9 @@
 module Targetable
   def self.included(base)
-    base.extend(InstanceMethods)
+    base.extend(ClassMethods)
   end
   
-  module InstanceMethods
+  module ClassMethods
     def find_target(type, id)
       if(type == "possession")
         return CharacterPossession.where(:id=>id).first
