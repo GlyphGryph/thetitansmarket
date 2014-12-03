@@ -34,6 +34,8 @@ class Character < ActiveRecord::Base
   after_create :default_relationships
 
   def default_attributes
+    max_health = 10
+    self.body = Body.new(:max_health => max_health)
     self.max_vigor ||= 10
     if(self.has_trait?("organized_planner"))
       self.max_vigor = (self.max_vigor * 1.1).ceil
@@ -44,12 +46,12 @@ class Character < ActiveRecord::Base
     self.readied=false
     self.name ||= "Avatar of "+self.user.name
     self.nutrition ||= 0
+    BodyPart.all.each do |part|
+      self.character_body_parts << CharacterBodyPart.new(:body_part_id => part.id)
+    end
   end
 
   def default_relationships
-    max_health = 10
-    self.body = Body.new(:max_health => max_health)
-    self.body.save!
     self.character_conditions << CharacterCondition.new(:condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:condition_id => 'hunger')
     self.character_conditions << CharacterCondition.new(:condition_id => 'weariness')
@@ -61,14 +63,6 @@ class Character < ActiveRecord::Base
       new_log.save!
       self.record("passive", "You were born from the machine, and thrust into the world.")
     end
-    BodyPart.all.each do |part|
-      self.character_body_parts << CharacterBodyPart.new(:body_part_id => part.id)
-    end
-    self.save!
-  end
-  
-  def attack_cost
-
   end
 
   def record(type, message)
@@ -438,36 +432,44 @@ class Character < ActiveRecord::Base
     end
   end
 
-  def attack_cost
-    return 1
-  end
 
-  def butcher_cost
-    return 2
-  end
-
-  def change_health(amount)
+  def change_health(value)
     #lose health
-    if(amount < 0)
-      # Just to keep things clear, we'll work with the positive amount lost
-      amount_lost = -amount
-      if(self.health-amount_lost > 0)
-        self.body.change_health(-amount_lost)
-      else
-        health_lost = self.health
-        self.body.set_health(0)
-        remainder = amount_lost-health_lost
-        change_resolve(-remainder*2)
-        if(!self.has_condition?('pure_grit'))
-          self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
-        end
-      end
+    if(value <= 0)
+      new_health = self.health + value 
+      #if health would drop below one, reduce to one and apply pure grit, if needed
+
+
     #gain health
+    elsif(value >= 0)
+
+    end
+
+
+    new_health = self.body.health
+    if(self.has_condition?('pure_grit') && value <= 0)
+      new_health = 0
+      change_resolve(value)
     else
-      self.body.change_health(amount)
-      if(self.health > 1 && self.has_condition?('pure_grit'))
+      # Change the vigor, up to max or down to zero
+      new_health += value
+      if(new_health > self.max_health)
+        new_health = self.max_health
+      elsif(new_health < 1)
+        # Minimum health is zero, which triggers PURE GRIT. Further damage is dealt to morale instead.
+        self.change_resolve(new_health*2)
+        new_health = 0
+        self.character_conditions << CharacterCondition.new(:character => self, :condition_id => 'pure_grit')
+      end
+
+      if(self.has_condition?('pure_grit') && new_health > 0)
         self.character_conditions.where(:condition_id => 'pure_grit').destroy_all
       end
+    end
+    # Only bother saving if the new vigor is different
+    if(self.health != new_health)
+      self.health = new_health
+      self.save!
     end
 
     self.check_for_death

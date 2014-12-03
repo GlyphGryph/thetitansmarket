@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141128032316) do
+ActiveRecord::Schema.define(version: 20141203014942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bodies", force: true do |t|
+    t.integer  "health"
+    t.boolean  "dead"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "max_health"
+    t.integer  "world_id"
+  end
 
   create_table "character_actions", force: true do |t|
     t.integer  "character_id"
@@ -62,14 +73,12 @@ ActiveRecord::Schema.define(version: 20141128032316) do
 
   create_table "characters", force: true do |t|
     t.string   "name"
-    t.integer  "health"
     t.integer  "resolve"
     t.integer  "world_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_resolve"
-    t.integer  "max_health"
     t.integer  "vigor"
     t.integer  "max_vigor"
     t.boolean  "readied"

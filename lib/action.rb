@@ -136,6 +136,7 @@ class Action
     # Note: If an action costs at least 1ap, the modifier should not be able to reduce the cost below zero
     # If an action is already free, it cannot be reduced at all (although it can be increased)
     modifier = 0.0
+
     if(@cost_modifiers[:damage])
       modifier += @cost_modifiers[:damage].to_f * character.damage_fraction
     end
@@ -163,7 +164,7 @@ class Action
         end
       end
     end
-
+    
     modifier = modifier.round
 
     cost += modifier
