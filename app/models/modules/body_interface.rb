@@ -3,6 +3,10 @@
 #
 # Having a body allows the owner to attack and be attacked, and to spend vigor on doing actions
 # It also tracks whether the owner is dead, and allows the owner to be butchered if so
+# 
+# The methods you are likely to want to overwrite when including this are:
+# check_for_death - this determines whether or not the body should be killed
+# confirm_death - this is run when a body dies and runs any needed cleanup code on the part of the owner
 #####################
 module BodyInterface
   def self.included(base)
@@ -53,6 +57,9 @@ module BodyInterface
 
   def check_for_death
     self.body.check_for_death
+  end
+
+  def confirm_death
   end
 
   def health_fraction

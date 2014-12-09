@@ -26,6 +26,10 @@ class World < ActiveRecord::Base
     self.last_turned ||= DateTime.now
   end
 
+  def corpses
+    self.bodies.where(:dead => true)
+  end
+
   def default_relationships
     self.build_exploration_pool
   end

@@ -27,6 +27,10 @@ REFACTOR BREAK
 - Create a module for persistent world objects that:
 -- Can be targeted
 
+Separate out body and concepts
+Update bodies to use delegators
+Have world_visitors use bodies
+
 
 ************
 ************

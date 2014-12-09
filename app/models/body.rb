@@ -8,6 +8,11 @@ class Body < ActiveRecord::Base
   def default_attributes
     self.max_health ||= 1
     self.health ||= self.max_health
+    if(self.owner)
+      self.name ||= "Body of "+owner.name
+    else
+      self.name ||= "Generic Corpse"
+    end
   end
   
   def default_relationships
@@ -20,16 +25,19 @@ class Body < ActiveRecord::Base
   end
 
   def die
-    if self.dead?
-      return false
+    if(self.owner)
+      if self.dead?
+        return false
+      end
+      self.dead = true
+      self.world.broadcast('important', "#{self.owner.name} has died.", :exceptions => [self.owner])
+      if(self.owner.respond_to?(:record))
+        self.owner.record("important", "You have died.")
+      end
+      self.save!
+      self.owner.confirm_death
+      return true
     end
-    self.dead = true
-    self.world.broadcast('important', "#{self.owner.name} has died.", :exceptions => [self.owner])
-    if(self.owner.respond_to?(:record))
-      self.owner.record("important", "You have died.")
-    end
-    self.save!
-    return true
   end
 
   def change_health(amount)

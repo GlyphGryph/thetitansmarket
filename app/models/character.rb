@@ -480,5 +480,14 @@ class Character < ActiveRecord::Base
       self.body.die
     end
   end
+  
+  def confirm_death
+    self.world = nil
+    self.save!
+  end
+  
+  def dead?
+    return !self.body || self.body.dead?
+  end
 end
 
