@@ -31,6 +31,9 @@ Separate out body and concepts
 Update bodies to use delegators
 Have world_visitors use bodies
 
+Figure out how to determine starting health of bodies!
+
+Figure out why visitors aren't dying properly.
 
 ************
 ************

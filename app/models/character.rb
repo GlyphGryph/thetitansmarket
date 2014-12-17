@@ -12,7 +12,6 @@ end
 class Character < ActiveRecord::Base
   include ActiveModel::Validations
   include ConceptModule
-
   include BodyInterface
 
   belongs_to :user
@@ -47,9 +46,6 @@ class Character < ActiveRecord::Base
   end
 
   def default_relationships
-    max_health = 10
-    self.body = Body.new(:max_health => max_health)
-    self.body.save!
     self.character_conditions << CharacterCondition.new(:condition_id => 'resilience')
     self.character_conditions << CharacterCondition.new(:condition_id => 'hunger')
     self.character_conditions << CharacterCondition.new(:condition_id => 'weariness')
@@ -403,8 +399,7 @@ class Character < ActiveRecord::Base
 
   # Dev cheats
   def godmode
-    self.health=1000
-    self.max_health=1000
+    self.set_health(1000)
     self.vigor=1000
     self.max_vigor=1000
     self.resolve=1000
@@ -482,7 +477,6 @@ class Character < ActiveRecord::Base
   end
   
   def confirm_death
-    self.world = nil
     self.save!
   end
   

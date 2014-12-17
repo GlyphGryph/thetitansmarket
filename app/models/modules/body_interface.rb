@@ -7,12 +7,25 @@
 # The methods you are likely to want to overwrite when including this are:
 # check_for_death - this determines whether or not the body should be killed
 # confirm_death - this is run when a body dies and runs any needed cleanup code on the part of the owner
+# starting_health - health and max health
+# attacked - required for combat
+# attacked_by - required for combat
 #####################
 module BodyInterface
   def self.included(base)
     base.class_eval do
       has_one :body, :as => :owner, :dependent => :destroy
+      after_create :add_body
     end
+  end
+
+  def starting_health
+    return 10
+  end
+
+  def add_body
+    self.body = Body.new(:max_health => self.starting_health)
+    self.body.save!
   end
 
   def attacked_by(attacker)
@@ -41,6 +54,10 @@ module BodyInterface
 
   def change_health(amount)
     self.body.change_health(amount)
+  end
+
+  def set_health(amount)
+    self.body.set_health(amount)
   end
 
   def health

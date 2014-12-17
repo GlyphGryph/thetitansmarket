@@ -9,7 +9,7 @@ class Body < ActiveRecord::Base
     self.max_health ||= 1
     self.health ||= self.max_health
     if(self.owner)
-      self.name ||= "Body of "+owner.name
+      self.name ||= "Body of "+owner.get_name
     else
       self.name ||= "Generic Corpse"
     end
@@ -30,7 +30,7 @@ class Body < ActiveRecord::Base
         return false
       end
       self.dead = true
-      self.world.broadcast('important', "#{self.owner.name} has died.", :exceptions => [self.owner])
+      self.world.broadcast('important', "#{self.owner.get_name} has died.", :exceptions => [self.owner])
       if(self.owner.respond_to?(:record))
         self.owner.record("important", "You have died.")
       end
@@ -40,6 +40,7 @@ class Body < ActiveRecord::Base
     end
   end
 
+  # Health cannot go above max
   def change_health(amount)
     self.health += amount
     if(self.health > self.max_health)
@@ -49,8 +50,12 @@ class Body < ActiveRecord::Base
     self.save!
   end
 
+  # Setting the health changes the max if its higher
   def set_health(amount)
     self.health = amount
+    if(self.health > self.max_health)
+      self.max_health = self.health
+    end
     self.owner.check_for_death
     self.save!
   end
@@ -58,14 +63,15 @@ class Body < ActiveRecord::Base
   def check_for_death
     if(self.dead?)
       return true
-    elsif(self.health < 0)
+    elsif(self.health <= 0)
       self.owner.die
       return true
     end
+    return false
   end
 
   def hurt(amount)
-    self.world.broadcast('important', "#{self.owner.name} takes #{amount} damage.", :exceptions => [self.owner])
+    self.world.broadcast('important', "#{self.owner.get_name} takes #{amount} damage.", :exceptions => [self.owner])
     if(self.owner.respond_to?(:record))
       self.owner.record("important", "You have taken #{amount} damage.")
     end

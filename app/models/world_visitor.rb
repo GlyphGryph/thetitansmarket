@@ -1,5 +1,7 @@
 class WorldVisitor < ActiveRecord::Base
   include ConceptModule
+  include BodyInterface
+
   belongs_to :world
   validates_presence_of :world_id
   validates_presence_of :visitor_id
@@ -8,9 +10,12 @@ class WorldVisitor < ActiveRecord::Base
   before_create :default_attributes
 
   def default_attributes
-    self.health ||= self.get.starting_health
-    self.anger ||= self.get.starting_anger
-    self.fear ||= self.get.starting_fear
+    self.anger = self.get.starting_anger
+    self.fear = self.get.starting_fear
+  end
+  
+  def starting_health
+    self.get.starting_health
   end
 
   def get
@@ -67,14 +72,6 @@ class WorldVisitor < ActiveRecord::Base
     self.save!
   end
 
-  def change_health(amount)
-    self.health+=amount
-    self.save!
-    if(health <= 0)
-      self.die 
-    end
-  end
-
   def change_anger(amount)
     self.anger+=amount
     self.save!
@@ -83,18 +80,5 @@ class WorldVisitor < ActiveRecord::Base
   def change_target_to(new_target)
     self.target = new_target
     self.save!
-  end
-
-  def die
-    if self.dead?
-      return false
-    end
-    self.dead = true
-    self.world.broadcast('event', "#{self.get.name} has died!")
-    self.save!
-  end
-
-  def dead?
-    return dead
   end
 end
