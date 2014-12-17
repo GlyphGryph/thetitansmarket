@@ -29,19 +29,15 @@ module BodyInterface
   end
 
   def attacked_by(attacker, wound)
-    if(self.respond_to?(:record))
-      self.record('important', "#{attacker.get_name} attacks you!")
-    end
+    Message.send(self, 'important', "#{attacker.get_name} attacks you!")
     self.hurt(1, attacker)
   end
 
   def attack(target)
-    if(target.dead? && self.respond_to?(:record))
-      self.record('important', "You can't attack the dead.")
+    if(target.dead?)
+      Message.send(self, 'important', "You can't attack the dead.")
     elsif(!target.dead?)
-      if(self.respond_to?(:record))
-        self.record('important', "You launch an attack!")
-      end
+      Message.send(self, 'important', "You launch an attack!")
       target.attacked_by(self, "TODO:THIS IS A WOUND")
       target.counter_attack(self)
     end
@@ -50,16 +46,10 @@ module BodyInterface
   def counter_attack(target)
     if(rand(1..2) > 1)
       if(target.dead?) 
-        if(self.respond_to?(:record))
-          self.record('important', "You can't attack the dead.")
-        end
+        Message.send(self, 'important', "You can't attack the dead.")
       else
-        if(self.respond_to?(:record))
-          self.record('important', "You strike back!")
-        end
-        if(target.respond_to?(:record))
-          target.record('important', "#{self.get_name} strikes back!")
-        end
+        Message.send(self, 'important', "You strike back!")
+        Message.send(target, 'important', "#{self.get_name} strikes back!")
         target.attacked_by(self, "TODO:THIS IS A WOUND")
       end
     end
@@ -72,53 +62,25 @@ module BodyInterface
   def butcherable?
     self.dead?
   end
-
-  def die
-    self.body.die
-  end
-
-  def dead?
-    self.body.dead?
-  end
-
-  def change_health(amount)
-    self.body.change_health(amount)
-  end
-
-  def set_health(amount)
-    self.body.set_health(amount)
-  end
-
-  def health
-    self.body.health
-  end
-
   def max_health
     self.body.max_health
   end
 
   def hurt(amount, source=nil)
-    if(self.respond_to?(:record))
-      self.record('important', "You take #{amount} damage.")
-    end
-    if(source && source.respond_to?(:record))
-      source.record('important', "#{self.get_name} takes #{amount} damage.")
+    Message.send(self, 'important', "You take #{amount} damage.")
+    if(source)
+      Message.send(source, 'important', "#{self.get_name} takes #{amount} damage.")
     end
     self.change_health(-amount)
   end
 
-  def check_for_death
-    self.body.check_for_death
-  end
-
-  def confirm_death
-  end
-
-  def health_fraction
-    self.body.health_fraction
-  end
-
-  def damage_fraction
-    self.body.damage_fraction
-  end
+  delegate :die, :to => :body
+  delegate :dead?, :to => :body
+  delegate :change_health, :to => :body
+  delegate :set_health, :to => :body
+  delegate :health, :to => :body
+  delegate :max_health, :to => :body
+  delegate :check_for_death, :to => :body
+  delegate :health_fraction, :to => :body
+  delegate :damage_fraction, :to => :body
 end

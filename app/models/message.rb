@@ -4,6 +4,12 @@ class Message < ActiveRecord::Base
   has_one :receiver, :through => :proposal, :class_name => "Character"
   has_many :message_components, :dependent => :destroy
 
+  def self.send(target, type, message)
+    if(target.respond_to?(:record))
+      target.record(type, message)
+    end
+  end
+
   def acceptable?
     false
   end

@@ -31,9 +31,7 @@ class Body < ActiveRecord::Base
       end
       self.dead = true
       self.world.broadcast('important', "#{self.owner.get_name} has died.", :exceptions => [self.owner])
-      if(self.owner.respond_to?(:record))
-        self.owner.record("important", "You have died.")
-      end
+      Message.send(self.owner, "important", "You have died.")
       self.save!
       self.owner.confirm_death
       return true
@@ -69,12 +67,13 @@ class Body < ActiveRecord::Base
     end
     return false
   end
+  
+  def confirm_death
+  end
 
   def hurt(amount)
     self.world.broadcast('important', "#{self.owner.get_name} takes #{amount} damage.", :exceptions => [self.owner])
-    if(self.owner.respond_to?(:record))
-      self.owner.record("important", "You have taken #{amount} damage.")
-    end
+    Message.send(self.owner, "important", "You have taken #{amount} damage.")
     self.owner.change_health(-amount)
   end
 
