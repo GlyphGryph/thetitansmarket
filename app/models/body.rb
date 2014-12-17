@@ -46,8 +46,8 @@ class Body < ActiveRecord::Base
     if(self.health > self.max_health)
       self.health = self.max_health
     end
-    self.owner.check_for_death
     self.save!
+    self.owner.check_for_death
   end
 
   # Setting the health changes the max if its higher

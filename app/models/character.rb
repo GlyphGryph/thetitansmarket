@@ -411,22 +411,11 @@ class Character < ActiveRecord::Base
   ########################
   # Includes Body Module #
   ########################
-  # The following overwrites or modifies pieces of that body
-  def attack_visitor(world_visitor)
-    if(world_visitor.dead?)
-      self.record('important', "You can't attack the dead.")
-    else
-      require_vigor(self.attack_cost) do
-        world_visitor.attacked_by(self)
-      end
-    end
-  end
 
-
-  def butcher_visitor(world_visitor)
-    if(world_visitor.dead?)
+  def butcher(target)
+    if(target.dead?)
       require_vigor(self.butcher_cost) do
-        world_visitor.butchered_by(self)
+        target.butchered_by(self)
       end
     else
       self.record('important', "You can't butcher the living.")

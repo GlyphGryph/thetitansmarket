@@ -28,12 +28,41 @@ module BodyInterface
     self.body.save!
   end
 
-  def attacked_by(attacker)
-    raise "Attacked by not implemented for #{self.class}"
+  def attacked_by(attacker, wound)
+    if(self.respond_to?(:record))
+      self.record('important', "#{attacker.get_name} attacks you!")
+    end
+    self.hurt(1, attacker)
   end
 
   def attack(target)
-    raise "Attack not implemented for #{self.class}"
+    if(target.dead? && self.respond_to?(:record))
+      self.record('important', "You can't attack the dead.")
+    elsif(!target.dead?)
+      if(self.respond_to?(:record))
+        self.record('important', "You launch an attack!")
+      end
+      target.attacked_by(self, "TODO:THIS IS A WOUND")
+      target.counter_attack(self)
+    end
+  end
+
+  def counter_attack(target)
+    if(rand(1..2) > 1)
+      if(target.dead?) 
+        if(self.respond_to?(:record))
+          self.record('important', "You can't attack the dead.")
+        end
+      else
+        if(self.respond_to?(:record))
+          self.record('important', "You strike back!")
+        end
+        if(target.respond_to?(:record))
+          target.record('important', "#{self.get_name} strikes back!")
+        end
+        target.attacked_by(self, "TODO:THIS IS A WOUND")
+      end
+    end
   end
 
   def attackable?
@@ -68,7 +97,13 @@ module BodyInterface
     self.body.max_health
   end
 
-  def hurt(amount)
+  def hurt(amount, source=nil)
+    if(self.respond_to?(:record))
+      self.record('important', "You take #{amount} damage.")
+    end
+    if(source && source.respond_to?(:record))
+      source.record('important', "#{self.get_name} takes #{amount} damage.")
+    end
     self.change_health(-amount)
   end
 

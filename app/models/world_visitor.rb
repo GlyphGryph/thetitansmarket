@@ -44,13 +44,6 @@ class WorldVisitor < ActiveRecord::Base
     self.destroy!
   end
 
-  def attacked_by(character)
-    if self.dead?
-      return false
-    end
-    self.get.attacked(self, character)
-  end
-
   def scared_by(character)
     if self.dead?
       return false

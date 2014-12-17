@@ -23,7 +23,7 @@ class CharactersController < ApplicationController
 
   def attack_visitor
     @world_visitor = WorldVisitor.find(params[:world_visitor_id])
-    @character.attack_visitor(@world_visitor)
+    @character.attack(@world_visitor)
     respond_to do |format|
       format.html { redirect_to character_overview_path }
     end

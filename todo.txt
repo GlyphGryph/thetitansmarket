@@ -19,25 +19,36 @@ CODE CLEANUP
 ***********
 * Next Up *
 ***********
+ ________________
+| COMBAT SYSTEM VERSION 1
+| ---
+| ] Players can attack other players.
+|  \] Deals 1 damage to target
+|   ] 50% chance of taking 1 damage
+| ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
+| ] Taking damage from an attack causes a "wound"
+|  \] Described as a "bruise" when coming from players
+|   ] Describes as a "gash" when coming from predator packs
+| ] Wounds reduce a players max health, in addition to dealing damage, as long as they exist
+|  \] Wounds have a "damage" value, which is the amount current and max health is reduced by.
+| ] Wounds have a chance of healing each turn
+|  \] Wounds have a "healing required" value. When this reaches zero, the wound is removed.
+|   ] Wounds have a "chance to heal" value. This is the chance each turn the wound value will decrease.
+|   ] Bruises have a healing required of 1, and a chance to heal of 90%
+|    \] Message: "Your bruise has faded over time."
+|   ] Gashes have a healing required of 2, and a chance to heal of 50%
+|    \] Messages: "Your gash has scabbed over.", "Your gash has healed, though it left a faint scar."
+|   ] A wound being removed restores max health, but does NOT heal the character - their overall health is separate.
+|   ] Wounds are removed before player healing occurs
+|________________
 
-REFACTOR BREAK
-- Create a module for world_visitors and characters to share, so that they both:
--- Respond to being attacked
+Since attacks cause wounds, our attacked_by methods will probably want to accept an attacker and a wound.
 
-- Create a module for persistent world objects that:
--- Can be targeted
+Wounds need to be able to be "downgraded"...
 
-Separate out body and concepts
-Update bodies to use delegators
-Have world_visitors use bodies
-
-Figure out how to determine starting health of bodies!
-
-Figure out why visitors aren't dying properly.
-
-************
-************
-************
+*********
+* Queue *
+*********
  ________________
 | CONTENT MILESTONE 2
 | ---
@@ -64,32 +75,6 @@ Figure out why visitors aren't dying properly.
 | ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
 | ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
 | ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
-|________________
-
-*********
-* Queue *
-*********
- ________________
-| COMBAT SYSTEM VERSION 1
-| ---
-| ] Players can attack other players.
-|  \] Deals 1 damage to target
-|   ] 50% chance of taking 1 damage
-| ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
-| ] Taking damage from an attack causes a "wound"
-|  \] Described as a "bruise" when coming from players
-|   ] Describes as a "gash" when coming from predator packs
-| ] Wounds reduce a players max health, in addition to dealing damage, as long as they exist
-|  \] Wounds have a "damage" value, which is the amount current and max health is reduced by.
-| ] Wounds have a chance of healing each turn
-|  \] Wounds have a "healing required" value. When this reaches zero, the wound is removed.
-|   ] Wounds have a "chance to heal" value. This is the chance each turn the wound value will decrease.
-|   ] Bruises have a healing required of 1, and a chance to heal of 90%
-|    \] Message: "Your bruise has faded over time."
-|   ] Gashes have a healing required of 2, and a chance to heal of 50%
-|    \] Messages: "Your gash has scabbed over.", "Your gash has healed, though it left a faint scar."
-|   ] A wound being removed restores max health, but does NOT heal the character - their overall health is separate.
-|   ] Wounds are removed before player healing occurs
 |________________
  ________________
 | CONTENT MILESTONE 3
