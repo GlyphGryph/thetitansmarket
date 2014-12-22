@@ -5,7 +5,7 @@
 # An option with no message is silent, otherwise the owner of the wound receives the message (if they can).
 WoundTemplate.load([
   { :id => :wound,
-    :name => "Gash",
+    :name => "Wound",
     :description => "This is a pretty nasty looking gash.",
     :decay_targets => [
       { :id => :healed_gash,
@@ -33,7 +33,7 @@ WoundTemplate.load([
     ],
   },
   { :id => :healed_wound,
-    :name => "Healing wound.",
+    :name => "Healing Wound.",
     :description => "This wound is healing nicely.",
     :decay_targets => [
     ],
