@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   get 'character/:id/add_action/:action_id' => 'characters#add_action', :as => :add_action
   get 'character/:id/find_action_target/:action_id' => 'characters#find_action_target', :as => :find_action_target
   get 'character/:id/add_action/:action_id/:target_type/:target_id' => 'characters#add_action_with_target', :as => :add_action_with_target
-  get 'character/:id/attack/visitor/:world_visitor_id' => 'characters#attack_visitor', :as => :attack_visitor
+  get 'character/:id/attack/visitor/:target_id' => 'characters#attack_visitor', :as => :attack_visitor
+  get 'character/:id/attack/character/:target_id' => 'characters#attack_character', :as => :attack_character
   get 'character/:id/scare/visitor/:world_visitor_id' => 'characters#scare_visitor', :as => :scare_visitor
   get 'character/:id/butcher/visitor/:world_visitor_id' => 'characters#butcher_visitor', :as => :butcher_visitor
   get 'character/:id/remove_action/:character_action_id' => 'characters#remove_action', :as => :remove_action

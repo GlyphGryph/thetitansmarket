@@ -22,8 +22,16 @@ class CharactersController < ApplicationController
   end
 
   def attack_visitor
-    @world_visitor = WorldVisitor.find(params[:world_visitor_id])
-    @character.attack(@world_visitor)
+    @target = WorldVisitor.find(params[:target_id])
+    @character.attack(@target)
+    respond_to do |format|
+      format.html { redirect_to character_overview_path }
+    end
+  end
+
+  def attack_character
+    @target = Character.find(params[:target_id])
+    @character.attack(@target)
     respond_to do |format|
       format.html { redirect_to character_overview_path }
     end

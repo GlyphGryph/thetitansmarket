@@ -240,7 +240,10 @@
             There are <%= @other_characters.count %> other beings in this world. 
             <ul>
               <% @other_characters.each do |other| %>
-                <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %></li>
+                <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %>
+                  <%= link_to "Attack", attack_character_path(:id=>@character.id, :target_id => other.id) %>
+                  <span class="charges"><%= @character.attack_cost %>
+                </li>
               <% end %>
             </ul>
           <% end %>
@@ -274,7 +277,7 @@
             <% elsif @character.can_attack?(world_visitor) %>
               <div>Interact: 
                 <div>
-                  <%= link_to "Attack", attack_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+                  <%= link_to "Attack", attack_visitor_path(:id=>@character.id, :target_id=>world_visitor.id) %>
                   <span class="charges"><%= @character.attack_cost %>
                 </div>
                 <div>
