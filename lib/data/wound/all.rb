@@ -13,7 +13,7 @@ WoundTemplate.load([
         :difficulty => 5,
       },
       { :id => :fresh_scar,
-        :message => "Your gash has begun to heal, but unevenly, and has formed a scar."
+        :message => "Your gash has begun to heal, but unevenly, and has formed a scar.",
         :difficulty => 7,
       },
       { :id => :infected_wound,

@@ -73,7 +73,7 @@ class Body < ActiveRecord::Base
   end
 
   def hurt(amount, source=nil)
-    Wound.new(:wound_template_id => 'gash', :owner => self).save!
+    Wound.new(:wound_template_id => 'wound', :owner => self).save!
     Message.send(self.owner, 'important', "You take #{amount} damage.")
     if(source)
       Message.send(source, 'important', "#{self.owner.get_name} takes #{amount} damage.")

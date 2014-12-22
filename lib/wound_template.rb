@@ -5,7 +5,7 @@ class WoundTemplate
   attr_reader :id, :name, :description
 
   def initialize(params={})
-    (@id = params[:id]) || raise "No id provided for WoundTemplate"
+    @id = params[:id]
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Description Error"
   end

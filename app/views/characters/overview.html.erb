@@ -24,13 +24,13 @@
           <div class="data-element">
             <div class="label">Traits</div>
             <% @character.character_traits.each do |trait| %>
-              <div class="value detailed" data-description="<%= trait.get.description %>"><%= trait.get.name %></div>
+              <div class="value detailed" data-description="<%= trait.get.description %>"><%= trait.get_name %></div>
             <% end %>
           </div>
           <div class="data-element">
             <div class="label">Wounds</div>
             <% @character.wounds.each do |wound| %>
-              <div class="value detailed" data-description="ZEGADS!">ZEGADS! A WOUND!</div>
+              <div class="value detailed" data-description="<%= wound.get.description %>"><%= wound.get_name %></div>
             <% end %>
           </div>
         </div>

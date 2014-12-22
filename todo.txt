@@ -26,10 +26,10 @@ CODE CLEANUP
 |  \] Deals 1 damage to target
 |   ] 50% chance of taking 1 damage
 | ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
-| ] Taking damage from an attack causes a "wound"
+x ] Taking damage from an attack causes a "wound"
 |  \] Described as a "bruise" when coming from players
-|   ] Describes as a "gash" when coming from predator packs
-|   ] These are "wound types".
+x   ] Describes as a "gash" when coming from predator packs
+x   ] These are "wound types".
 |   \] Wound types can "decay" to either healed wounds or festered wounds or nothing.
 |   ] Wound types: bruise, faded bruise, gash, festering gash, freshly healed gash, scar
 | ] Wounds can cause damage each turn, and cause a "hindrance" for as long as they exist.
