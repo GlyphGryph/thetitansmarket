@@ -1,6 +1,7 @@
 class Body < ActiveRecord::Base
   belongs_to :owner, :polymorphic=>true
   belongs_to :world
+  has_many :wounds, :as => :owner, :dependent => :destroy
 
   before_create :default_attributes
   after_create :default_relationships
@@ -71,10 +72,14 @@ class Body < ActiveRecord::Base
   def confirm_death
   end
 
-  def hurt(amount)
-    self.world.broadcast('important', "#{self.owner.get_name} takes #{amount} damage.", :exceptions => [self.owner])
-    Message.send(self.owner, "important", "You have taken #{amount} damage.")
-    self.owner.change_health(-amount)
+  def hurt(amount, source=nil)
+    Wound.new(:wound_template_id => 'gash', :owner => self).save!
+    Message.send(self.owner, 'important', "You take #{amount} damage.")
+    if(source)
+      Message.send(source, 'important', "#{self.owner.get_name} takes #{amount} damage.")
+    end
+    self.change_health(-amount)
+
   end
 
   def health_fraction

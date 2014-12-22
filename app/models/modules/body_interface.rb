@@ -66,14 +66,6 @@ module BodyInterface
     self.body.max_health
   end
 
-  def hurt(amount, source=nil)
-    Message.send(self, 'important', "You take #{amount} damage.")
-    if(source)
-      Message.send(source, 'important', "#{self.get_name} takes #{amount} damage.")
-    end
-    self.change_health(-amount)
-  end
-
   delegate :die, :to => :body
   delegate :dead?, :to => :body
   delegate :change_health, :to => :body
@@ -83,4 +75,7 @@ module BodyInterface
   delegate :check_for_death, :to => :body
   delegate :health_fraction, :to => :body
   delegate :damage_fraction, :to => :body
+  delegate :wounds, :to => :body
+  delegate :confirm_death, :to => :body
+  delegate :hurt, :to => :body
 end

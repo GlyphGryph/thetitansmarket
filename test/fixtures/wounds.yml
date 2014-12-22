@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  wound_template_id: MyString
+  owner_id: 1
+  owner_type: MyString
+
+two:
+  wound_template_id: MyString
+  owner_id: 1
+  owner_type: MyString

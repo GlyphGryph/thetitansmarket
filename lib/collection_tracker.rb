@@ -8,10 +8,15 @@ module CollectionTracker
   end
 
   def find(id)
-    entries[id]
+    entries[id.to_sym]
   end
 
   def add(id, value)
-    entries[id]=value
+    entries[id.to_sym]=value
+  end
+
+  def add_new(params)
+    object = self.new(params)
+    entries[object.id.to_sym] = object
   end
 end

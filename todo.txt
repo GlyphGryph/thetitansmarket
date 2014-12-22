@@ -29,17 +29,22 @@ CODE CLEANUP
 | ] Taking damage from an attack causes a "wound"
 |  \] Described as a "bruise" when coming from players
 |   ] Describes as a "gash" when coming from predator packs
-| ] Wounds reduce a players max health, in addition to dealing damage, as long as they exist
-|  \] Wounds have a "damage" value, which is the amount current and max health is reduced by.
+|   ] These are "wound types".
+|   \] Wound types can "decay" to either healed wounds or festered wounds or nothing.
+|   ] Wound types: bruise, faded bruise, gash, festering gash, freshly healed gash, scar
+| ] Wounds can cause damage each turn, and cause a "hindrance" for as long as they exist.
+|  \] Wounds have a physical and mental hindrance values (mechanical and pain based hindrances)
+|   ] Mechanical hindrances add to the penalty for physical actions.
+|   ] Mental hindrances add to the penalty for mental actions.
+|   ] Characters also take damage when a wound is first incurred, but this is separate from the wound itself.
+|   ] Some wounds, such as bleeding and infected wounds, can continue to cause damage at the end of each turn.
 | ] Wounds have a chance of healing each turn
-|  \] Wounds have a "healing required" value. When this reaches zero, the wound is removed.
-|   ] Wounds have a "chance to heal" value. This is the chance each turn the wound value will decrease.
-|   ] Bruises have a healing required of 1, and a chance to heal of 90%
-|    \] Message: "Your bruise has faded over time."
-|   ] Gashes have a healing required of 2, and a chance to heal of 50%
-|    \] Messages: "Your gash has scabbed over.", "Your gash has healed, though it left a faint scar."
-|   ] A wound being removed restores max health, but does NOT heal the character - their overall health is separate.
-|   ] Wounds are removed before player healing occurs
+|  \] Characters have a "recovery" value, which is the same for all characters.
+|     \] Add a trait that raises this.
+|   ] Any given wound type "decays" each turn, and the recovery value influences what it decays too. 
+|     \] It may decay to the same wound type. Scars will usually do this.
+|      ] Leaves a message.
+|   ] Wounds decay at end of turn.
 |________________
 
 Since attacks cause wounds, our attacked_by methods will probably want to accept an attacker and a wound.
@@ -94,6 +99,7 @@ Wounds need to be able to be "downgraded"...
 |  ] Bandages increase chance to heal by 50%
 |  ] Only one bandage can be applied to a wound
 | ] Characters can make a "Club" item with weapon crafting, which gives them a 50% chance to cause a worse wound when attacking
+| ] "Robust" trait makes a character "significantly more likely to recover quickly from injuries and illness"
 |________________
 
  ________________
@@ -128,6 +134,11 @@ ________________
 | CODE CLEANUP
 | ] Break up the collosal character overview page.
 | ] Rewrite the "variant" stuff - the logic is spaghetti, there must be a better way to handle it.
+| ] Change everything in the lib folder to "type" or "template" or something, to free up the names for instances
+| ] Make the data files into something more data-y, instead of directions to the application to create the given objects.
+|  \] Arrays of hashes seems likely.
+|   ] Have code that loads them appropriately
+|   ] Implement "fallback objects" in case the given object can't be found.
 |________________
 
 ******************
