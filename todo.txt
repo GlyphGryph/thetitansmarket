@@ -24,7 +24,7 @@ CODE CLEANUP
 | ---
 x ] Players can attack other players.
 x  \] Deals 1 damage to target
-|   ] 50% chance of taking 1 damage
+x   ] 50% chance of taking 1 damage
 | ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
 x ] Taking damage from an attack causes a "wound"
 |  \] Described as a "bruise" when coming from players
@@ -46,6 +46,9 @@ x   ] These are "wound types".
 |      ] Leaves a message.
 |   ] Wounds decay at end of turn.
 |________________
+
+Assorted:
+Players should properly be removed from tracking when they die with the new body system for: not being attackable/visible, and cancelling all proposals they are involved in, and no longer being required in order to fast forward a turn.
 
 *********
 * Queue *

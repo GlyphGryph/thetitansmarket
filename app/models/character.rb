@@ -192,7 +192,7 @@ class Character < ActiveRecord::Base
     if(world_visitor.dead?)
       self.record('important', "You can't frighten the dead.")
     else
-      require_vigor(self.attack_cost) do
+      self.require_vigor(self.attack_cost) do
         world_visitor.scared_by(self)
       end
     end
@@ -436,6 +436,10 @@ class Character < ActiveRecord::Base
 
   def counter_attack_chance
     return 50
+  end
+
+  def attacks_require_vigor
+    return true
   end
 
   def change_health(amount)

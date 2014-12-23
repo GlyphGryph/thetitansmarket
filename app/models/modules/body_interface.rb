@@ -22,6 +22,15 @@ module BodyInterface
   def starting_health
     return 10
   end
+  def attack_success_chance
+    return 100
+  end
+  def counter_attack_chance
+    return 50
+  end
+  def attacks_require_vigor
+    false
+  end
 
   def add_body
     self.body = Body.new(:max_health => self.starting_health)
@@ -33,6 +42,16 @@ module BodyInterface
   end
 
   def attack(target)
+    if(attacks_require_vigor)
+      self.require_vigor(self.attack_cost) do
+        self.execute_attack(target)
+      end
+    else
+      self.execute_attack(target)
+    end
+  end
+
+  def execute_attack(target)
     if(target.dead?)
       Message.send(self, 'important', "You can't attack the dead.")
     elsif(!target.dead?)
@@ -49,7 +68,7 @@ module BodyInterface
   end
 
   def counter_attack(target)
-    if(rand(1..100) <= self.counter_attack_chance)
+    if(rand(1..100) <= self.counter_attack_chance && !self.dead?)
       if(rand(1..100) <= self.attack_success_chance)
         Message.send(self, 'important', "You strike back!")
         Message.send(target, 'important', "#{self.get_name} strikes back!")
@@ -60,13 +79,7 @@ module BodyInterface
       end
     end
   end
-  
-  def attack_success_chance
-    return 100
-  end
-  def counter_attack_chance
-    return 50
-  end
+
 
   def attackable?
     !self.dead?
