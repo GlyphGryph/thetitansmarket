@@ -29,7 +29,6 @@ module BodyInterface
   end
 
   def attacked_by(attacker, wound)
-    Message.send(self, 'important', "#{attacker.get_name} attacks you!")
     self.hurt(1, attacker)
   end
 
@@ -37,22 +36,36 @@ module BodyInterface
     if(target.dead?)
       Message.send(self, 'important', "You can't attack the dead.")
     elsif(!target.dead?)
-      Message.send(self, 'important', "You launch an attack!")
-      target.attacked_by(self, "TODO:THIS IS A WOUND")
+      if(rand(1..100) <= self.attack_success_chance)
+        Message.send(self, 'important', "You launch an attack!")
+        Message.send(target, 'important', "#{self.get_name} attacks you!")
+        target.attacked_by(self, "TODO:THIS IS A WOUND")
+      else
+        Message.send(self, 'important', "You fumble your attack.")
+        Message.send(target, 'important', "#{self.get_name} fumbles an attack!")
+      end
       target.counter_attack(self)
     end
   end
 
   def counter_attack(target)
-    if(rand(1..2) > 1)
-      if(target.dead?) 
-        Message.send(self, 'important', "You can't attack the dead.")
-      else
+    if(rand(1..100) <= self.counter_attack_chance)
+      if(rand(1..100) <= self.attack_success_chance)
         Message.send(self, 'important', "You strike back!")
         Message.send(target, 'important', "#{self.get_name} strikes back!")
         target.attacked_by(self, "TODO:THIS IS A WOUND")
+      else
+        Message.send(self, 'important', "You fumble a counter attack.")
+        Message.send(target, 'important', "#{self.get_name} tries to strike back, but fails!")
       end
     end
+  end
+  
+  def attack_success_chance
+    return 100
+  end
+  def counter_attack_chance
+    return 50
   end
 
   def attackable?

@@ -430,6 +430,14 @@ class Character < ActiveRecord::Base
     return 2
   end
 
+  def attack_success_chance
+    return 90
+  end
+
+  def counter_attack_chance
+    return 50
+  end
+
   def change_health(amount)
     #lose health
     if(amount < 0)

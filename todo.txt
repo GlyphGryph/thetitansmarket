@@ -22,8 +22,8 @@ CODE CLEANUP
  ________________
 | COMBAT SYSTEM VERSION 1
 | ---
-| ] Players can attack other players.
-|  \] Deals 1 damage to target
+x ] Players can attack other players.
+x  \] Deals 1 damage to target
 |   ] 50% chance of taking 1 damage
 | ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
 x ] Taking damage from an attack causes a "wound"
@@ -46,10 +46,6 @@ x   ] These are "wound types".
 |      ] Leaves a message.
 |   ] Wounds decay at end of turn.
 |________________
-
-Since attacks cause wounds, our attacked_by methods will probably want to accept an attacker and a wound.
-
-Wounds need to be able to be "downgraded"...
 
 *********
 * Queue *

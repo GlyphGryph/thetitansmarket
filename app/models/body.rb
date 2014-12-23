@@ -78,8 +78,7 @@ class Body < ActiveRecord::Base
     if(source)
       Message.send(source, 'important', "#{self.owner.get_name} takes #{amount} damage.")
     end
-    self.change_health(-amount)
-
+    self.owner.change_health(-amount)
   end
 
   def health_fraction
