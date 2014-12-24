@@ -74,4 +74,14 @@ class WorldVisitor < ActiveRecord::Base
     self.target = new_target
     self.save!
   end
+
+  def wound_type
+    self.get.wound_type
+  end
+  def attack_success_chance
+    self.get.attack_success_chance
+  end
+  def counter_attack_chance
+    self.get.counter_success_chance
+  end
 end

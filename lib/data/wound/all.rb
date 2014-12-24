@@ -4,9 +4,17 @@
 # If no option succeeds, or an option with no id, the wound decays to nothing.
 # An option with no message is silent, otherwise the owner of the wound receives the message (if they can).
 WoundTemplate.load([
+  { :id => :error_wound,
+    :name => "Mysterious Wound",
+    :description => "This wound is impossible to acquire.",
+    :damage => 0,
+    :decay_targets => [
+    ],
+  },
   { :id => :wound,
     :name => "Wound",
     :description => "This is a pretty nasty looking gash.",
+    :damage => 1,
     :decay_targets => [
       { :id => :healed_gash,
         :message => "Your gash has closed, though it is still tender.",
@@ -24,6 +32,7 @@ WoundTemplate.load([
   { :id => :infected_wound,
     :name => "Festering Wound",
     :description => "This wound has become infected.",
+    :damage => 1,
     :decay_targets => [
       { :id => :fresh_scar,
         :message => "The infection has abated, though it left a jagged and irregular scar.",

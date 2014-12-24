@@ -20,6 +20,36 @@ CODE CLEANUP
 * Next Up *
 ***********
  ________________
+| CONTENT MILESTONE 2
+| ---
+| ] Add Predators
+|  \] Has a "target" when spawned, which is visible
+|   ] Can target players or other visitors
+|   ] Attacks target at end of turn
+|    \] Attacks three times, 75% chance of dealing 1 damage each attack
+|     ] Player has a 25% chance to damage the predator pack when being attacked. 
+|     ] Predator pack has a 10% chance to switch targets after each attack. 
+|      \] If damaged by the target during the attack, this increases to 50%.
+|   ] If target dies, butchers target
+|   ] Has a 10% chance to depart each turn
+|    \] This chance increases by 20% for every point of damage taken
+|   ] Has 6 health. 
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
+| ] Add Prey, which do nothing but sit around
+|  \] 25% chance to leave on any given turn
+|   ] +75% chance to leave for each point of damage taken
+|   ] Has 3 health. 
+|   ] If it reaches 0 health, it dies, granting the player some "meat"
+|   ] Prey who've eaten farm food will be more likely to stick around
+| ] Player has a chance of having an item of food stolen by wild animals as an Occurence
+| ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
+| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
+| ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
+|________________
+
+Make visitors use their defined attack /counterattack result behaviour! Currently not increasing anger or fear!
+
+ ________________
 | COMBAT SYSTEM VERSION 1
 | ---
 x ] Players can attack other players.
@@ -53,33 +83,6 @@ Players should properly be removed from tracking when they die with the new body
 *********
 * Queue *
 *********
- ________________
-| CONTENT MILESTONE 2
-| ---
-| ] Add Predators
-|  \] Has a "target" when spawned, which is visible
-|   ] Can target players or other visitors
-|   ] Attacks target at end of turn
-|    \] Attacks three times, 75% chance of dealing 1 damage each attack
-|     ] Player has a 25% chance to damage the predator pack when being attacked. 
-|     ] Predator pack has a 10% chance to switch targets after each attack. 
-|      \] If damaged by the target during the attack, this increases to 50%.
-|   ] If target dies, butchers target
-|   ] Has a 10% chance to depart each turn
-|    \] This chance increases by 20% for every point of damage taken
-|   ] Has 6 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
-| ] Add Prey, which do nothing but sit around
-|  \] 25% chance to leave on any given turn
-|   ] +75% chance to leave for each point of damage taken
-|   ] Has 3 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
-|   ] Prey who've eaten farm food will be more likely to stick around
-| ] Player has a chance of having an item of food stolen by wild animals as an Occurence
-| ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
-| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
-| ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
-|________________
  ________________
 | CONTENT MILESTONE 3
 | ---

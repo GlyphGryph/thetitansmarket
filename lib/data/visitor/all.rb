@@ -24,9 +24,6 @@ Visitor.new("being",
       if(instance.fear > 0)
         pool.add_tickets(:flee, instance.fear)
       end
-      if(instance.health < 4)
-        pool.add_tickets(:flee, 4-instance.health)
-      end
       if(instance.anger > 0)
         pool.add_tickets(:attack, instance.anger)
       end
@@ -50,41 +47,48 @@ Visitor.new("being",
         instance.world.broadcast("event", "The being flees haphazardly, disappearing into the underbrush and not looking back.")
         instance.depart
       elsif(drawn == :attack)
-        if(rand(1..3)!=1)
-          instance.target.record("event", "The being roars, and launches a brutal attack at you!")
-          instance.target.hurt(1)
-        else
-          instance.target.record("failure", "The being roars, and attacks! You somehow manage to fight it off!")
-          instance.change_fear(1)
-        end
-        instance.change_anger(-1)
+        instance.target.record("event", "The being roars, and launches a brutal attack at you!")
+        instance.attack(instance.target)
       else
         instance.world.broadcast("event", "THERE'S SOMETHING WRONG! THERE'S SOMETHING WRONG! THIS SHOULDN'T BE POSSIBLE!")
       end
     },
-    :attacked => lambda { |instance, character|
-      instance.change_anger(3)
-      instance.change_target_to(character)
-      character.record("important", "You attacked the being.")
-      if(rand(1..3)!=1)
+    :attacked => {
+      :always => lambda { |instance, attacker|
+        instance.change_anger(10)
+        instance.change_target_to(attacker)
+      },
+      :success => lambda{ |instance, attacker, amount|
+        instance.change_fear(amount)
+      },
+      :failure => lambda{ |instance, attacker|
+      },
+    },
+    :attack => {
+      :success_chance => 80,
+      :success_message => "The Being strikes you with a roar.",
+      :fail_message => "The Being swings at you with anger in it's eyes, but the strike goes wide.",
+      :wound_type => :wound,
+    },
+    :counter => {
+      :chance => 50,
+      :success_message => "The Being roars in anger and rushes at you, striking you!",
+      :fail_message => "The Being roars in anger and rushes at you, but misses!",
+      :success => lambda{ |instance, attacker|
+        instance.change_anger(1)
+        instance.change_fear(-1)
+      },
+      :failure => lambda{ |instance, attacker|
         instance.change_fear(1)
-        instance.change_health(-1)
-        character.record("success", "You hurt the being!")
-      else
-        character.record("failure", "You fail to injure the being!")
-      end
-      if(rand(1..3)==1)
-        character.hurt(1)
-        instance.change_anger(2)
-        character.record("failure", "The being hurt you!")
-      end
+      }
     },
     :scared => lambda { |instance, character|
       character.record("important", "You shout and wave your arms at the creature.")
       pool = DrawPool.new
       pool.add_tickets(:stare, 2)
       pool.add_tickets(:growl, 1)
-      pool.add_tickets(:spook, 1)
+      poolaracter.record("important", "You shout and wave your arms at the creature.")
+      add_tickets(:spook, 1)
       drawn = pool.draw
       if(drawn==:stare)
         character.record("passive", "The being stares at you impassively.")

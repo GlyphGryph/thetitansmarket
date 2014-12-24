@@ -3,13 +3,6 @@
 #
 # Having a body allows the owner to attack and be attacked, and to spend vigor on doing actions
 # It also tracks whether the owner is dead, and allows the owner to be butchered if so
-# 
-# The methods you are likely to want to overwrite when including this are:
-# check_for_death - this determines whether or not the body should be killed
-# confirm_death - this is run when a body dies and runs any needed cleanup code on the part of the owner
-# starting_health - health and max health
-# attacked - required for combat
-# attacked_by - required for combat
 #####################
 module BodyInterface
   def self.included(base)
@@ -25,7 +18,7 @@ module BodyInterface
   def attack_success_chance
     return 100
   end
-  def counter_attack_chance
+  def counter_success_chance
     return 50
   end
   def attacks_require_vigor
@@ -35,10 +28,6 @@ module BodyInterface
   def add_body
     self.body = Body.new(:max_health => self.starting_health)
     self.body.save!
-  end
-
-  def attacked_by(attacker, wound)
-    self.hurt(1, attacker)
   end
 
   def attack(target)
@@ -58,7 +47,7 @@ module BodyInterface
       if(rand(1..100) <= self.attack_success_chance)
         Message.send(self, 'important', "You launch an attack!")
         Message.send(target, 'important', "#{self.get_name} attacks you!")
-        target.attacked_by(self, "TODO:THIS IS A WOUND")
+        target.hurt(self.wound_type)
       else
         Message.send(self, 'important', "You fumble your attack.")
         Message.send(target, 'important', "#{self.get_name} fumbles an attack!")
@@ -67,12 +56,16 @@ module BodyInterface
     end
   end
 
+  def wound_type
+    return :wound
+  end
+
   def counter_attack(target)
-    if(rand(1..100) <= self.counter_attack_chance && !self.dead?)
+    if(rand(1..100) <= self.counter_success_chance && !self.dead?)
       if(rand(1..100) <= self.attack_success_chance)
         Message.send(self, 'important', "You strike back!")
         Message.send(target, 'important', "#{self.get_name} strikes back!")
-        target.attacked_by(self, "TODO:THIS IS A WOUND")
+        target.hurt(self.wound_type)
       else
         Message.send(self, 'important', "You fumble a counter attack.")
         Message.send(target, 'important', "#{self.get_name} tries to strike back, but fails!")

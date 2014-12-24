@@ -434,7 +434,7 @@ class Character < ActiveRecord::Base
     return 90
   end
 
-  def counter_attack_chance
+  def counter_success_chance
     return 50
   end
 

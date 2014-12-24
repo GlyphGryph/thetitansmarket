@@ -72,13 +72,8 @@ class Body < ActiveRecord::Base
   def confirm_death
   end
 
-  def hurt(amount, source=nil)
-    Wound.new(:wound_template_id => 'wound', :owner => self).save!
-    Message.send(self.owner, 'important', "You take #{amount} damage.")
-    if(source)
-      Message.send(source, 'important', "#{self.owner.get_name} takes #{amount} damage.")
-    end
-    self.owner.change_health(-amount)
+  def hurt(wound_type)
+    Wound.new(:wound_template_id => wound_type, :owner => self).save!
   end
 
   def health_fraction
