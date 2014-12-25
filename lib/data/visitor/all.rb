@@ -90,7 +90,7 @@ Visitor.new("being",
       pool = DrawPool.new
       pool.add_tickets(:stare, 2)
       pool.add_tickets(:growl, 1)
-      add_tickets(:spook, 3)
+      pool.add_tickets(:spook, 4)
       drawn = pool.draw
       if(drawn==:stare)
         character.record("passive", "The being stares at you impassively.")
@@ -98,7 +98,7 @@ Visitor.new("being",
         instance.change_anger(1)
         character.record("failure", "The being growls angrily at you.")
       else
-        instance.change_fear(1)
+        instance.change_fear(rand(1..3))
         character.record("success", "The being seems surprised.")
       end
     },

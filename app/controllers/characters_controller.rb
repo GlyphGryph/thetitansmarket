@@ -5,7 +5,7 @@ class CharactersController < ApplicationController
 
   def overview
     @world = @character.world
-    # If this character has no world, it is a ghost, and can't be shown the normal overview page
+    # If this character is dead, it is a ghost, and can't be shown the normal overview page
     if(@character.dead?)
       redirect_to :action => :show
     else
@@ -39,7 +39,7 @@ class CharactersController < ApplicationController
 
   def scare_visitor
     @world_visitor = WorldVisitor.find(params[:world_visitor_id])
-    @character.scare_visitor(@world_visitor)
+    @character.scare(@world_visitor)
     respond_to do |format|
       format.html { redirect_to character_overview_path }
     end
@@ -47,7 +47,7 @@ class CharactersController < ApplicationController
 
   def butcher_visitor
     @world_visitor = WorldVisitor.find(params[:world_visitor_id])
-    @character.butcher_visitor(@world_visitor)
+    @character.butcher(@world_visitor)
     respond_to do |format|
       format.html { redirect_to character_overview_path }
     end

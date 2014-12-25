@@ -188,12 +188,12 @@ class Character < ActiveRecord::Base
     return !(self.ideas.where(:knowledge_id => knowledge_id).empty?)
   end
 
-  def scare_visitor(world_visitor)
-    if(world_visitor.dead?)
+  def scare(target)
+    if(target.dead?)
       self.record('important', "You can't frighten the dead.")
     else
       self.require_vigor(self.attack_cost) do
-        world_visitor.scared_by(self)
+        target.scared_by(self)
       end
     end
   end
