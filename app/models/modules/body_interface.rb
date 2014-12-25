@@ -98,15 +98,9 @@ module BodyInterface
   def counter_happens(opponent) end
   def counter_succeeds(opponent) end
   def counter_fails(opponent) end
-  def counter_defense_happens(opponent) 
-    self.attack_happens(opponent)
-  end
-  def counter_defense_succeeds(opponent) 
-    self.defense_succeeds(opponent)
-  end
-  def counter_defense_fails(opponent)
-    self.defense_fails(opponent)
-  end
+  def counter_defense_happens(opponent) end
+  def counter_defense_succeeds(opponent) end
+  def counter_defense_fails(opponent) end
 
   # DELEGATES
   delegate :die, :to => :body

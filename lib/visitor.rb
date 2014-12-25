@@ -1,9 +1,11 @@
 class Visitor
   extend CollectionTracker
   attr_reader :id, :name, :description, :starting_health, :starting_anger, :starting_fear,
-    :attack_success_chance, :attack_success_message, :attack_fail_message,
-    :counter_success_chance, :counter_success_message, :counter_fail_message,
-    :wound_type
+    :attack_success_chance, :counter_success_chance, :wound_type,
+    :attack_happens, :attack_succeeds, :attack_fails,
+    :defense_happens, :defense_succeeds, :defense_fails,
+    :counter_happens, :counter_succeeds, :counter_fails,
+    :counter_defense_happens, :counter_defense_succeeds, :counter_defense_fails
 
   def initialize(id, params={})
     @id = id
@@ -16,13 +18,28 @@ class Visitor
     @starting_health = params[:health]
     @starting_anger = params[:anger]
     @starting_fear = params[:fear]
-    @attack_success_chance = params[:attack][:success_chance] || 100
-    @attack_success_message = params[:attack][:success_message] || "Error: Visitor unknown attack succeeded."
-    @attack_fail_message = params[:attack][:fail_message] || "Error: Visitor unknown attack failed."
-    @counter_success_chance = params[:counter][:success_chance] || 100
-    @counter_success_message = params[:counter][:success_message] || "Error: Visitor unknown counter succeeded."
-    @counter_fail_message = params[:counter][:fail_message] || "Error: Visitor unknown counter failed."
+    attack = params[:attack] || {}
+    counter = attack[:counter] || {}
+    defense = params[:defense] || {}
+    counter_defense = defense[:counter] || {}
     @wound_type = params[:attack][:wound_type] || :error_wound
+    @attack_success_chance = attack[:success_chance] || 100
+    @counter_success_chance = counter[:success_chance] || 100
+
+    # Callbacks
+    @attack_happens = attack[:always] || lambda { |instance, target| }
+    @attack_succeeds = attack[:success] || lambda { |instance, target| }
+    @attack_fails = attack[:failure] || lambda { |instance, target| }
+    @counter_happens = counter[:always] || lambda { |instance, target| }
+    @counter_succeeds = counter[:success] || lambda { |instance, target| }
+    @counter_fails = counter[:failure] || lambda { |instance, target| }
+
+    @defense_happens =  defense[:always] || lambda { |instance, target| }
+    @defense_succeeds = defense[:success] || lambda { |instance, target| }
+    @defense_fails = defense[:failure] || lambda { |instance, target| }
+    @counter_defense_happens = counter_defense[:always] || lambda { |instance, target| }
+    @counter_defense_succeeds = counter_defense[:success] || lambda { |instance, target| }
+    @counter_defense_fails = counter_defense[:failure] || lambda { |instance, target| }
     self.class.add(@id, self)
   end
 

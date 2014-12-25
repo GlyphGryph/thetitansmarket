@@ -62,11 +62,17 @@ class WorldVisitor < ActiveRecord::Base
 
   def change_fear(amount)
     self.fear+=amount
+    if(self.fear < 0)
+      self.fear=0
+    end
     self.save!
   end
 
   def change_anger(amount)
     self.anger+=amount
+    if(self.anger < 0)
+      self.anger=0
+    end
     self.save!
   end
 
@@ -83,5 +89,43 @@ class WorldVisitor < ActiveRecord::Base
   end
   def counter_attack_chance
     self.get.counter_success_chance
+  end
+
+  # Body interface callbacks
+  def attack_happens(opponent)
+    self.get.attack_happens.call(self, opponent)
+  end
+  def attack_succeeds(opponent)
+    self.get.attack_succeeds.call(self, opponent)
+  end
+  def attack_fails(opponent)
+    self.get.attack_fails.call(self, opponent)
+  end
+  def defense_happens(opponent)
+    self.get.defense_happens.call(self, opponent)
+  end
+  def defense_succeeds(opponent)
+    self.get.defense_succeeds.call(self, opponent)
+  end
+  def defense_fails(opponent)
+    self.get.defense_fails.call(self, opponent)
+  end
+  def counter_happens(opponent)
+    self.get.counter_happens.call(self, opponent)
+  end
+  def counter_succeeds(opponent)
+    self.get.counter_succeeds.call(self, opponent)
+  end
+  def counter_fails(opponent)
+    self.get.counter_fails.call(self, opponent)
+  end
+  def counter_defense_happens(opponent)
+    self.defense_happens(opponent)
+  end
+  def counter_defense_succeeds(opponent)
+    self.defense_succeeds(opponent)
+  end
+  def counter_defense_fails(opponent)
+    self.defense_fails(opponent)
   end
 end

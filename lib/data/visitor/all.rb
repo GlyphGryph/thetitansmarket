@@ -53,33 +53,36 @@ Visitor.new("being",
         instance.world.broadcast("event", "THERE'S SOMETHING WRONG! THERE'S SOMETHING WRONG! THIS SHOULDN'T BE POSSIBLE!")
       end
     },
-    :attacked => {
+    :defense => {
       :always => lambda { |instance, attacker|
-        instance.change_anger(10)
+        instance.change_anger(1)
         instance.change_target_to(attacker)
       },
-      :success => lambda{ |instance, attacker, amount|
-        instance.change_fear(amount)
+      :success => lambda{ |instance, attacker|
+        instance.change_fear(-1)
       },
-      :failure => lambda{ |instance, attacker|
-      },
+      :counter => {
+        :success => lambda{ |instance, attacker|
+          instance.change_anger(1)
+          instance.change_fear(-1)
+        },
+        :failure => lambda{ |instance, attacker|
+          instance.change_fear(1)
+        }
+      }
     },
     :attack => {
       :success_chance => 80,
-      :success_message => "The Being strikes you with a roar.",
-      :fail_message => "The Being swings at you with anger in it's eyes, but the strike goes wide.",
       :wound_type => :wound,
-    },
-    :counter => {
-      :chance => 50,
-      :success_message => "The Being roars in anger and rushes at you, striking you!",
-      :fail_message => "The Being roars in anger and rushes at you, but misses!",
-      :success => lambda{ |instance, attacker|
-        instance.change_anger(1)
-        instance.change_fear(-1)
-      },
-      :failure => lambda{ |instance, attacker|
-        instance.change_fear(1)
+      :counter => {
+        :chance => 50,
+        :success => lambda{ |instance, attacker|
+          instance.change_anger(1)
+          instance.change_fear(-1)
+        },
+        :failure => lambda{ |instance, attacker|
+          instance.change_fear(1)
+        }
       }
     },
     :scared => lambda { |instance, character|
@@ -87,8 +90,7 @@ Visitor.new("being",
       pool = DrawPool.new
       pool.add_tickets(:stare, 2)
       pool.add_tickets(:growl, 1)
-      poolaracter.record("important", "You shout and wave your arms at the creature.")
-      add_tickets(:spook, 1)
+      add_tickets(:spook, 3)
       drawn = pool.draw
       if(drawn==:stare)
         character.record("passive", "The being stares at you impassively.")

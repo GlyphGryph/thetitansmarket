@@ -47,7 +47,6 @@ CODE CLEANUP
 | ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
 |________________
 
-Make visitors use their defined attack /counterattack result behaviour! Currently not increasing anger or fear!
 Butcher and scare are also currently broken
  ________________
 | COMBAT SYSTEM VERSION 1
