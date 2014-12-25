@@ -48,7 +48,7 @@ CODE CLEANUP
 |________________
 
 Make visitors use their defined attack /counterattack result behaviour! Currently not increasing anger or fear!
-
+Butcher and scare are also currently broken
  ________________
 | COMBAT SYSTEM VERSION 1
 | ---

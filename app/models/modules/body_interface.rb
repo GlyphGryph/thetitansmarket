@@ -44,13 +44,15 @@ module BodyInterface
     if(target.dead?)
       Message.send(self, 'important', "You can't attack the dead.")
     elsif(!target.dead?)
+      self.attack_happens(target)
+      target.defense_happens(self)
       if(rand(1..100) <= self.attack_success_chance)
-        Message.send(self, 'important', "You launch an attack!")
-        Message.send(target, 'important', "#{self.get_name} attacks you!")
+        self.attack_succeeds(target)
+        target.defense_fails(self)
         target.hurt(self.wound_type)
       else
-        Message.send(self, 'important', "You fumble your attack.")
-        Message.send(target, 'important', "#{self.get_name} fumbles an attack!")
+        self.attack_fails(target)
+        target.defense_succeeds(self)
       end
       target.counter_attack(self)
     end
@@ -62,17 +64,18 @@ module BodyInterface
 
   def counter_attack(target)
     if(rand(1..100) <= self.counter_success_chance && !self.dead?)
+      self.counter_happens(target)
+      target.counter_defense_happens(self)
       if(rand(1..100) <= self.attack_success_chance)
-        Message.send(self, 'important', "You strike back!")
-        Message.send(target, 'important', "#{self.get_name} strikes back!")
+        self.counter_succeeds(target)
+        target.counter_defense_fails(self)
         target.hurt(self.wound_type)
       else
-        Message.send(self, 'important', "You fumble a counter attack.")
-        Message.send(target, 'important', "#{self.get_name} tries to strike back, but fails!")
+        self.counter_fails(target)
+        target.counter_defense_succeeds(self)
       end
     end
   end
-
 
   def attackable?
     !self.dead?
@@ -85,6 +88,27 @@ module BodyInterface
     self.body.max_health
   end
 
+  # CALLBACKS, no behaviour unless overwritten
+  def attack_happens(opponent) end
+  def attack_succeeds(opponent) end
+  def attack_fails(opponent) end
+  def defense_happens(opponent) end
+  def defense_succeeds(opponent) end
+  def defense_fails(opponent) end
+  def counter_happens(opponent) end
+  def counter_succeeds(opponent) end
+  def counter_fails(opponent) end
+  def counter_defense_happens(opponent) 
+    self.attack_happens(opponent)
+  end
+  def counter_defense_succeeds(opponent) 
+    self.defense_succeeds(opponent)
+  end
+  def counter_defense_fails(opponent)
+    self.defense_fails(opponent)
+  end
+
+  # DELEGATES
   delegate :die, :to => :body
   delegate :dead?, :to => :body
   delegate :change_health, :to => :body

@@ -484,5 +484,43 @@ class Character < ActiveRecord::Base
   def dead?
     return !self.body || self.body.dead?
   end
+
+  # Body interface callbacks
+  def attack_happens(opponent)
+    self.record('important', "You launch an attack...")
+  end
+  def attack_succeeds(opponent)
+    self.record('important', "You land a solid blow.")
+  end
+  def attack_fails(opponent)
+    self.record('important', "You fumble!")
+  end
+  def defense_happens(opponent)
+    self.record('important', "#{opponent.get_name} attacks you...")
+  end
+  def defense_succeeds(opponent)
+    self.record('important', "#{opponent.get_name} fumbles!")
+  end
+  def defense_fails(opponent)
+    self.record('important', "#{opponent.get_name} hits you, hard.")
+  end
+  def counter_happens(opponent)
+    self.record('important', "You find an opening to launch an attack of your own...")
+  end
+  def counter_succeeds(opponent)
+    self.record('important', "You hit #{opponent.get_name} where it hurts!")
+  end
+  def counter_fails(opponent)
+    self.record('important', "But you fumble the strike!")
+  end
+  def counter_defense_happens(opponent)
+    self.record('important', "#{opponent.get_name} respond to your attack with one of their own...")
+  end
+  def counter_defense_succeeds(opponent)
+    self.record('important', "#{opponent.get_name} fumbles the attack!")
+  end
+  def counter_defense_fails(opponent)
+    self.record('important', "#{opponent.get_name} and hits you hard.")
+  end
 end
 
