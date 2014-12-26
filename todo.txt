@@ -22,19 +22,14 @@ CODE CLEANUP
  ________________
 | CONTENT MILESTONE 2
 | ---
-| ] Add Predators
-|  \] Has a "target" when spawned, which is visible
-|   ] Can target players or other visitors
-|   ] Attacks target at end of turn
-|    \] Attacks three times, 75% chance of dealing 1 damage each attack
-|     ] Player has a 25% chance to damage the predator pack when being attacked. 
-|     ] Predator pack has a 10% chance to switch targets after each attack. 
-|      \] If damaged by the target during the attack, this increases to 50%.
-|   ] If target dies, butchers target
-|   ] Has a 10% chance to depart each turn
-|    \] This chance increases by 20% for every point of damage taken
-|   ] Has 6 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
+x ] Add Predators
+x  \] Has a "target" when spawned, which is visible
+x   ] Can target players or other visitors
+x   ] Attacks target at end of turn
+x    \] Attacks three times, chance of dealing 1 damage each attack
+x   ] Has a chance to depart each turn
+x   ] Has 6 health. 
+x   ] If it reaches 0 health, it dies, granting the player some "meat"
 | ] Add Prey, which do nothing but sit around
 |  \] 25% chance to leave on any given turn
 |   ] +75% chance to leave for each point of damage taken
@@ -47,7 +42,6 @@ CODE CLEANUP
 | ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
 |________________
 
-Butcher and scare are also currently broken
  ________________
 | COMBAT SYSTEM VERSION 1
 | ---
@@ -76,12 +70,11 @@ x   ] These are "wound types".
 |   ] Wounds decay at end of turn.
 |________________
 
-Assorted:
-Players should properly be removed from tracking when they die with the new body system for: not being attackable/visible, and cancelling all proposals they are involved in, and no longer being required in order to fast forward a turn.
-
 *********
 * Queue *
 *********
+Are dead and butchered critters not being cleaned up properly?
+Bug Report:"I found some strawberries, then clicked eat. it gave me the strawberries as options, which worked. Targeting prompt error was written above, that's all"
  ________________
 | CONTENT MILESTONE 3
 | ---

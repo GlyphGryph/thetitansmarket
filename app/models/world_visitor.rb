@@ -8,6 +8,7 @@ class WorldVisitor < ActiveRecord::Base
   belongs_to :target, :polymorphic=>true
 
   before_create :default_attributes
+  after_create :spawn
 
   def default_attributes
     self.anger = self.get.starting_anger
@@ -16,6 +17,10 @@ class WorldVisitor < ActiveRecord::Base
   
   def starting_health
     self.get.starting_health
+  end
+
+  def spawn
+    self.get.spawn(self)
   end
 
   def get

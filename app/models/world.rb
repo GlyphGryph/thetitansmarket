@@ -117,12 +117,6 @@ class World < ActiveRecord::Base
             character.execute
           end
 
-          Event.draw(self).execute(self)
-          # Process this character's active conditions, so long as they are not dead
-          self.world_situations.each do |world_situation|
-            world_situation.age
-          end
-
           # Process visitor actions
           self.world_visitors.each do |visitor|
             if(visitor.dead?)
@@ -130,6 +124,12 @@ class World < ActiveRecord::Base
             else
               visitor.execute
             end
+          end
+
+          Event.draw(self).execute(self)
+          # Process this character's active conditions, so long as they are not dead
+          self.world_situations.each do |world_situation|
+            world_situation.age
           end
 
           self.turn += 1

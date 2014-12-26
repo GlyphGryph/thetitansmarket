@@ -54,11 +54,29 @@ Event.new("harsh_weather",
   },
 )
 Event.new("visitor",
-  :tickets => 4,
-  :description => "A vile force of darkness has arrived.",
+  :tickets => 1,
+  :description => "A strange being lurks at the edge of camp.",
   :creates => {
     :visitor => {
       :id => "being"
+    }
+  },
+)
+Event.new("predator",
+  :tickets => 4,
+  :description => "A vicious looking predator has been seen prowling the area. It seems to have caught an interesting scent.",
+  :creates => {
+    :visitor => {
+      :id => "predator"
+    }
+  },
+)
+Event.new("prey",
+  :tickets => 4,
+  :description => "A clumsy herbivore has wandered in and begun gnawing on the scenery.",
+  :creates => {
+    :visitor => {
+      :id => "prey"
     }
   },
 )
