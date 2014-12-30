@@ -27,7 +27,7 @@ Event.new("light",
 )
 Event.new("lucky_find",
   :tickets => 1,
-  :description => "Someone find an item on the ground.",
+  :description => "Someone finds an item on the ground.",
   :silent => true,
   :creates => {
     :occurence => {
@@ -37,6 +37,29 @@ Event.new("lucky_find",
           :result => lambda { |character|
             CharacterPossession.new(:character_id => character.id, :possession_id => "generic_object").save!
             character.record("event", "You find a strange object just lying on the ground!")
+          },
+        },
+      ]
+    }
+  }
+)
+Event.new("stolen_food",
+  :tickets => 1,
+  :description => "It looks like some animals ran off with a few pieces of food.",
+  :silent => true,
+  :creates => {
+    :occurence => {
+      :characters => 1,
+      :outcomes => [
+        { 
+          :result => lambda { |character|
+            foods = character.character_possessions.where(:possession_id => "food")
+            if(foods.empty?)
+              character.record("event", "A strange animal scurries off into the underbrush.")
+            else
+              foods.sample.destroy!
+              character.record("event", "A strange animal scurries off into the underbrush. Some of your food has gone missing!")
+            end
           },
         },
       ]

@@ -20,29 +20,6 @@ CODE CLEANUP
 * Next Up *
 ***********
  ________________
-| CONTENT MILESTONE 2
-| ---
-x ] Add Predators
-x  \] Has a "target" when spawned, which is visible
-x   ] Can target players or other visitors
-x   ] Attacks target at end of turn
-x    \] Attacks three times, chance of dealing 1 damage each attack
-x   ] Has a chance to depart each turn
-x   ] Has 6 health. 
-x   ] If it reaches 0 health, it dies, granting the player some "meat"
-| ] Add Prey, which do nothing but sit around
-|  \] 25% chance to leave on any given turn
-|   ] +75% chance to leave for each point of damage taken
-|   ] Has 3 health. 
-|   ] If it reaches 0 health, it dies, granting the player some "meat"
-|   ] Prey who've eaten farm food will be more likely to stick around
-| ] Player has a chance of having an item of food stolen by wild animals as an Occurence
-| ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
-| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
-| ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
-|________________
-
- ________________
 | COMBAT SYSTEM VERSION 1
 | ---
 x ] Players can attack other players.
@@ -78,7 +55,7 @@ Bug Report:"I found some strawberries, then clicked eat. it gave me the strawber
  ________________
 | CONTENT MILESTONE 3
 | ---
-| ] Killing Predatora or Prey provides meat and skin
+| ] Killing Predators or Prey provides meat and skin
 | ] Acquiring or Pondering a wound gives the character knowledge of "Pain"
 | ] Researching Pain gives the character ideas for "Bandages" and "Fighting"
 | \] Researching Bandages requires a Skin, and the prototype is a Bandage item
@@ -112,7 +89,12 @@ Bug Report:"I found some strawberries, then clicked eat. it gave me the strawber
 | ] Predators are more likely to appear and less likely to leave during The Long Dark
 | ] Locusts only appear during Dusk
 | ] Blood Moon cannot appear during summer, dispelled by summer
+| ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
+| ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
+| ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
 |________________
+
+
 
  ________________
 | STYLE MILESTONE 1
