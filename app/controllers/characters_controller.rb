@@ -102,7 +102,6 @@ class CharactersController < ApplicationController
   end
 
   def complete_action
-    logger.error "\n\n\n\n\n\n\nBOOOOO\n\n\n\n\n\n\n\n\n"
     character_action = CharacterAction.find(params[:character_action_id])
     @character.execute_queued_action(character_action)
     respond_to do |format|

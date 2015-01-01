@@ -17,19 +17,14 @@ class DrawPool
     if(@total <= 0)
       return nil
     else
-      p "picking"
       pick = rand(1..@total)
-      p pick.to_s
       chosen = nil
       @pool.each_pair do |key, value|
-        p "pairing... #{pick} vs. #{key} : #{value}"
         if(pick <= value)
-          p "chosen!"
           chosen = key
           @pool[key] = value-1
           break
         else
-          p "moving on..."
           pick -= value
         end
       end
