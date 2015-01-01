@@ -1,5 +1,5 @@
 class Wound < ActiveRecord::Base
-  belongs_to :owner, :polymorphic=>true
+  belongs_to :body
   after_create :apply_damage
 
   def get
@@ -14,9 +14,39 @@ class Wound < ActiveRecord::Base
     return self.get.name
   end
 
+  def owner
+    self.body.owner
+  end
+
   def apply_damage
-    Message.send(self.owner.owner, 'important', "You take #{self.get.damage} damage.")
-    owner.owner.world.broadcast('important', "#{self.owner.owner.get_name} takes #{self.get.damage} damage.", :exceptions => [self.owner.owner])
-    self.owner.owner.change_health(-self.get.damage)
+    Message.send(self.owner, 'important', "You take #{self.get.damage} damage.")
+    self.owner.world.broadcast('important', "#{self.owner.get_name} takes #{self.get.damage} damage.", :exceptions => [self.owner])
+    self.owner.change_health(-self.get.damage)
+  end
+
+  def decay
+    new_type = nil
+    new_message = nil
+    self.get.decay_targets.each do |target|
+      if(target[:difficulty])
+        roll = rand( self.owner.recovery_value..(WoundTemplate.max_difficulty+self.owner.recovery_value) )
+        if(roll >= target[:difficulty])
+          new_type = target[:id]
+          new_message = target[:message]
+          break
+        end
+      else
+        new_type = target[:id]
+        new_message = target[:message]
+        break
+      end
+    end
+    if(new_type)
+      Wound.new(:body => self.body, :wound_template_id => new_type).save!
+    end
+    if(new_message)
+      Message.send(self.owner, 'important', new_message)
+    end
+    self.destroy!
   end
 end

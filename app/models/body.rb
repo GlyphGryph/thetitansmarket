@@ -1,7 +1,7 @@
 class Body < ActiveRecord::Base
   belongs_to :owner, :polymorphic=>true
   belongs_to :world
-  has_many :wounds, :as => :owner, :dependent => :destroy
+  has_many :wounds, :dependent => :destroy
 
   before_create :default_attributes
   after_create :default_relationships
@@ -15,7 +15,7 @@ class Body < ActiveRecord::Base
       self.name ||= "Generic Corpse"
     end
   end
-  
+
   def default_relationships
     self.world ||= self.owner.world
     self.save!
@@ -73,7 +73,7 @@ class Body < ActiveRecord::Base
   end
 
   def hurt(wound_type)
-    Wound.new(:wound_template_id => wound_type, :owner => self).save!
+    Wound.new(:wound_template_id => wound_type, :body => self).save!
   end
 
   def health_fraction
@@ -86,5 +86,9 @@ class Body < ActiveRecord::Base
 
   def damage_fraction
     return 1.0 - self.health_fraction.to_f
+  end
+
+  def execute
+    wounds.each(&:decay)
   end
 end

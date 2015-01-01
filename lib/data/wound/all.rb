@@ -16,7 +16,7 @@ WoundTemplate.load([
     :description => "This is a pretty nasty looking gash.",
     :damage => 1,
     :decay_targets => [
-      { :id => :healed_gash,
+      { :id => :healed_wound,
         :message => "Your gash has closed, though it is still tender.",
         :difficulty => 5,
       },

@@ -1,5 +1,5 @@
 Event.new("nothing",
-  :tickets => 1,
+  :tickets => 5,
   :description => "Nothing happens.",
   :silent => true,
 )
@@ -86,7 +86,7 @@ Event.new("visitor",
   },
 )
 Event.new("predator",
-  :tickets => 4,
+  :tickets => 1,
   :description => "A vicious looking predator has been seen prowling the area. It seems to have caught an interesting scent.",
   :creates => {
     :visitor => {
@@ -95,7 +95,7 @@ Event.new("predator",
   },
 )
 Event.new("prey",
-  :tickets => 4,
+  :tickets => 1,
   :description => "A clumsy herbivore has wandered in and begun gnawing on the scenery.",
   :creates => {
     :visitor => {

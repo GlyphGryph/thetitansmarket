@@ -47,7 +47,7 @@ Visitor.new("being",
         instance.world.broadcast("event", "The being flees haphazardly, disappearing into the underbrush and not looking back.")
         instance.depart
       elsif(drawn == :attack)
-        instance.world.broadcast("event", "The being roars, and launches a brutal attack against #{target.get_name}", :exceptions => [self, self.target])
+        instance.world.broadcast("event", "The being roars, and launches a brutal attack against #{instance.target.get_name}", :exceptions => [instance, instance.target])
         instance.target.record("event", "The being roars, and launches a brutal attack at you!")
         instance.attack(instance.target)
       else

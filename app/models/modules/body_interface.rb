@@ -21,6 +21,9 @@ module BodyInterface
   def counter_success_chance
     return 50
   end
+  def recovery_value
+    return 0
+  end
   def attacks_require_vigor
     false
   end

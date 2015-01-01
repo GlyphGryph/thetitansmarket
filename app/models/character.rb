@@ -369,6 +369,8 @@ class Character < ActiveRecord::Base
       end
     end
 
+    self.body.execute
+
     #=====================
     #= Beginning of Turn =
     #=====================
