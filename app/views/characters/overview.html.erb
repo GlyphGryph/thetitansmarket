@@ -11,11 +11,21 @@
         <div class="data-block">
           <div class="data-element">
             <div class="label">Health</div>
-            <div class="value"><%= @character.health %>/<%= @character.max_health -%></div>
+            <div class="value">
+              <%= @character.health %>/<%= @character.max_health -%>
+              <% if @character.physical_hindrance_modifier > 0 %>
+                <span class="bad-stuff">(<%= @character.physical_hindrance_modifier %>)</span>
+              <% end %>
+            </div>
           </div>
           <div class="data-element">
             <div class="label">Resolve</div>
-            <div class="value"><%= @character.resolve %>/<%= @character.max_resolve -%></div>
+            <div class="value">
+              <%= @character.resolve %>/<%= @character.max_resolve -%>
+              <% if @character.mental_hindrance_modifier > 0 %>
+                <span class="bad-stuff">(<%= @character.mental_hindrance_modifier %>)</span>
+              <% end %>
+            </div>
           </div>
           <div class="data-element">
             <div class="label">Vigor</div>

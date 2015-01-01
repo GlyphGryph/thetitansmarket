@@ -63,10 +63,6 @@ class Character < ActiveRecord::Base
     self.save!
   end
   
-  def attack_cost
-
-  end
-
   def record(type, message)
     self.current_history.make_entry(type, message)
   end
@@ -277,7 +273,23 @@ class Character < ActiveRecord::Base
   def despair_fraction
     1.0 - self.resolve_fraction.to_f
   end
- 
+
+  def physical_hindrance_modifier
+    hindrance = self.damage_fraction/2.0
+    self.wounds.each do |wound|
+      hindrance += wound.physical_hindrance/100.0
+    end
+    return hindrance.round(2)
+  end
+
+  def mental_hindrance_modifier
+    hindrance = self.despair_fraction/2.0
+    self.wounds.each do |wound|
+      hindrance += wound.mental_hindrance/100.0
+    end
+    return hindrance.round(2)
+  end
+
   def possesses?(possession_id, quantity=1)
     return (self.character_possessions.where(:possession_id => possession_id).size >= quantity)
   end

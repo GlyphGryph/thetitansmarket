@@ -24,6 +24,14 @@ class Wound < ActiveRecord::Base
     self.owner.change_health(-self.get.damage)
   end
 
+  def physical_hindrance
+    return self.get.physical_hindrance
+  end
+
+  def mental_hindrance
+    return self.get.mental_hindrance
+  end
+
   def decay
     new_type = nil
     new_message = nil

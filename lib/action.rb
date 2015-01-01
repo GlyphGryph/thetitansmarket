@@ -138,10 +138,10 @@ class Action
     modifier = 0.0
 
     if(@cost_modifiers[:damage])
-      modifier += @cost_modifiers[:damage].to_f * character.damage_fraction
+      modifier += @cost_modifiers[:damage].to_f * character.physical_hindrance_modifier
     end
     if(@cost_modifiers[:despair])
-      modifier += @cost_modifiers[:despair].to_f * character.despair_fraction
+      modifier += @cost_modifiers[:despair].to_f * character.mental_hindrance_modifier
     end
     if(@cost_modifiers[:possession])
       @cost_modifiers[:possession].each do |possession|

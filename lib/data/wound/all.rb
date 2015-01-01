@@ -28,6 +28,10 @@ WoundTemplate.load([
         :message => "Your gash has become infected, and hurts like hell.",
       }
     ],
+    :hindrance => {
+      :mental => 5,
+      :physical => 15,
+    },
   },
   { :id => :infected_wound,
     :name => "Festering Wound",
@@ -40,12 +44,19 @@ WoundTemplate.load([
       },
       { :id => :infected_wound },
     ],
+    :hindrance => {
+      :mental => 15,
+      :physical => 15,
+    },
   },
   { :id => :healed_wound,
     :name => "Healing Wound.",
     :description => "This wound is healing nicely.",
     :decay_targets => [
     ],
+    :hindrance => {
+      :physical => 5,
+    },
   },
   { :id => :fresh_scar,
     :name => "Fresh Scar",
@@ -53,12 +64,18 @@ WoundTemplate.load([
     :decay_targets => [
       { :id => :scar }
     ],
+    :hindrance => {
+      :physical => 4,
+    },
   },
   { :id => :scar,
     :name => "Scar",
     :description => "A faded scar from an old wound.",
     :decay_targets => [
       { :id => :scar }
-    ]
+    ],
+    :hindrance => {
+      :physical => 3,
+    },
   }
 ])
