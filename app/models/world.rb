@@ -24,6 +24,11 @@ class World < ActiveRecord::Base
     self.name ||= generate_name
     self.turn ||= 1
     self.last_turned ||= DateTime.now
+    self.season_id ||= :eternal_summer
+  end
+
+  def season
+    SeasonTemplate.find(self.season_id || :grey)
   end
 
   def corpses
@@ -134,6 +139,7 @@ class World < ActiveRecord::Base
 
           self.turn += 1
           self.last_turned = Time.now
+          self.season_id = self.season.next.id
           self.save!
         end
       rescue => e

@@ -7,8 +7,9 @@
 ************
 X Content Milestone 1 
 X Events System Version 1
-Content Milestone 2
-Combat System Version 1
+X Content Milestone 2
+X Combat System Version 1
+x Wounds system 1
 Content Milestone 3
 Seasons System Version 1
 Content Milestone 4
@@ -20,29 +21,14 @@ CODE CLEANUP
 * Next Up *
 ***********
  ________________
-| COMBAT SYSTEM VERSION 1
-| ---
-x ] Players can attack other players.
-x  \] Deals 1 damage to target
-x   ] 50% chance of taking 1 damage
-x ] Players can attack Predators and Prey to make them leave earlier or to kill them. 
-x ] Taking damage from an attack causes a "wound"
-x   ] Describes as a "gash" when coming from predator packs
-x   ] These are "wound types".
-x   \] Wound types can "decay" to either healed wounds or festered wounds or nothing.
-x   ] Wound types: gash, festering gash, freshly healed gash, scar
-x ] Wounds can cause damage each turn, and cause a "hindrance" for as long as they exist.
-x  \] Wounds have a physical and mental hindrance values (mechanical and pain based hindrances)
-x   ] Mechanical hindrances add to the penalty for physical actions.
-x   ] Mental hindrances add to the penalty for mental actions.
-x   ] Some wounds, such as bleeding and infected wounds, can continue to cause damage at the end of each turn.
-x ] Wounds have a chance of healing each turn
-x  \] Characters have a "recovery" value, which is the same for all characters.
-|     \] Add a trait that raises this.
-x   ] Any given wound type "decays" each turn, and the recovery value influences what it decays too. 
-x     \] It may decay to the same wound type. Scars will usually do this.
-x      ] Leaves a message.
+| SEASONS SYSTEM 1
+| ] Implement a season property for worlds
+| ] Character Overview displays current season, from Dawn, Summer, Dusk, The Long Dark
+| ] Season advances every other turn
+| ] Change page CSS each season
+| ] Players cannot farm during The Long Dark, and farmed fields turn into regular fields
 |________________
+
 
 *********
 * Queue *
@@ -67,16 +53,6 @@ Bug Report:"I found some strawberries, then clicked eat. it gave me the strawber
 |  ] Bandages increase chance to heal by 50%
 |  ] Only one bandage can be applied to a wound
 | ] Characters can make a "Club" item with weapon crafting, which gives them a 50% chance to cause a worse wound when attacking
-| ] "Robust" trait makes a character "significantly more likely to recover quickly from injuries and illness"
-|________________
-
- ________________
-| SEASONS SYSTEM 1
-| ] Implement a season property for worlds
-| ] Character Overview displays current season, from Dawn, Summer, Dusk, The Long Dark
-| ] Season advances every other turn
-| ] Change page CSS each season
-| ] Players cannot farm during The Long Dark, and farmed fields turn into regular fields
 |________________
 
  ________________

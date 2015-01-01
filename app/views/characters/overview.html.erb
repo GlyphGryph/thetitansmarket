@@ -244,59 +244,70 @@
       <div class="info-block-head"><%= @world.name %> - The world has turned <%= @world.turn%> times.</div>
       <div class="info-block-body">
         <div id="world-peers" class="data-block">
-          <% if @other_characters.empty? %>
-            You are alone.
-          <% else %>
-            There are <%= @other_characters.count %> other beings in this world. 
-            <ul>
-              <% @other_characters.each do |other| %>
-                <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %>
-                  <%= link_to "Attack", attack_character_path(:id=>@character.id, :target_id => other.id) %>
-                  <span class="charges"><%= @character.attack_cost %>
-                </li>
-              <% end %>
-            </ul>
-          <% end %>
+          <div class="data-element">
+            <h3><%= @world.season.get_name %></h3>
+            <p><%= @world.season.get.description %></p>
+          </div>
+          <div class="data-element">
+            <h3>Others</h3>
+            <% if @other_characters.empty? %>
+              <p>You are alone.</p>
+            <% else %>
+              There are <%= @other_characters.count %> other beings in this world. 
+              <ul>
+                <% @other_characters.each do |other| %>
+                  <li><%= link_to other.name, examine_character_path(:id => @character.id, :character_id => other.id) %>
+                    <%= link_to "Attack", attack_character_path(:id=>@character.id, :target_id => other.id) %>
+                    <span class="charges"><%= @character.attack_cost %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </div>
         </div>
         <% @world.world_situations.each do |world_situation| %>
           <div class="data-block">
             <%= world_situation.get.description %>
           </div>
         <% end %>
-        <h3>Corpses</h3>
-        <% @world.corpses.each do |corpse| %>
-            <%= corpse.name %>
+        <% if(!@world.corpses.empty?) %>
+          <h3>Corpses</h3>
+          <% @world.corpses.each do |corpse| %>
+              <%= corpse.name %>
+          <% end %>
         <% end %>
-        <h3>Visitors</h3>
-        <% @world.world_visitors.each do |world_visitor| %>
-          <div class="data-block visitor-block">
-            <div><%= world_visitor.get_name %> - <%= world_visitor.get.description %></div>
-            <% if !world_visitor.dead? %>
-              <div>Health: <%= world_visitor.health %></div>
-              <div>Anger: <%= world_visitor.anger %></div>
-              <div>Fear: <%= world_visitor.fear %></div>
-              <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
-            <% end %>
-            <% if world_visitor.dead? %>
-              <div>Interact: 
-                <div>
-                  <%= link_to "Butcher", butcher_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
-                  <span class="charges"><%= @character.butcher_cost %>
+        <% if(!@world.world_visitors.empty?) %>
+          <h3>Visitors</h3>
+          <% @world.world_visitors.each do |world_visitor| %>
+            <div class="data-block visitor-block">
+              <div><%= world_visitor.get_name %> - <%= world_visitor.get.description %></div>
+              <% if !world_visitor.dead? %>
+                <div>Health: <%= world_visitor.health %></div>
+                <div>Anger: <%= world_visitor.anger %></div>
+                <div>Fear: <%= world_visitor.fear %></div>
+                <div>Currently targeting: <%= world_visitor.target ? world_visitor.target.get_name : "No target selected" %></div>
+              <% end %>
+              <% if world_visitor.dead? %>
+                <div>Interact: 
+                  <div>
+                    <%= link_to "Butcher", butcher_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+                    <span class="charges"><%= @character.butcher_cost %>
+                  </div>
                 </div>
-              </div>
-            <% elsif @character.can_attack?(world_visitor) %>
-              <div>Interact: 
-                <div>
-                  <%= link_to "Attack", attack_visitor_path(:id=>@character.id, :target_id=>world_visitor.id) %>
-                  <span class="charges"><%= @character.attack_cost %>
+              <% elsif @character.can_attack?(world_visitor) %>
+                <div>Interact: 
+                  <div>
+                    <%= link_to "Attack", attack_visitor_path(:id=>@character.id, :target_id=>world_visitor.id) %>
+                    <span class="charges"><%= @character.attack_cost %>
+                  </div>
+                  <div>
+                    <%= link_to "Shout", scare_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
+                    <span class="charges"><%= @character.attack_cost %>
+                  </div>
                 </div>
-                <div>
-                  <%= link_to "Shout", scare_visitor_path(:id=>@character.id, :world_visitor_id=>world_visitor.id) %>
-                  <span class="charges"><%= @character.attack_cost %>
-                </div>
-              </div>
-            <% end %>
-          </div>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
