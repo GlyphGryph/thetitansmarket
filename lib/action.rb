@@ -164,6 +164,14 @@ class Action
         end
       end
     end
+    if(@cost_modifiers[:season])
+      @cost_modifiers[:season].each do |season|
+        if character.world.season_id == season[:id]
+          modifier += season[:modifier]
+        end
+      end
+    end
+
     
     modifier = modifier.round
 
@@ -235,6 +243,16 @@ class Action
           chance += situation[:modifier]
         end
       end
+    end
+    if(@success_modifiers[:season])
+      @success_modifiers[:season].each do |season|
+        if character.world.season_id == season[:id]
+          chance += season[:modifier]
+        end
+      end
+    end
+    if(chance < 0)
+      chance = 0
     end
     return chance
   end

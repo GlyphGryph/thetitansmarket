@@ -59,6 +59,14 @@ Action.new("forage",
       :situation => [
         {:id => 'harsh_weather', :modifier => -25},
       ],
+      :season => [
+        {:id => 'late_dusk', :modifier => -25},
+        {:id => 'early_dark', :modifier => -50},
+        {:id => 'dark', :modifier => -100},
+        {:id => 'late_dark', :modifier => -100},
+        {:id => 'early_dawn', :modifier => -50},
+        {:id => 'late_dawn', :modifier => -25},
+      ],
     },
     :result => lambda { |character, target|
       findable = ['strawberry', 'blueberry', 'blackberry']

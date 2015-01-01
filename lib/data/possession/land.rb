@@ -13,15 +13,20 @@ Possession.new("new_farm",
     :variant_name => lambda{ |key| return "Newly Planted #{Plant.find(key).plant_name} Field" },
     :description=>"Neat rows of turned soil, and a few sprouts just starting to reveal themselves.", 
     :age => lambda { |character_possession|
-      variant_key = character_possession.possession_variant.key
-      possession_id = "growing_farm"
-      CharacterPossession.new(
-        :character_id => character_possession.character_id,
-        :possession_id => possession_id,
-        :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, Possession.find(possession_id).variant_name(variant_key)),
-      ).save!
-      character_possession.destroy!
-      return AgeResult.new(:loud, "Your farm has turned to field, and anything left unharvested has gone to waste, whether gone rotter, eaten by animals, or blackened by frost.")
+      time = character_possession.character.world.season_id
+      if([:eternal_summer, :late_dawn, :early_summer, :summer, :early_dusk].include?(time))
+        variant_key = character_possession.possession_variant.key
+        possession_id = "growing_farm"
+        CharacterPossession.new(
+          :character_id => character_possession.character_id,
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, Possession.find(possession_id).variant_name(variant_key)),
+        ).save!
+        character_possession.destroy!
+        return AgeResult.new(:loud, "The seeds at your farm have sprouted.")
+      else
+        return AgeResult.new(:silent)
+      end
     },
   }
 )
@@ -30,15 +35,22 @@ Possession.new("growing_farm",
     :variant_name => lambda{ |key| return "Growing #{Plant.find(key).plant_name} Field" },
     :description=>"A field full of young plants, not yet ready to harvest.", 
     :age => lambda { |character_possession|
-      variant_key = character_possession.possession_variant.key
-      possession_id = "mature_farm"
-      CharacterPossession.new(
-        :character_id => character_possession.character_id,
-        :possession_id => possession_id,
-        :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, Possession.find(possession_id).variant_name(variant_key)),
-      ).save!
-      character_possession.destroy!
-      return AgeResult.new(:loud, "Your farm has turned to field, and anything left unharvested has gone to waste, whether gone rotter, eaten by animals, or blackened by frost.")
+      time = character_possession.character.world.season_id
+      if([:eternal_summer, :late_dawn, :early_summer, :summer, :early_dusk].include?(time))
+        variant_key = character_possession.possession_variant.key
+        possession_id = "mature_farm"
+        CharacterPossession.new(
+          :character_id => character_possession.character_id,
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(variant_key, possession_id, Possession.find(possession_id).variant_name(variant_key)),
+        ).save!
+        character_possession.destroy!
+        return AgeResult.new(:loud, "The sprouts at your farm have turned into mature plants.")
+      else
+        character_possession.destroy!
+        CharacterPossession.new(:character_id => character_possession.character_id,:possession_id => "field").save!
+        return AgeResult.new(:loud, "Your immature plants have been killed by the cold.")
+      end
     },
   }
 )
