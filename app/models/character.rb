@@ -499,6 +499,14 @@ class Character < ActiveRecord::Base
     return !self.body || self.body.dead?
   end
 
+  def recovery_value
+    if(self.has_trait?("healthy_immune_system"))
+      return 3
+    else
+      return 0
+    end
+  end
+
   # Body interface callbacks
   def attack_happens(opponent)
     self.record('important', "You launch an attack...")

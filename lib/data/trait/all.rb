@@ -35,3 +35,8 @@ Trait.new("pretty_face",
     :description=>"The benefit to the morale of others for playing with, socializing with, or being entertained by you is significantly improved.", 
   }
 )
+Trait.new("healthy_immune_system",
+  { :name=>"Healthy Immune System", 
+    :description=>"You are significantly better at recovering from injuries while avoiding the hassles of infection and disease.", 
+  }
+)
