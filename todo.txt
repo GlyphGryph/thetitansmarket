@@ -20,21 +20,10 @@ CODE CLEANUP
 ***********
 * Next Up *
 ***********
- ________________
-| SEASONS SYSTEM 1
-| ] Implement a season property for worlds
-| ] Character Overview displays current season, from Dawn, Summer, Dusk, The Long Dark
-| ] Season advances every other turn
-| ] Change page CSS each season
-| ] Players cannot farm during The Long Dark, and farmed fields turn into regular fields
-|________________
-
 
 *********
 * Queue *
 *********
-Are dead and butchered critters not being cleaned up properly?
-Bug Report:"I found some strawberries, then clicked eat. it gave me the strawberries as options, which worked. Targeting prompt error was written above, that's all"
  ________________
 | CONTENT MILESTONE 3
 | ---
@@ -57,21 +46,20 @@ Bug Report:"I found some strawberries, then clicked eat. it gave me the strawber
 
  ________________
 | CONTENT MILESTONE 4
-| ] Player's chance to gather food during The Long Dark is greatly reduced, and is increased in Dawn and Summer
-| ] Prey are more less likely to appear and more likely to leave during The Long Dark
+x ] Player's chance to gather food during The Long Dark is greatly reduced, and is increased in Dawn and Summer
+| ] Prey are less likely to appear and more likely to leave during The Long Dark
 | ] Predators are more likely to appear and less likely to leave during The Long Dark
 | ] Locusts only appear during Dusk
 | ] Blood Moon cannot appear during summer, dispelled by summer
 | ] Locust Swarm destroys all food ready to be harvested in fields as an Occurence
 | ] Spirit of Optimism raises the morale of all players by one each turn, or their health if morale is full, as a Situation. 1-3 turns.
 | ] Bad Omen reduces morale by 1 point each turn, dispels Spirit of Optimism, dispelled by Spirit of Optimism
+| ] Weariness has a greater effect in winter.
 |________________
-
-
 
  ________________
 | STYLE MILESTONE 1
-| ] This space intentionally left blank
+x ] Change page CSS each season
 |________________
 
 ________________
@@ -94,6 +82,8 @@ ________________
 * Distant Future *
 ******************
 
+Are dead and butchered critters not being cleaned up properly?
+Bug Report:"I found some strawberries, then clicked eat. it gave me the strawberries as options, which worked. Targeting prompt error was written above, that's all"
 
 
 ***********************

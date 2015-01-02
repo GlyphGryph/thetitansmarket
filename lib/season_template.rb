@@ -2,13 +2,14 @@ class SeasonTemplate
   extend CollectionTracker
   extend DataLoader
 
-  attr_reader :id, :name, :description
+  attr_reader :id, :name, :description, :style
 
   def initialize(params={})
     @id = params[:id]
     @name = params[:name] || "Name Error"
     @description = params[:description] || "Unkown Description"
     @to = params[:to] || :grey
+    @style = params[:style] || "unseasoned"
   end
 
   def next

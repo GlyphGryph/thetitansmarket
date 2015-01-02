@@ -193,3 +193,45 @@ ul{
 .reference-template{
   display:none;
 }
+
+.grey-season{
+  background-color:#CCD;
+}
+
+.summer-season{
+  background-color:#DDF;
+}
+
+.summer-twilight-season{
+  background-color:#AAC;
+}
+
+.dark-twilight-season{
+  color:#F0F0F0;
+  background-color:#484060;
+  a {
+    color: #DDD;
+    &:visited {
+      color: #DDD;
+    }
+    &:hover {
+      color: #fff;
+      background-color: #000;
+    }
+  }
+}
+
+.dark-season{
+  color:#F0F0F0;
+  background-color:#080510;
+  a {
+    color: #DDD;
+    &:visited {
+      color: #DDD;
+    }
+    &:hover {
+      color: #fff;
+      background-color: #000;
+    }
+  }
+}
