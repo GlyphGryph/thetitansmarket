@@ -209,11 +209,17 @@ Visitor.new("predator",
     :butchered => lambda { |instance, character|
       variant_id = "meat"
       possession_id = "food"
-      CharacterPossession.new(
-        :character_id => character.id, 
-        :possession_id => possession_id,
-        :possession_variant => PossessionVariant.find_or_do(variant_id, possession_id, Possession.find(possession_id).variant_name(variant_id)),
-      ).save!
+      3.times do
+        CharacterPossession.new(
+          :character_id => character.id, 
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(variant_id, possession_id, Possession.find(possession_id).variant_name(variant_id)),
+        ).save!
+      end
+      ["skin","skin","bone","bone"].each do |possession_id|
+        CharacterPossession.new(:character_id => character.id, :possession_id => possession_id).save!
+      end
+
       character.record("event", "You turn the slaughtered Predator into delicious meat.")
     },
   },
@@ -288,11 +294,16 @@ Visitor.new("prey",
     :butchered => lambda { |instance, character|
       variant_id = "meat"
       possession_id = "food"
-      CharacterPossession.new(
-        :character_id => character.id, 
-        :possession_id => possession_id,
-        :possession_variant => PossessionVariant.find_or_do(variant_id, possession_id, Possession.find(possession_id).variant_name(variant_id)),
-      ).save!
+      4.times do
+        CharacterPossession.new(
+          :character_id => character.id, 
+          :possession_id => possession_id,
+          :possession_variant => PossessionVariant.find_or_do(variant_id, possession_id, Possession.find(possession_id).variant_name(variant_id)),
+        ).save!
+      end
+      ["skin","skin","skin","bone","bone", "bone", "bone"].each do |possession_id|
+        CharacterPossession.new(:character_id => character.id, :possession_id => possession_id).save!
+      end
       character.record("event", "You turn the slaughtered grazer into delicious meat.")
     },
   },

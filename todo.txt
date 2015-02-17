@@ -27,7 +27,8 @@ CODE CLEANUP
  ________________
 | CONTENT MILESTONE 3
 | ---
-| ] Killing Predators or Prey provides meat and skin
+x ] Killing Predators or Prey provides meat and skin
+| ] Add a "requires" field to pondering and researching an idea.
 | ] Acquiring or Pondering a wound gives the character knowledge of "Pain"
 | ] Researching Pain gives the character ideas for "Bandages" and "Fighting"
 | \] Researching Bandages requires a Skin, and the prototype is a Bandage item
@@ -57,9 +58,15 @@ x ] Player's chance to gather food during The Long Dark is greatly reduced, and 
 | ] Weariness has a greater effect in winter.
 |________________
 
+ADD THE BROKEN MACHINE TO GIVE PLAYERS SOMETHING TO WORK TOWARDS
+
  ________________
-| STYLE MILESTONE 1
+| Touchup MILESTONE 1
 x ] Change page CSS each season
+| ] Make the "you learned successfully but discovered nothing" measure clearer
+| ] Add mouseover descriptions for stats
+| ] Suppress charge counts for items with a max charge of zero, esp. on the ponder/target page
+| ] Add percent symbol to action success chance
 |________________
 
 ________________

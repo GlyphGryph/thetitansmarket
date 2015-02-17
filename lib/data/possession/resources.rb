@@ -46,6 +46,28 @@ Possession.new("wampoon",
     :description => "This is a shard of gathered wampoon.",
   }
 )
+Possession.new("bone",
+  { :name => "Bone.",
+    :description => "A long, solid bone.",
+  }
+)
+Possession.new("skin", 
+  { :name => "Skin", 
+    :description => "The skin of an animal.", 
+    :max_charges  =>  2,
+    :age => lambda { |character_possession|
+      if(character_possession.deplete(1) && character_possession.charges > 0)
+        return AgeResult.new(:silent)
+      else
+        character = character_possession.character
+        message = "Your #{character_possession.get_name} has rotted away."
+        CharacterPossession.new(:character => character, :possession_id => "rot").save!
+        character_possession.destroy!
+        return AgeResult.new(:loud, message)
+      end
+    },
+  }
+)
 Possession.new("rot",
   { :name => "Rot",
     :description => "Some kind of rotted organic matter. It could have been anything, and whatever it is wont last much longer.",
