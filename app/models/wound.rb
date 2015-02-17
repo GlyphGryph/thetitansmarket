@@ -19,9 +19,11 @@ class Wound < ActiveRecord::Base
   end
 
   def apply_damage
-    Message.send(self.owner, 'important', "You take #{self.get.damage} damage.")
-    self.owner.world.broadcast('important', "#{self.owner.get_name} takes #{self.get.damage} damage.", :exceptions => [self.owner])
-    self.owner.change_health(-self.get.damage)
+    if(self.get.damage > 0)
+      Message.send(self.owner, 'important', "You take #{self.get.damage} damage.")
+      self.owner.world.broadcast('important', "#{self.owner.get_name} takes #{self.get.damage} damage.", :exceptions => [self.owner])
+      self.owner.change_health(-self.get.damage)
+    end
   end
 
   def physical_hindrance
